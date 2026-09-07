@@ -6,9 +6,12 @@
  *
  *   >= 1024px  the LANDSCAPE crop (3012x2133 of the source, the tuner's frame),
  *              pinned right and dissolved on its left.
- *   <  1024px  a PORTRAIT 4:5 crop (1848x2310 of the source). The landscape
- *              asset forced into a 4:5 box showed mostly sky with him small in
- *              frame; this is cut for the box it actually lands in.
+ *   <  1024px  a PORTRAIT 3:4 crop (1848x2464 of the source), served 1200w +
+ *              800w. The aspect is load-bearing, not cosmetic: band D sets the
+ *              photo box to exactly 3:4, so object-cover has nothing to crop
+ *              and his head holds the same fraction of the box at every phone
+ *              width. Re-cutting this asset to a different aspect means
+ *              changing `--m-aspect` in Hero.astro in the same commit.
  *
  * The portrait entries carry `media="(max-width: 1023px)"`, so a desktop
  * browser never downloads them and a phone never downloads the landscape set.
