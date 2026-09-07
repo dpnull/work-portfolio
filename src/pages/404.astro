@@ -1,0 +1,16 @@
+---
+import Base from "../layouts/Base.astro";
+
+// Cloudflare Pages serves this with a real 404 status. Without it, Pages falls
+// back to index.html at HTTP 200 for every unknown path.
+---
+
+<Base title="Not found — Dom Przewozny" description="That page doesn't exist.">
+  <main class="mx-auto flex min-h-dvh max-w-(--container-page) flex-col justify-center px-6 sm:px-8">
+    <p class="text-paper-dim font-mono text-xs tracking-widest uppercase">404</p>
+    <h1 class="font-display text-section mt-4">That page doesn&rsquo;t exist.</h1>
+    <a href="/" class="text-accent mt-6 inline-block text-sm font-semibold underline underline-offset-4">
+      Back to the start
+    </a>
+  </main>
+</Base>

@@ -16,7 +16,9 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+// build.format "file" emits /index.html, which must not leak into the canonical.
+const path = Astro.url.pathname.replace(/index\.html$/, "").replace(/\.html$/, "");
+const canonical = new URL(path, Astro.site);
 ---
 
 <html lang="en-GB">
