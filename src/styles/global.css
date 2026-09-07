@@ -39,8 +39,10 @@
      Naming: `ground` is the page, `ink` is text, `plate` is the solid block
      behind each line of the hero lede. Lime is a FILL only — it fails as text
      on any of these grounds — so numbers on the strip use `ice`.
-     NOTE: lime now does two jobs, the lede plate and the CTA. If a third lime
-     thing ever appears, the button stops being the loudest object on the page.
+     NOTE: lime does ONE job now, the CTA (Dom moved the plate to white,
+     2026-09-07). That is the point of it — the button is the only lime object
+     on the page and therefore the loudest. Don't spend the colour anywhere
+     else.
      Superseded: "Ice" #dfe6ec (blue-grey), "Bone" #f2eee7 (lighter warm). */
   --color-ground: #e9e1d5;       /* page background */
   --color-surface: #ded2c1;      /* cards, tiles */
@@ -55,7 +57,11 @@
   --color-ice: #e8eff6;          /* numbers on the strip */
   --color-mist: #9db2c6;         /* labels on the strip: the sky, desaturated */
   --color-tile-line: rgb(129 171 205 / 0.3); /* stat tile hairlines: the sky at 30% */
-  --color-plate: #e5ff3d;        /* solid block behind each line of the hero lede */
+  /* Solid block behind each line of the hero lede. Chalk white, picked in the
+     plate tuner (Dom, 2026-09-07) over lime: 18.2:1 for ink on the plate, and
+     1.30:1 against the ground — soft separation, so it reads as paper laid on
+     the page rather than a marker stripe. Was #e5ff3d. */
+  --color-plate: #ffffff;
 
   /* Type — neutral grotesque + terminal mono, no display face. */
   --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system,

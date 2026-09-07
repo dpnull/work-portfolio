@@ -8,9 +8,9 @@ import site from "../data/site.json";
 // Dom's revisions (2026-09-07, second pass):
 //  · STICKY. The rail freezes to the top of the viewport, so it needs an opaque
 //    ground of its own — the hero photo scrolls underneath it.
-//  · NO LIME. The CTA was a lime fill; it is now ground with the same 2px `ink`
-//    border. There is no lime anywhere in the header now — the hero's lede
-//    plates are the only lime on the page.
+//  · NO LIME. The CTA was a lime fill; it is now ground with an `ink` border.
+//    Lime survives nowhere on the page now — the hero's lede plates went white
+//    on 2026-09-07 too.
 //  · INSTANT hover. No transition on any cell: the invert snaps.
 //  · The email is set in the sans, not Kode Mono.
 //  · The CTA reads "Book a free video call", which is too long for a third of a
@@ -19,10 +19,12 @@ import site from "../data/site.json";
 //    rather than a child of <nav> — it has to be able to share tier one with
 //    the wordmark while the nav wraps below it.
 //
-// The CTA keeps its 2px `ink` border on all four sides while the rest of the
-// rail stays 1px. It sits 1px proud of the row (`margin-block: -1px` on a
-// stretched flex item) so that border COVERS the rail's top and bottom
-// hairlines instead of stacking 1px+2px against them.
+// The CTA's border is 1px on all four sides — the same weight as every other
+// rule in the rail (Dom, 2026-09-07; it was 2px and read as heavy). It still
+// sits 1px proud of the row (`margin-block: -1px` on a stretched flex item),
+// which now lands its ink border exactly ON the rail's top and bottom
+// hairlines rather than beside them. Keep the two together: drop the negative
+// margin and the button gains a doubled edge.
 //
 // 640–1023: the email cell is dropped and an empty flex spacer cell holds its
 // slot, so the rail language survives. <640: the two tiers described above; no
@@ -125,16 +127,18 @@ import site from "../data/site.json";
   }
 
   /* ── The CTA ──────────────────────────────────────────────────────
-     No fill: ground, ink text, 2px ink border on all four sides, pulled 1px
-     proud top and bottom so the border lands exactly on the rail's hairlines
-     rather than beside them. On phones it shares tier one with the wordmark
-     and its right border sits on the viewport edge. */
+     No fill: ground, ink text, a 1px ink border on all four sides — rail
+     weight, not a heavier one — pulled 1px proud top and bottom so the border
+     lands exactly on the rail's hairlines rather than beside them. What marks
+     it as the button is that the border is INK while every other rule in the
+     rail is `line`. On phones it shares tier one with the wordmark and its
+     right border sits on the viewport edge. */
   .rail-cta {
     order: 1;
     flex: 0 0 auto;
     background-color: var(--color-ground);
     color: var(--color-ink);
-    border: 2px solid var(--color-ink);
+    border: 1px solid var(--color-ink);
     margin-block: -1px;
     padding-inline: 16px;
   }

@@ -224,13 +224,29 @@ const { hero } = site;
     );
   }
   /* The lift ends inside the photo, so the flow after the lede would too: this
-     puts the blocks' rule a normal 2.5rem below the photo's bottom edge instead
-     of leaving the hole the raw lift would leave. Overrides the `mt-7` in the
-     markup, which bands C and A/B put back. */
+     gives the space back and sets the gap between the photo's bottom edge and
+     the first block. Was 2.5rem; Dom read it as too loose on a phone
+     (2026-09-07), so 1.5rem. The `--m-lede-inset` term is not a choice, it is
+     the lift being repaid — change the 1.5rem, never the inset, to move this
+     gap. Overrides the `mt-7` in the markup, which bands C and A/B put back. */
   .hero-blocks {
     font-size: 0.9375rem;
     max-width: 46ch;
-    margin-top: calc(var(--m-lede-inset) + 2.5rem);
+    margin-top: calc(var(--m-lede-inset) + 1.5rem);
+  }
+
+  /* No hairline over the blocks on a phone (Dom, 2026-09-07). Band D is the one
+     layout where the lede sits ON the photograph, so the photo's own bottom
+     edge is already the divider — a rule a few tens of pixels under it reads as
+     a second edge doing the same job. Bands C and above keep it: there the lede
+     sits beside or over open sky and the rule is the only thing separating the
+     sentence from the blocks. Scoped to band D's exact query rather than the
+     phone-first base, so nothing above 600px has to put it back. */
+  @media (max-width: 37.4375rem) and (orientation: portrait) {
+    .hero-blocks {
+      border-top-width: 0;
+      padding-top: 0;
+    }
   }
 
   /* This element is bands A and B's veil only. The photo darkens towards the
