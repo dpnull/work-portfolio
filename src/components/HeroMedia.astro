@@ -1,10 +1,14 @@
 ---
 /**
- * Hero media slot — SQUARE (1:1). Image first: the poster is the LCP element
- * and always renders. When `video` is set, a muted looping clip layers over
- * the poster and the poster stays as its fallback frame. Never lazy — this is
- * above the fold. NOTE: a 9:16 clip dropped in here is centre-cropped to the
- * square by object-cover.
+ * Hero media slot — SQUARE (1:1). Image first: the poster is the LCP element,
+ * so it is never lazy and carries fetchpriority="high". When `video` is set, a
+ * muted looping clip layers over the poster and the poster stays as its
+ * fallback frame. NOTE: a 9:16 clip dropped in here is centre-cropped by
+ * object-cover.
+ *
+ * `poster` is the .jpg path; the -640 variant and the .webp siblings are
+ * derived from it, so all four files must be generated together
+ * (see PROGRESS.md for the crop recipe).
  */
 interface Props {
   poster: string;
@@ -12,18 +16,27 @@ interface Props {
   video?: string | null;
 }
 const { poster, alt, video = null } = Astro.props;
+const base = poster.replace(/\.jpg$/, "");
+const srcset = (ext: string) => `${base}-640.${ext} 640w, ${base}.${ext} 1080w`;
+// Desktop frame is ~460px wide; on phones it is the column width.
+const sizes = "(min-width: 1024px) 460px, 90vw";
 ---
 
 <figure class="bg-surface relative aspect-square w-full overflow-hidden rounded-(--radius-tile)">
-  <img
-    src={poster}
-    alt={alt}
-    width="1080"
-    height="1080"
-    fetchpriority="high"
-    decoding="async"
-    class="absolute inset-0 h-full w-full object-cover"
-  />
+  <picture>
+    <source type="image/webp" srcset={srcset("webp")} sizes={sizes} />
+    <img
+      src={poster}
+      srcset={srcset("jpg")}
+      sizes={sizes}
+      alt={alt}
+      width="1080"
+      height="1080"
+      fetchpriority="high"
+      decoding="async"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+  </picture>
   {video && (
     <video
       src={video}
