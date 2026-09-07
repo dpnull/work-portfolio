@@ -1,25 +1,47 @@
 {
-  "_note": "Header + hero copy. PLACEHOLDER values come from research/01-portfolio-blueprint.md and are Dom's call to replace. Keep the four stats to four.",
+  "_note": "Header + hero copy. Stats are blueprint PLACEHOLDERS and are Dom's call to confirm. Keep them to four.",
   "wordmark": "dpy2k",
   "name": "Dom Przewozny",
   "email": "dprzewozny2k@icloud.com",
   "bookUrl": "#contact",
   "nav": [
-    { "label": "Work", "href": "#work" },
-    { "label": "Rates", "href": "#rates" }
+    {
+      "label": "Work",
+      "href": "#work"
+    },
+    {
+      "label": "Rates",
+      "href": "#rates"
+    }
   ],
+  "meta": {
+    "title": "Dom Przewozny — social media creator",
+    "description": "Social media creator who scripts, films and edits. 12K audience in men’s beauty and self-improvement, London."
+  },
   "hero": {
-    "eyebrow": "Short-form video · London",
-    "promise": "Short-form video that sells to men 18–34.",
-    "positioning": "I make content for men 18–34, because that's who watches mine. UGC ads for brands. Monthly content systems for founders.",
+    "_note": "No visible title or eyebrow by Dom's call (2026-09-07) — the summary carries the hero. srHeading is the visually-hidden h1 that keeps the page structurally valid.",
+    "srHeading": "Dom Przewozny — social media creator",
+    "summary": "Social media creator who scripts, films and edits. I’ve built a 12K audience around men’s beauty and self-improvement and generated around 2,000 email sign-ups through my own content funnel. I bring that creative experience together with hands-on skills in technology, AI and automation.",
     "poster": "/hero.jpg",
     "posterAlt": "Dom Przewozny at dusk, palm trees and a sunset sky behind him",
     "video": null
   },
   "stats": [
-    { "value": "12.4K", "label": "followers" },
-    { "value": "976K", "label": "plays, one reel" },
-    { "value": "2,142", "label": "follows from one post" },
-    { "value": "95%", "label": "male 18–34" }
+    {
+      "value": "12.4K",
+      "label": "followers"
+    },
+    {
+      "value": "976K",
+      "label": "plays, one reel"
+    },
+    {
+      "value": "2,142",
+      "label": "follows from one post"
+    },
+    {
+      "value": "95%",
+      "label": "male 18–34"
+    }
   ]
 }
