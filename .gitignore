@@ -12,3 +12,6 @@ design/
 .env
 .env.*
 .DS_Store
+
+# local progress tracking — stays off GitHub, same as PLAN.md
+PROGRESS.md
