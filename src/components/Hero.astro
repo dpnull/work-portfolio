@@ -13,12 +13,12 @@ const { hero } = site;
  *                  photo's aspect, copy column tied to the viewport, and the
  *                  photo anchored to its own left edge so the dissolve zone
  *                  shows the same sky at every width.
- *   C  768-1023    two columns, no overlap: copy left, a portrait photo flush
+ *   C  600-1023    two columns, no overlap: copy left, a portrait photo flush
  *                  to the right edge with a short feathered left edge.
- *   D  < 768px     the photo as a full-bleed 3:4 block with the lede lifted ON
- *                  to its bottom-left, the way the desktop lede sits on the
- *                  faded part of the picture. Blocks + tools stay on the ground
- *                  below it.
+ *   D  < 600px     the photo as a full-bleed block, wider than it is tall
+ *                  relative to the asset, with the lede lifted ON to its
+ *                  bottom-left the way the desktop lede sits on the faded part
+ *                  of the picture. Blocks + tools stay on the ground below it.
  *
  * Band A's numbers came out of the hero tuner (scratchpad/hero-tuner.html,
  * published as an Artifact); Dom dialled them on 2026-09-07. Don't eyeball
@@ -43,14 +43,16 @@ const { hero } = site;
  * portrait crop cut for those boxes.
  *
  * Band D's rule, and the reason its numbers look fussy: THE BOX HEIGHT COMES
- * FROM THE WIDTH ALONE. A `max-height` cap in portrait would change the box
- * aspect as the viewport got narrower or shorter, object-cover would re-crop,
- * and his head would slide around — which is exactly what Dom saw with the old
- * 55svh cap. `aspect-ratio: 3 / 4` on an asset that is itself exactly 3:4 means
- * cover has nothing to crop at any phone size, so the face sits at the same
- * fraction of the box everywhere and the caption can be guaranteed clear of it
- * by arithmetic instead of by eye. The only cap left is the landscape guard,
- * and there the lede drops back below the photo rather than sitting on it.
+ * FROM THE WIDTH ALONE, via a CONSTANT aspect. A `max-height` cap in portrait
+ * would change the box aspect as the viewport got narrower or shorter,
+ * object-cover would re-crop, and his head would slide around — which is
+ * exactly what Dom saw with the old 55svh cap. A constant aspect means cover
+ * takes the same slice of the asset at every phone width, so the face sits at
+ * the same fraction of the box everywhere and the caption can be guaranteed
+ * clear of it by arithmetic instead of by eye. The box is 1:1 and the asset is
+ * 3:4, so cover trims an eighth off the top and an eighth off the bottom — sky
+ * and jacket. The only cap left is the landscape guard, and there the lede drops
+ * back below the photo rather than sitting on it.
  */
 ---
 
@@ -90,36 +92,48 @@ const { hero } = site;
 
     /* ── Band D dials (phone). Every one of these is in the phone tuner
        (scratchpad/phone-tuner.html); move them there, not here. ────────── */
-    --m-aspect: 3 / 4; /* photo box, and the asset's own aspect */
-    --m-lede-size: clamp(1.0625rem, 5.334vw, 1.25rem);
-    --m-lede-lines: 5; /* the lede's line count — see the note on the lift */
-    --m-lede-inset: 20px; /* lede baseline block to the photo's bottom edge */
-    --m-lede-measure: 26ch;
-    --m-plate-gap: 4px;
-    /* Bottom dissolve: full opacity to 54%, smootherstep down to a 44% FLOOR
-       by 74%, that floor held to 96% (the whole caption zone sits on it), then
-       a 4% feather to nothing so the photo's bottom edge is never a line.
-       Stops are 6t^5-15t^4+10t^3 — never flatten this to two stops. */
+    /* THE BOX IS NO LONGER THE ASSET'S 3:4 (Dom, 2026-09-07, second pass:
+       "the photo is waaaay too big, the whole screen is just me"). At 3:4 the
+       photo was 500px tall at 375 wide and, with the header, took 73% of the
+       viewport. SQUARE makes it 375px and 57%, so the Growth block is above
+       the fold on every real phone, and a 1:1 frame reads as a deliberate
+       portrait rather than a wall. The cost is headroom: cover now trims an
+       eighth off the top, leaving 37px of sky above his hair at 375 — that is
+       the number to watch if this moves again.
+       The aspect is still a CONSTANT, which is the part that matters:
+       cover crops the same slice of the asset at every phone width, so the
+       face sits at the same fraction of the box everywhere and the caption is
+       clear of it by arithmetic. A viewport-height cap would break that. */
+    --m-aspect: 1;
+    /* Was clamp(1.0625rem, 5.334vw, 1.25rem) — 20px at 375, which Dom read as
+       "a Vox or Guardian article". 4.4vw is 16.5px there. The vw term is what
+       keeps the caption a constant fraction of the box as the width changes. */
+    --m-lede-size: clamp(0.9375rem, 4.4vw, 1.125rem);
+    --m-lede-lines: 4; /* the lede's line count — see the note on the lift */
+    --m-lede-inset: 16px; /* lede baseline block to the photo's bottom edge */
+    /* Wider than the old 26ch: at the smaller size a narrow measure pushed the
+       sentence to six lines and ate the clearance over his head. */
+    --m-lede-measure: 32ch;
+    --m-plate-gap: 3px;
+    /* Bottom dissolve. Was a 44% floor from 74% down — Dom: "the transparency
+       is too strong, its not needed, the bottom is quite strong dark background
+       it will be fine." So the photo now holds FULL opacity through the whole
+       caption zone and only dissolves in the last 18%, where it meets the
+       ground. Stops are 6t^5-15t^4+10t^3 — never flatten this to two stops. */
     --m-fade: linear-gradient(
       to bottom,
-      #000 54%,
-      rgb(0 0 0 / 0.996) 55.82%,
-      rgb(0 0 0 / 0.975) 57.64%,
-      rgb(0 0 0 / 0.928) 59.45%,
-      rgb(0 0 0 / 0.856) 61.27%,
-      rgb(0 0 0 / 0.767) 63.09%,
-      rgb(0 0 0 / 0.673) 64.91%,
-      rgb(0 0 0 / 0.584) 66.73%,
-      rgb(0 0 0 / 0.512) 68.55%,
-      rgb(0 0 0 / 0.465) 70.36%,
-      rgb(0 0 0 / 0.444) 72.18%,
-      rgb(0 0 0 / 0.440) 74%,
-      rgb(0 0 0 / 0.440) 96%,
-      rgb(0 0 0 / 0.424) 96.67%,
-      rgb(0 0 0 / 0.348) 97.33%,
-      rgb(0 0 0 / 0.220) 98%,
-      rgb(0 0 0 / 0.092) 98.67%,
-      rgb(0 0 0 / 0.016) 99.33%,
+      #000 82%,
+      rgb(0 0 0 / 0.996) 83.64%,
+      rgb(0 0 0 / 0.972) 85.27%,
+      rgb(0 0 0 / 0.911) 86.91%,
+      rgb(0 0 0 / 0.806) 88.55%,
+      rgb(0 0 0 / 0.664) 90.18%,
+      rgb(0 0 0 / 0.500) 91.82%,
+      rgb(0 0 0 / 0.336) 93.45%,
+      rgb(0 0 0 / 0.194) 95.09%,
+      rgb(0 0 0 / 0.089) 96.73%,
+      rgb(0 0 0 / 0.028) 98.36%,
+      rgb(0 0 0 / 0.004) 99.18%,
       rgb(0 0 0 / 0.000) 100%
     );
   }
@@ -148,16 +162,18 @@ const { hero } = site;
     inset: 0;
   }
 
-  /* ── Band D — phone (< 768px) ────────────────────────────────────────────
-     Full-bleed 3:4 block, the lede lifted on to its bottom-left, blocks and
-     tools on the ground below. NO height cap in portrait: the box aspect is
-     the asset's aspect, so object-cover never re-crops and the face holds the
+  /* ── Band D — phone (< 600px) ────────────────────────────────────────────
+     Full-bleed block, the lede lifted on to its bottom-left, blocks and tools
+     on the ground below. NO height cap in portrait: the aspect is a constant,
+     so object-cover takes the same slice at every width and the face holds the
      same fraction of the box at 320 and at 767 alike. */
   .media :global(img),
   .media :global(video) {
     aspect-ratio: var(--m-aspect);
-    /* The box is exactly the asset's aspect here, so this is a no-op in
-       portrait. It only bites under the landscape guard below. */
+    /* The box (1:1) is shorter than the asset (3:4), so cover is width-driven
+       and this chooses which horizontal band survives. Centred takes an eighth
+       off the sky and an eighth off the jacket — moving this is how you would
+       raise or lower him in the frame. */
     object-position: 50% 50%;
     /* The floor is the point (see band A): the photo washes into the ground
        instead of fading out under the caption. Stops in --m-fade. */
@@ -165,31 +181,13 @@ const { hero } = site;
     mask-image: var(--m-fade);
   }
 
-  /* Ground-coloured veil over the bottom of the photo, mirroring band A's:
-     it keeps the exposed sky and sand behind the lime plates calm so the
-     plates read as the loudest thing in the lower third. */
-  .media::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-ground) 0%, transparent) 58%,
-      color-mix(in srgb, var(--color-ground) 0.3%, transparent) 61.82%,
-      color-mix(in srgb, var(--color-ground) 2.1%, transparent) 65.64%,
-      color-mix(in srgb, var(--color-ground) 5.9%, transparent) 69.45%,
-      color-mix(in srgb, var(--color-ground) 11.8%, transparent) 73.27%,
-      color-mix(in srgb, var(--color-ground) 19.1%, transparent) 77.09%,
-      color-mix(in srgb, var(--color-ground) 26.9%, transparent) 80.91%,
-      color-mix(in srgb, var(--color-ground) 34.2%, transparent) 84.73%,
-      color-mix(in srgb, var(--color-ground) 40.1%, transparent) 88.55%,
-      color-mix(in srgb, var(--color-ground) 43.9%, transparent) 92.36%,
-      color-mix(in srgb, var(--color-ground) 45.7%, transparent) 96.18%,
-      color-mix(in srgb, var(--color-ground) 46.0%, transparent) 100%
-    );
-  }
-
+  /* There is deliberately NO ground-coloured veil on the phone any more.
+     Band D used to carry one over its bottom 42%, mirroring band A's, to calm
+     the sky behind the lime plates. Dom removed it (2026-09-07): the caption
+     sits on his jacket, which is already near-black, and the plates carry
+     their own background — so the wash was lightening the photograph for no
+     contrast gain. Bands A and B still use `.veil`, which is a different
+     element and unaffected. */
 
   /* Flex, not block, purely so the lede's own margins cannot collapse into the
      blocks' `mt-7` — the lift below depends on both margins landing in full. */
@@ -239,7 +237,7 @@ const { hero } = site;
     display: none;
   }
 
-  /* ── Band C — tablet (768-1023px) ────────────────────────────────────────
+  /* ── Band C — tablet and small tablet (600-1023px) ────────────────────────────────────────
      Two columns and no overlap: copy left, the portrait crop as a full-height
      column flush to the right viewport edge and to the top of the hero. Only a
      short feathered left edge — not the 48%-floor dissolve and no veil — so it
@@ -250,17 +248,14 @@ const { hero } = site;
      there is no room under his chin for a wash. As a column the box is close
      to the asset's own shape again, and the lede sits beside the photo instead
      of on it, so nothing can collide. */
-  @media (min-width: 48rem) and (max-width: 63.9375rem),
-    (max-width: 47.9375rem) and (orientation: landscape) {
+  @media (min-width: 37.5rem) and (max-width: 63.9375rem),
+    (max-width: 37.4375rem) and (orientation: landscape) {
     .media {
       position: absolute;
       inset: 0 0 0 auto;
       width: 46%;
     }
-    /* Band D's bottom veil and lede lift are phone-only. */
-    .media::after {
-      display: none;
-    }
+    /* Band D's lede lift is phone-only. */
     .lede {
       margin-top: 0;
     }
@@ -342,9 +337,6 @@ const { hero } = site;
       position: absolute;
       inset: 0 0 0 auto;
       width: 69%;
-    }
-    .media::after {
-      display: none;
     }
     .media :global(img),
     .media :global(video) {

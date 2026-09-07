@@ -37,9 +37,9 @@ const srcset = (ext: string) => `${base}-1000.${ext} 1000w, ${base}.${ext} 2000w
 const sizes = "(min-width: 1024px) 69vw, 100vw";
 
 // Portrait (tablet + phone): 1200w + 800w. A 46vw column on tablets,
-// the full viewport width on phones.
+// the full viewport width on phones. 600px is band C's start (see Hero.astro).
 const mSrcset = (ext: string) => `${base}-m-800.${ext} 800w, ${base}-m.${ext} 1200w`;
-const mSizes = "(min-width: 768px) 46vw, 100vw";
+const mSizes = "(min-width: 600px) 46vw, 100vw";
 ---
 
 <picture>
