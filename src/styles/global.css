@@ -35,9 +35,11 @@
   --text-stat--line-height: 1;
   --text-stat--letter-spacing: -0.02em;
 
-  /* Radius — PLACEHOLDER */
-  --radius-tile: 0.875rem;       /* 9:16 video tiles */
-  --radius-card: 1.25rem;        /* lane / rate cards */
+  /* Radius — squared off by Dom's call (2026-09-07): no rounding anywhere.
+     Still tokens, so a later softening stays a one-file edit. */
+  --radius-tile: 0;              /* video tiles + hero frame */
+  --radius-card: 0;              /* lane / rate cards */
+  --radius-button: 0;            /* CTA buttons */
 
   /* Layout */
   --container-page: 76rem;
@@ -64,7 +66,7 @@
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 0;
   }
 
   /* Video tiles must never shift layout while a poster loads. */

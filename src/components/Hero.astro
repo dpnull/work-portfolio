@@ -21,8 +21,8 @@ const { hero } = site;
     </a>
   </div>
 
-  <!-- Media height is capped on phones so the copy and stats stay within reach. -->
-  <div class="mx-auto w-full max-w-[min(100%,calc(60svh*9/16))] lg:order-1 lg:col-span-5 lg:max-w-none">
+  <!-- Square frame: capping the width caps the height too, so the stats stay in reach on phones. -->
+  <div class="mx-auto w-full max-w-[min(100%,60svh)] lg:order-1 lg:col-span-5 lg:max-w-none">
     <HeroMedia poster={hero.poster} alt={hero.posterAlt} video={hero.video} />
   </div>
 </section>
