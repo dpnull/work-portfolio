@@ -1,14 +1,48 @@
 ---
 import site from "../data/site.json";
+// Tiles: fused hairlines in the sky blue (Dom, 2026-09-07) — each tile owns its right
+// and bottom edge, the list owns the top and left, so neighbours share one line.
+// Background: AI render (nano-banana-2, 21:9) of a blue-hour promenade echoing the hero
+// photo — palms, one sodium lamp. Chosen by Dom 2026-09-07 from 8 candidates. Files in
+// public/stats-bg{,-1200}.{webp,jpg}; regenerate the four together. The gradient keeps
+// the strip's mean luminance low so the ice numbers stay AAA at any viewport.
 ---
 
-<section aria-label="Results at a glance" class="border-line border-y">
-  <dl class="mx-auto grid max-w-(--container-page) grid-cols-2 gap-x-6 gap-y-8 px-6 py-10 sm:px-8 lg:grid-cols-4">
-    {site.stats.map((stat) => (
-      <div>
-        <dd class="font-display text-stat text-accent font-semibold">{stat.value}</dd>
-        <dt class="text-paper-dim mt-2 text-sm">{stat.label}</dt>
-      </div>
-    ))}
-  </dl>
+<section aria-label="Results at a glance" class="border-line stats-strip relative border-y">
+  <div class="mx-auto max-w-(--container-page) px-6 py-10 sm:px-8">
+    <dl class="stats-tiles relative grid grid-cols-2 lg:grid-cols-4">
+      {site.stats.map((stat) => (
+        <div class="px-6 py-7 text-center">
+          <dd class="font-display text-stat text-ice font-semibold">{stat.value}</dd>
+          <dt class="text-mist mt-2 text-sm text-balance">{stat.label}</dt>
+        </div>
+      ))}
+    </dl>
+  </div>
 </section>
+
+<style>
+  .stats-tiles {
+    border-top: 1px solid var(--color-tile-line);
+    border-left: 1px solid var(--color-tile-line);
+  }
+  .stats-tiles > div {
+    border-right: 1px solid var(--color-tile-line);
+    border-bottom: 1px solid var(--color-tile-line);
+  }
+  .stats-strip {
+    background-color: var(--color-dusk);
+    background-image:
+      linear-gradient(to bottom, rgb(10 10 11 / 0.35), rgb(10 10 11 / 0.15) 40%, rgb(10 10 11 / 0.55)),
+      image-set(url("/stats-bg-1200.webp") type("image/webp"), url("/stats-bg-1200.jpg") type("image/jpeg"));
+    background-size: cover;
+    background-position: 62% 45%; /* keeps the lamp between the 2nd and 3rd figure */
+  }
+  @media (min-width: 1200px) {
+    .stats-strip {
+      background-image:
+        linear-gradient(to bottom, rgb(10 10 11 / 0.35), rgb(10 10 11 / 0.15) 40%, rgb(10 10 11 / 0.55)),
+        image-set(url("/stats-bg.webp") type("image/webp"), url("/stats-bg.jpg") type("image/jpeg"));
+    }
+  }
+</style>

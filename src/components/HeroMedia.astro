@@ -1,12 +1,14 @@
 ---
 /**
- * Hero media slot — SQUARE (1:1). Image first: the poster is the LCP element,
- * so it is never lazy and carries fetchpriority="high". When `video` is set, a
- * muted looping clip layers over the poster and the poster stays as its
- * fallback frame. NOTE: a 9:16 clip dropped in here is centre-cropped by
- * object-cover.
+ * Hero media slot — the crop Dom set in the tuner (3012x2133 of the source). It fills its parent and is cropped by
+ * object-cover, so the parent owns the size, the position and the mask that
+ * dissolves the left edge into the ground (see Hero.astro).
  *
- * `poster` is the .jpg path; the -640 variant and the .webp siblings are
+ * Image first: the poster is the LCP element, so it is never lazy and carries
+ * fetchpriority="high". When `video` is set, a muted looping clip layers over
+ * the poster and the poster stays as its fallback frame.
+ *
+ * `poster` is the .jpg path; the -1000 variant and the .webp siblings are
  * derived from it, so all four files must be generated together
  * (see PROGRESS.md for the crop recipe).
  */
@@ -17,37 +19,34 @@ interface Props {
 }
 const { poster, alt, video = null } = Astro.props;
 const base = poster.replace(/\.jpg$/, "");
-const srcset = (ext: string) => `${base}-640.${ext} 640w, ${base}.${ext} 1080w`;
-// Desktop frame is ~460px wide; on phones it is the column width.
-const sizes = "(min-width: 1024px) 460px, 90vw";
+const srcset = (ext: string) => `${base}-1000.${ext} 1000w, ${base}.${ext} 2000w`;
+// Desktop the photo is 69vw; on phones it is the full column width.
+const sizes = "(min-width: 1024px) 69vw, 100vw";
 ---
 
-<figure class="bg-surface relative aspect-square w-full overflow-hidden rounded-(--radius-tile)">
-  <picture>
-    <source type="image/webp" srcset={srcset("webp")} sizes={sizes} />
-    <img
-      src={poster}
-      srcset={srcset("jpg")}
-      sizes={sizes}
-      alt={alt}
-      width="1080"
-      height="1080"
-      fetchpriority="high"
-      decoding="async"
-      class="absolute inset-0 h-full w-full object-cover"
-    />
-  </picture>
-  {video && (
-    <video
-      src={video}
-      poster={poster}
-      autoplay
-      muted
-      playsinline
-      loop
-      preload="metadata"
-      aria-hidden="true"
-      class="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
-    ></video>
-  )}
-</figure>
+<picture>
+  <source type="image/webp" srcset={srcset("webp")} sizes={sizes} />
+  <img
+    src={poster}
+    srcset={srcset("jpg")}
+    sizes={sizes}
+    alt={alt}
+    width="2000"
+    height="1416"
+    fetchpriority="high"
+    decoding="async"
+  />
+</picture>
+{video && (
+  <video
+    src={video}
+    poster={poster}
+    autoplay
+    muted
+    playsinline
+    loop
+    preload="metadata"
+    aria-hidden="true"
+    class="motion-reduce:hidden"
+  ></video>
+)}

@@ -7,9 +7,9 @@ import site from "../data/site.json";
 
   <nav aria-label="Primary" class="flex items-center gap-5 text-sm">
     {site.nav.map((item) => (
-      <a href={item.href} class="text-paper-dim hover:text-paper hidden sm:inline">{item.label}</a>
+      <a href={item.href} class="text-ink-dim hover:text-ink hidden sm:inline">{item.label}</a>
     ))}
-    <a href={`mailto:${site.email}`} class="text-paper-dim hover:text-paper hidden md:inline">{site.email}</a>
+    <a href={`mailto:${site.email}`} class="text-ink-dim hover:text-ink hidden md:inline">{site.email}</a>
     <a
       href={site.bookUrl}
       class="bg-accent text-accent-ink rounded-(--radius-button) px-4 py-2 font-semibold transition-transform hover:-translate-y-0.5"

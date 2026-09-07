@@ -16,7 +16,7 @@ const tiles = clips.groups.flatMap((g) => g.clips).slice(0, TILE_COUNT);
       <li>
         <div class="bg-surface border-line aspect-[9/16] rounded-(--radius-tile) border border-dashed"></div>
         <p class="mt-3 text-sm">{clip.title}</p>
-        <p class="text-paper-dim font-mono text-xs">
+        <p class="text-ink-dim font-mono text-xs">
           {[clip.label.format, clip.label.category, clip.label.result].filter(Boolean).join(" · ") || "format · category · result"}
         </p>
       </li>

@@ -2,22 +2,228 @@
 import site from "../data/site.json";
 import HeroMedia from "./HeroMedia.astro";
 const { hero } = site;
+
+/**
+ * Hero — copy left, photo pinned to the right edge and dissolved into the
+ * ground on its left. Every number below came out of the hero tuner
+ * (scratchpad/hero-tuner.html, published as an Artifact); Dom dialled them on
+ * 2026-09-07. Don't eyeball changes to them — re-open the tuner, move the
+ * sliders, and paste the settings block back.
+ *
+ *   photo width 69%   crop x=0 y=915 w=3012 h=2133 of the 3024x4537 source
+ *   dissolve  floor 48%, feather 6%, solid at 22%, eased
+ *   veil      95%, gone by 62%, starts 48% down
+ *
+ * The floor is the point: the photo keeps 48% opacity all the way to its left
+ * edge instead of fading to nothing, so it reads as one image washing into the
+ * page rather than a picture with a soft border. The 6% feather is what stops
+ * that left edge being a visible line.
+ *
+ * The lede's measure (33ch) breaks the sentence over FOUR lines, which is what
+ * carries it into the picture. The four-line band is ~29ch-34ch. If the
+ * sentence is rewritten, re-check the line count.
+ *
+ * Below 1024px the overlap is dropped: text over an image at phone width is
+ * where the idea breaks, so the photo becomes a block with a soft bottom edge
+ * and the copy sits under it.
+ */
 ---
 
-<section
-  aria-labelledby="hero-heading"
-  class="mx-auto grid max-w-(--container-page) items-center gap-10 px-6 py-10 sm:px-8 lg:grid-cols-12 lg:gap-20 lg:py-16"
->
-  <!-- Copy first in the DOM so the phone shows the summary before the media. -->
-  <div class="lg:order-2 lg:col-span-7">
+<section aria-labelledby="hero-heading" class="hero">
+  <div class="media">
+    <HeroMedia poster={hero.poster} alt={hero.posterAlt} video={hero.video} />
+  </div>
+  <div class="veil" aria-hidden="true"></div>
+
+  <div class="wrap mx-auto max-w-(--container-page) px-6 py-10 sm:px-8 lg:py-16">
     {/* No visible title by Dom's call; the page still needs one h1 for structure. */}
     <h1 id="hero-heading" class="sr-only">{hero.srHeading}</h1>
 
-    <p class="text-lede max-w-[46ch] text-pretty">{hero.summary}</p>
-  </div>
+    <p class="lede text-pretty"><span>{hero.lede}</span></p>
 
-  <!-- Square frame: capping the width caps the height too, so the stats stay in reach on phones. -->
-  <div class="mx-auto w-full max-w-[min(100%,60svh)] lg:order-1 lg:col-span-5 lg:max-w-none">
-    <HeroMedia poster={hero.poster} alt={hero.posterAlt} video={hero.video} />
+    <div class="border-line mt-7 grid max-w-[46ch] gap-5 border-t pt-5 text-[0.9375rem]">
+      {hero.blocks.map((block) => (
+        <div>
+          <p class="text-ink-dim mb-1 text-xs font-semibold tracking-[0.11em] uppercase">
+            {block.label}
+          </p>
+          <p>{block.body}</p>
+        </div>
+      ))}
+    </div>
+
+    {/* Full-strength ink, not ink-dim: the tail of this line sits over the
+        darkest part of the photo, where dim grey measured 2.6:1. */}
+    <p class="mt-5 text-[0.8125rem]">{hero.tools}</p>
   </div>
 </section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+  }
+  .wrap {
+    position: relative;
+    z-index: 2;
+  }
+  .media {
+    position: relative;
+    z-index: 0;
+  }
+  /* <picture> is inline by default, so a percentage height on the img inside
+     it resolves to auto and the photo collapses. It has to be a block box. */
+  .media :global(picture) {
+    display: block;
+    height: 100%;
+  }
+  .media :global(img),
+  .media :global(video) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* His face sits at 41% across and 51% down the crop. Anchoring there keeps
+       him framed the same way when the box aspect drifts from the asset's. */
+    object-position: 41% 51%;
+  }
+
+  /* Phone: no overlap. Photo is a 4:5 block that fades into the ground at the
+     bottom, copy underneath. Capped against the viewport so the stats stay
+     within reach on a short screen. */
+  .media :global(img),
+  .media :global(video) {
+    aspect-ratio: 4 / 5;
+    max-height: 62svh;
+    -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  }
+  .media :global(video) {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* The photo darkens towards the bottom (his jacket), and that is exactly
+     where the supporting copy sits. The veil brings the ground back under the
+     lower-left copy only: it is masked away above the lede, so the sentence
+     keeps sitting on open sky. */
+  .veil {
+    display: none;
+  }
+
+  @media (min-width: 64rem) {
+    .hero {
+      display: flex;
+      align-items: center;
+      min-height: 44rem;
+    }
+    .wrap {
+      width: 100%;
+    }
+    .media {
+      position: absolute;
+      inset: 0 0 0 auto;
+      width: 69%;
+    }
+    .media :global(img),
+    .media :global(video) {
+      aspect-ratio: auto;
+      max-height: none;
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        rgb(0 0 0 / 0.48) 6%,
+        rgb(0 0 0 / 0.483) 7.3%,
+        rgb(0 0 0 / 0.498) 8.7%,
+        rgb(0 0 0 / 0.534) 10.0%,
+        rgb(0 0 0 / 0.589) 11.3%,
+        rgb(0 0 0 / 0.660) 12.7%,
+        rgb(0 0 0 / 0.740) 14.0%,
+        rgb(0 0 0 / 0.820) 15.3%,
+        rgb(0 0 0 / 0.891) 16.7%,
+        rgb(0 0 0 / 0.946) 18.0%,
+        rgb(0 0 0 / 0.982) 19.3%,
+        rgb(0 0 0 / 0.997) 20.7%,
+        rgb(0 0 0 / 1.000) 22.0%,
+        #000 22%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        rgb(0 0 0 / 0.48) 6%,
+        rgb(0 0 0 / 0.483) 7.3%,
+        rgb(0 0 0 / 0.498) 8.7%,
+        rgb(0 0 0 / 0.534) 10.0%,
+        rgb(0 0 0 / 0.589) 11.3%,
+        rgb(0 0 0 / 0.660) 12.7%,
+        rgb(0 0 0 / 0.740) 14.0%,
+        rgb(0 0 0 / 0.820) 15.3%,
+        rgb(0 0 0 / 0.891) 16.7%,
+        rgb(0 0 0 / 0.946) 18.0%,
+        rgb(0 0 0 / 0.982) 19.3%,
+        rgb(0 0 0 / 0.997) 20.7%,
+        rgb(0 0 0 / 1.000) 22.0%,
+        #000 22%
+      );
+    }
+    .veil {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        to right,
+        color-mix(in srgb, var(--color-ground) 95.0%, transparent) 0,
+        color-mix(in srgb, var(--color-ground) 94.2%, transparent) 6.2%,
+        color-mix(in srgb, var(--color-ground) 89.5%, transparent) 12.4%,
+        color-mix(in srgb, var(--color-ground) 79.5%, transparent) 18.6%,
+        color-mix(in srgb, var(--color-ground) 64.8%, transparent) 24.8%,
+        color-mix(in srgb, var(--color-ground) 47.5%, transparent) 31.0%,
+        color-mix(in srgb, var(--color-ground) 30.2%, transparent) 37.2%,
+        color-mix(in srgb, var(--color-ground) 15.5%, transparent) 43.4%,
+        color-mix(in srgb, var(--color-ground) 5.5%, transparent) 49.6%,
+        color-mix(in srgb, var(--color-ground) 0.8%, transparent) 55.8%,
+        color-mix(in srgb, var(--color-ground) 0.0%, transparent) 62.0%
+      );
+      -webkit-mask-image: linear-gradient(to bottom, transparent 48%, #000 68%);
+      mask-image: linear-gradient(to bottom, transparent 48%, #000 68%);
+    }
+  }
+
+  /* Plate: each line of the lede carries its own solid block, the way a
+     highlighter would. Two things make it work:
+     - `box-decoration-break: clone` repeats the padding and background per
+       line instead of wrapping the whole run once.
+     - the block is a GRADIENT BAND, not the element's background. An inline
+       background paints the full font box, which for Hanken is 1.303em - taller
+       than the text and with no way to shrink it, so consecutive plates touch.
+       Painting a band at 86% of that box makes the plate shorter than the line,
+       which is the only way to get real gaps between the lines (Dom, 2026-09-07).
+     Plate height is therefore 1.303em x 0.86 = 1.12em, and the line-height is
+     that plus the gap. Change one, change the other.
+     The negative margin pulls the first character back onto the text column's
+     left edge so the plate's padding does not read as an indent. */
+  .lede span {
+    color: var(--color-ink);
+    background-image: linear-gradient(var(--color-plate), var(--color-plate));
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 100% 86%;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding: 0 10px;
+    margin-left: -10px;
+  }
+  .lede {
+    font-size: 1.125rem;
+    line-height: calc(1.12em + 4px); /* plate height + gap */
+  }
+  @media (min-width: 64rem) {
+    .lede {
+      max-width: 33ch; /* four lines - see the note above */
+      font-size: var(--text-lede);
+      line-height: calc(1.12em + 6px); /* plate height + a 6px gap */
+      letter-spacing: var(--text-lede--letter-spacing);
+      font-weight: 500;
+    }
+  }
+</style>

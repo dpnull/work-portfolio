@@ -2,28 +2,16 @@
 
 /* ─────────────────────────────────────────────────────────────
    TYPEFACES — self-hosted, latin subset, OFL.
-   Chakra Petch: squared-off techno sans, the Y2K/cyber note.
-   Kode Mono: variable terminal mono for eyebrows, labels, code-ish bits.
-   Files live in public/fonts/. Latin only — 44 KB for all four.
+   Hanken Grotesk: neutral Swiss grotesque, variable 400–700. Softer and
+   more professional than the Chakra Petch it replaced (Dom, 2026-09-07).
+   Kode Mono: variable terminal mono for labels and code-ish bits — the
+   one place the Y2K note still lives in the type.
+   Files live in public/fonts/. Latin only — ~40 KB for both.
    ───────────────────────────────────────────────────────────── */
 @font-face {
-  font-family: "Chakra Petch";
-  src: url("/fonts/chakra-400.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Chakra Petch";
-  src: url("/fonts/chakra-600.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Chakra Petch";
-  src: url("/fonts/chakra-700.woff2") format("woff2");
-  font-weight: 700;
+  font-family: "Hanken Grotesk";
+  src: url("/fonts/hanken-400-700.woff2") format("woff2");
+  font-weight: 400 700;
   font-style: normal;
   font-display: swap;
 }
@@ -43,18 +31,34 @@
    the codebase should hardcode a colour, font or radius.
    ───────────────────────────────────────────────────────────── */
 @theme {
-  /* Colour — PLACEHOLDER palette (near-black / off-white / one accent) */
-  --color-ink: #0a0a0b;          /* page background */
-  --color-surface: #141416;      /* cards, tiles */
-  --color-surface-2: #1e1e21;    /* raised / hover */
-  --color-line: #2a2a2e;         /* hairline borders */
-  --color-paper: #f4f4f2;        /* primary text on ink */
-  --color-paper-dim: #a1a1a6;    /* secondary text */
-  --color-accent: #e5ff3d;       /* CTA / numbers */
-  --color-accent-ink: #0a0a0b;   /* text on accent */
+  /* Colour — "Sand" light palette (Dom, 2026-09-07). Warm greige paper against
+     a cool dusk photograph: the ground sits opposite the sky's hue (≈208°)
+     instead of matching it, which is what makes the blue read as colour rather
+     than as more background. The strip stays the dusk sky, so the page runs
+     warm → photo → dark blue as you scroll.
+     Naming: `ground` is the page, `ink` is text, `plate` is the solid block
+     behind each line of the hero lede. Lime is a FILL only — it fails as text
+     on any of these grounds — so numbers on the strip use `ice`.
+     NOTE: lime now does two jobs, the lede plate and the CTA. If a third lime
+     thing ever appears, the button stops being the loudest object on the page.
+     Superseded: "Ice" #dfe6ec (blue-grey), "Bone" #f2eee7 (lighter warm). */
+  --color-ground: #e9e1d5;       /* page background */
+  --color-surface: #ded2c1;      /* cards, tiles */
+  --color-surface-2: #d7c8b2;    /* raised / hover */
+  --color-line: #cdbba0;         /* hairline borders */
+  --color-ink: #0f161e;          /* primary text on ground (13.7:1) */
+  --color-ink-dim: #48586a;      /* secondary text (5.6:1) */
+  --color-accent: #e5ff3d;       /* CTA fill only */
+  --color-accent-ink: #0a0a0b;   /* text on accent (13:1) */
+  --color-dusk: #16202c;         /* stats strip ground: hero sky, darkened */
+  --color-dusk-line: #2b3a4a;    /* lines on dusk */
+  --color-ice: #e8eff6;          /* numbers on the strip */
+  --color-mist: #9db2c6;         /* labels on the strip: the sky, desaturated */
+  --color-tile-line: rgb(129 171 205 / 0.3); /* stat tile hairlines: the sky at 30% */
+  --color-plate: #e5ff3d;        /* solid block behind each line of the hero lede */
 
-  /* Type — Y2K/cyber but plain: squared-off sans + terminal mono, no display face. */
-  --font-sans: "Chakra Petch", ui-sans-serif, system-ui, -apple-system,
+  /* Type — neutral grotesque + terminal mono, no display face. */
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-display: var(--font-sans);
   --font-mono: "Kode Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
@@ -67,9 +71,12 @@
   --text-section: clamp(1.5rem, 4vw, 2.25rem);
   --text-section--line-height: 1.1;
   --text-section--letter-spacing: -0.02em;
-  /* The hero summary carries the hero on its own — no title above it. */
-  --text-lede: clamp(1.0625rem, 1.1vw + 0.8rem, 1.375rem);
-  --text-lede--line-height: 1.5;
+  /* The hero lede carries the hero on its own — no title above it. Desktop
+     only: it is set over the photo, and its measure (33ch, in Hero.astro) is
+     tuned so it breaks over four lines. On phones the lede is body size. */
+  --text-lede: clamp(1.5rem, 3vw, 2.375rem);
+  --text-lede--line-height: 1.22;
+  --text-lede--letter-spacing: -0.022em;
 
   --text-stat: clamp(1.75rem, 6vw, 2.75rem);
   --text-stat--line-height: 1;
@@ -90,8 +97,9 @@
    ───────────────────────────────────────────────────────────── */
 @layer base {
   html {
-    background-color: var(--color-ink);
-    color: var(--color-paper);
+    color-scheme: light;
+    background-color: var(--color-ground);
+    color: var(--color-ink);
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
   }
@@ -102,9 +110,10 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Focus that is visible on a dark ground and never removed. */
+  /* Focus that is visible on the light ground and never removed. Lime is
+     invisible here, so the ring is ink. */
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-ink);
     outline-offset: 3px;
     border-radius: 0;
   }

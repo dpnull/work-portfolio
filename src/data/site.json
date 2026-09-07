@@ -1,5 +1,5 @@
 {
-  "_note": "Header + hero copy. Stats are blueprint PLACEHOLDERS and are Dom's call to confirm. Keep them to four.",
+  "_note": "Header + hero copy. Stats confirmed by Dom 2026-09-07: audience quality + conversion, not reach. Followers deliberately not shown. Keep them to four.",
   "wordmark": "dpy2k",
   "name": "Dom Przewozny",
   "email": "dprzewozny2k@icloud.com",
@@ -19,29 +19,42 @@
     "description": "Social media creator who scripts, films and edits. 12K audience in men’s beauty and self-improvement, London."
   },
   "hero": {
-    "_note": "No visible title or eyebrow by Dom's call (2026-09-07) — the summary carries the hero. srHeading is the visually-hidden h1 that keeps the page structurally valid.",
+    "_note": "No visible title or eyebrow by Dom's call (2026-09-07) — the lede carries the hero, set over the photo. srHeading is the visually-hidden h1 that keeps the page structurally valid. The lede must break over FOUR lines at desktop; if you rewrite it, re-check the line count against the 33ch measure in Hero.astro.",
     "srHeading": "Dom Przewozny — social media creator",
-    "summary": "Social media creator who scripts, films and edits. I’ve built a 12K audience around men’s beauty and self-improvement and generated around 2,000 email sign-ups through my own content funnel. I bring that creative experience together with hands-on skills in technology, AI and automation.",
-    "poster": "/hero.jpg",
-    "posterAlt": "Dom Przewozny at dusk, palm trees and a sunset sky behind him",
+    "lede": "Social media creator with a computer science background. I script, film and edit, then use AI and automation to make the content convert.",
+    "blocks": [
+      {
+        "label": "Growth",
+        "body": "Took an Instagram account from zero to 12K in six months, built a second audience of 10K on Xiaohongshu, and turned that into 1,750 email subscribers through a funnel I built myself. I plan topics and film for a creator with 7M followers."
+      },
+      {
+        "label": "Production",
+        "body": "Full production from plan to delivery: budgets, schedules, locations, crew and on-set. Premiere Pro and CapCut for edit and grade, Figma for design, Notion for the system behind it. Camera and drone."
+      }
+    ],
+    "tools": "Premiere Pro · CapCut · Figma · Canva · Notion · camera & drone",
+    "poster": "/hero-portrait.jpg",
+    "posterAlt": "Dom Przewozny at dusk, palm trees and a sodium lamp behind him",
     "video": null
   },
   "stats": [
     {
-      "value": "12.4K",
-      "label": "followers"
-    },
-    {
-      "value": "976K",
-      "label": "plays, one reel"
-    },
-    {
-      "value": "2,142",
-      "label": "follows from one post"
+      "value": "14%",
+      "label": "of followers on my email list",
+      "_calc": "1,750 sign-ups / 12,500 followers"
     },
     {
       "value": "95%",
-      "label": "male 18–34"
+      "label": "male audience"
+    },
+    {
+      "value": "18–34",
+      "label": "core age range"
+    },
+    {
+      "value": "XX%",
+      "label": "sign-up page conversion",
+      "_todo": "PLACEHOLDER — Dom to supply the real landing-page conversion rate (visitors → sign-ups). Replace XX before deploy."
     }
   ]
 }
