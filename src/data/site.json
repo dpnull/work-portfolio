@@ -1,0 +1,25 @@
+{
+  "_note": "Header + hero copy. PLACEHOLDER values come from research/01-portfolio-blueprint.md and are Dom's call to replace. Keep the four stats to four.",
+  "wordmark": "dpy2k",
+  "name": "Dom Przewozny",
+  "email": "dprzewozny2k@icloud.com",
+  "bookUrl": "#contact",
+  "nav": [
+    { "label": "Work", "href": "#work" },
+    { "label": "Rates", "href": "#rates" }
+  ],
+  "hero": {
+    "eyebrow": "Short-form video · London",
+    "promise": "Short-form video that sells to men 18–34.",
+    "positioning": "I make content for men 18–34, because that's who watches mine. UGC ads for brands. Monthly content systems for founders.",
+    "poster": "/hero-poster.svg",
+    "posterAlt": "Dom Przewozny",
+    "video": null
+  },
+  "stats": [
+    { "value": "12.4K", "label": "followers" },
+    { "value": "976K", "label": "plays, one reel" },
+    { "value": "2,142", "label": "follows from one post" },
+    { "value": "95%", "label": "male 18–34" }
+  ]
+}

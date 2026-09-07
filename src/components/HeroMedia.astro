@@ -1,0 +1,39 @@
+---
+/**
+ * Hero media slot. Image first: the poster is the LCP element and always
+ * renders. When `video` is set, a muted looping clip layers over the poster
+ * and the poster stays as its fallback frame. Never lazy — this is above
+ * the fold.
+ */
+interface Props {
+  poster: string;
+  alt: string;
+  video?: string | null;
+}
+const { poster, alt, video = null } = Astro.props;
+---
+
+<figure class="bg-surface relative aspect-[9/16] w-full overflow-hidden rounded-(--radius-tile)">
+  <img
+    src={poster}
+    alt={alt}
+    width="1080"
+    height="1920"
+    fetchpriority="high"
+    decoding="async"
+    class="absolute inset-0 h-full w-full object-cover"
+  />
+  {video && (
+    <video
+      src={video}
+      poster={poster}
+      autoplay
+      muted
+      playsinline
+      loop
+      preload="metadata"
+      aria-hidden="true"
+      class="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
+    ></video>
+  )}
+</figure>

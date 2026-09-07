@@ -1,0 +1,14 @@
+---
+import site from "../data/site.json";
+---
+
+<section aria-label="Results at a glance" class="border-line border-y">
+  <dl class="mx-auto grid max-w-(--container-page) grid-cols-2 gap-x-6 gap-y-8 px-6 py-10 sm:px-8 lg:grid-cols-4">
+    {site.stats.map((stat) => (
+      <div>
+        <dd class="font-display text-stat text-accent">{stat.value}</dd>
+        <dt class="text-paper-dim mt-2 text-sm">{stat.label}</dt>
+      </div>
+    ))}
+  </dl>
+</section>

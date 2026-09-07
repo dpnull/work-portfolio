@@ -1,0 +1,20 @@
+---
+import site from "../data/site.json";
+---
+
+<header class="mx-auto flex max-w-(--container-page) items-center justify-between gap-6 px-6 py-5 sm:px-8">
+  <a href="/" class="font-display text-lg font-semibold tracking-tight">{site.wordmark}</a>
+
+  <nav aria-label="Primary" class="flex items-center gap-5 text-sm">
+    {site.nav.map((item) => (
+      <a href={item.href} class="text-paper-dim hover:text-paper hidden sm:inline">{item.label}</a>
+    ))}
+    <a href={`mailto:${site.email}`} class="text-paper-dim hover:text-paper hidden md:inline">{site.email}</a>
+    <a
+      href={site.bookUrl}
+      class="bg-accent text-accent-ink rounded-full px-4 py-2 font-semibold transition-transform hover:-translate-y-0.5"
+    >
+      Book a call
+    </a>
+  </nav>
+</header>
