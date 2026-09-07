@@ -1,20 +1,181 @@
 ---
 import site from "../data/site.json";
+// THE RAIL (Dom's pick from a five-option board, 2026-09-07).
+// Full-bleed row of fused hairline cells — same construction as the stats strip:
+// neighbours share one 1px `line` rule, there are no gaps, and the button IS the
+// cell. Order at >=1024: wordmark | Work | Rates | email | Book a call.
+// Dom's change vs the board: the CTA carries a 2px `ink` border on all four sides
+// while the rest of the rail stays 1px. It sits 1px proud of the row
+// (`margin-block: -1px` on a stretched flex item) so that border COVERS the rail's
+// top and bottom hairlines instead of stacking 1px+2px against them, and there is
+// deliberately no `line` rule between the email cell and the CTA — the ink border
+// does the separating.
+// 640–1023: the email cell is dropped and an empty flex spacer cell holds its slot,
+// so the rail language survives. <640: two 48px tiers — wordmark centred, then
+// three equal cells Work | Rates | Book a call. No email on phones (see the open
+// flag in PROGRESS.md; block 4's contact section is the fix).
+// Lime appears exactly once here, on the CTA. The rail is static, never sticky.
 ---
 
-<header class="mx-auto flex max-w-(--container-page) items-center justify-between gap-6 px-6 py-5 sm:px-8">
-  <a href="/" class="font-display text-lg font-semibold tracking-tight">{site.wordmark}</a>
+<header class="rail">
+  <a href="/" class="rail-cell rail-mark font-display text-lg font-semibold">{site.wordmark}</a>
 
-  <nav aria-label="Primary" class="flex items-center gap-5 text-sm">
+  <nav aria-label="Primary" class="rail-nav">
     {site.nav.map((item) => (
-      <a href={item.href} class="text-ink-dim hover:text-ink hidden sm:inline">{item.label}</a>
+      <a href={item.href} class="rail-cell rail-link text-sm">{item.label}</a>
     ))}
-    <a href={`mailto:${site.email}`} class="text-ink-dim hover:text-ink hidden md:inline">{site.email}</a>
-    <a
-      href={site.bookUrl}
-      class="bg-accent text-accent-ink rounded-(--radius-button) px-4 py-2 font-semibold transition-transform hover:-translate-y-0.5"
-    >
-      Book a call
-    </a>
+    <a href={`mailto:${site.email}`} class="rail-cell rail-email font-mono text-xs">{site.email}</a>
+    <div class="rail-spacer" aria-hidden="true"></div>
+    <a href={site.bookUrl} class="rail-cell rail-cta text-sm font-semibold">Book a call</a>
   </nav>
 </header>
+
+<style>
+  /* ── The rail itself ──────────────────────────────────────────────
+     Phone first: two tiers inside one 96px border-box, so the hairlines
+     are part of the height rather than added to it. */
+  .rail {
+    display: flex;
+    flex-wrap: wrap;
+    height: 96px;
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  /* Both tiers are pinned to 47px rather than left to `align-content: stretch`,
+     which shares out the LEFTOVER space and so hands the taller line (the 18px
+     wordmark) a taller tier. 1 + 47 + 47 + 1 = the 96px border box, and each
+     tier reads as 48px once its hairline is counted. */
+  .rail-mark,
+  .rail-nav {
+    height: 47px;
+  }
+
+  .rail-mark {
+    flex: 1 0 100%;
+    padding-inline: 30px;
+    letter-spacing: -0.02em;
+  }
+
+  .rail-nav {
+    display: flex;
+    flex: 1 0 100%;
+    border-top: 1px solid var(--color-line); /* the tier divider; gone at >=640 */
+  }
+
+  /* ── Cells ────────────────────────────────────────────────────────
+     Every cell is the full height of its row, centred, and inverts on
+     hover/focus. Neighbours share one rule: each cell owns its LEFT edge,
+     the first of a row owns none (the viewport edge does that job). */
+  .rail-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--color-ink);
+    transition:
+      background-color 120ms ease,
+      color 120ms ease;
+  }
+
+  .rail-nav > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .rail-nav > * + *:not(.rail-cta) {
+    border-left: 1px solid var(--color-line);
+  }
+
+  .rail-link {
+    padding-inline: 12px;
+  }
+
+  .rail-email {
+    letter-spacing: 0.05em;
+    color: var(--color-ink-dim);
+    padding-inline: 24px;
+  }
+
+  /* Hidden on phones; the spacer wakes up at 640, the email at 1024. */
+  .rail-email,
+  .rail-spacer {
+    display: none;
+  }
+
+  /* ── The CTA ──────────────────────────────────────────────────────
+     2px ink on all four sides, pulled 1px proud top and bottom so the
+     border lands exactly on the rail's hairlines (and on the tier divider
+     on phones) rather than beside them. Its right border sits on the
+     viewport edge. */
+  .rail-cta {
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
+    border: 2px solid var(--color-ink);
+    margin-block: -1px;
+    padding-inline: 12px;
+  }
+
+  /* Invert: ink ground, page-colour text. The rules stay put. */
+  .rail-cell:hover,
+  .rail-cell:focus-visible {
+    background-color: var(--color-ink);
+    color: var(--color-ground);
+  }
+
+  /* The global focus ring is ink, which vanishes against the inverted ink
+     cell — same square 2px ring, recoloured and pulled inside so it also
+     clears the viewport edge on the CTA. */
+  .rail-cell:focus-visible {
+    outline: 2px solid var(--color-ground);
+    outline-offset: -6px;
+  }
+
+  /* ── Tablet: one 56px row, email swapped for an empty spacer cell ── */
+  @media (min-width: 640px) {
+    .rail {
+      flex-wrap: nowrap;
+      height: 56px;
+    }
+    /* auto = stretch again, so both fill the single row */
+    .rail-mark,
+    .rail-nav {
+      height: auto;
+    }
+    .rail-mark {
+      flex: 0 0 auto;
+    }
+    .rail-nav {
+      flex: 1 1 auto;
+      border-top: 0;
+    }
+    .rail-nav > * {
+      flex: 0 0 auto;
+    }
+    .rail-nav > *:first-child {
+      border-left: 1px solid var(--color-line);
+    }
+    .rail-link {
+      padding-inline: 28px;
+    }
+    .rail-cta {
+      padding-inline: 32px;
+    }
+    .rail-nav > .rail-spacer {
+      display: block;
+      flex: 1 1 0;
+    }
+  }
+
+  /* ── Desktop: the email takes the middle back off the spacer ── */
+  @media (min-width: 1024px) {
+    .rail-nav > .rail-spacer {
+      display: none;
+    }
+    .rail-nav > .rail-email {
+      display: flex;
+      flex: 1 1 0;
+    }
+  }
+</style>
