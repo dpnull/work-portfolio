@@ -110,7 +110,14 @@ const { hero } = site;
        keeps the caption a constant fraction of the box as the width changes. */
     --m-lede-size: clamp(0.9375rem, 4.4vw, 1.125rem);
     --m-lede-lines: 4; /* the lede's line count — see the note on the lift */
-    --m-lede-inset: 16px; /* lede baseline block to the photo's bottom edge */
+    /* Lede block to the photo's bottom edge. Dom raised this from 16px to 44px
+       (2026-09-07) — he wanted the caption up in the dark gap under his collar,
+       not sitting on the photo's bottom edge. It is capped by width because the
+       caption's height is set in px while the box scales with the viewport: at
+       375 and up the 44px is what Dom picked, and below that the vw term backs
+       it off so the caption does not climb into his throat on a 320px screen.
+       Head-to-caption clearance: 11px at 320, 19px at 375, 34px at 430. */
+    --m-lede-inset: min(44px, 11.7vw);
     /* Wider than the old 26ch: at the smaller size a narrow measure pushed the
        sentence to six lines and ate the clearance over his head. */
     --m-lede-measure: 32ch;
