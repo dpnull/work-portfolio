@@ -1,0 +1,14 @@
+# deps & build
+node_modules/
+dist/
+.astro/
+
+# local workshop files — not part of the deployable site
+PLAN.md
+research/
+design/
+
+# env & os
+.env
+.env.*
+.DS_Store

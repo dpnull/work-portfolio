@@ -1,0 +1,26 @@
+{
+  "_note": "Single source for every clip on the page. muxPlaybackId is filled in after upload; `ready` gates a clip out of the build until it has one. Labels are the 3-part rule: format · category · result.",
+  "hero": {
+    "id": "hero-loop",
+    "title": "Hero talking-head loop",
+    "muxPlaybackId": null,
+    "durationTarget": "10-15s",
+    "ready": false
+  },
+  "groups": [
+    {
+      "heading": "PLACEHOLDER — format heading (block 2)",
+      "clips": [
+        { "id": "glow-up-976k", "title": "Glow-up reel", "own": true, "label": { "format": "", "category": "", "result": "976K plays" }, "muxPlaybackId": null, "ready": false },
+        { "id": "ice-face", "title": "Ice face", "own": true, "label": { "format": "", "category": "", "result": "6.9K saves" }, "muxPlaybackId": null, "ready": false },
+        { "id": "ah-ep5-mewing", "title": "Atomic Habits EP5 — Mewing", "own": true, "label": { "format": "", "category": "", "result": "175K plays" }, "muxPlaybackId": null, "ready": false },
+        { "id": "ah-ep3-posture", "title": "Atomic Habits EP3 — Posture", "own": true, "label": { "format": "", "category": "", "result": "77K plays" }, "muxPlaybackId": null, "ready": false },
+        { "id": "ah-ep6-water", "title": "Atomic Habits EP6 — Water", "own": true, "label": { "format": "", "category": "", "result": "76K plays" }, "muxPlaybackId": null, "ready": false },
+        { "id": "experiment-opener", "title": "30-Day Experiment opener", "own": true, "label": { "format": "", "category": "", "result": "51K plays" }, "muxPlaybackId": null, "ready": false },
+        { "id": "native-talking-head", "title": "Native talking head", "own": true, "label": { "format": "", "category": "", "result": "53K plays" }, "muxPlaybackId": null, "ready": false },
+        { "id": "motion-graphics", "title": "Motion-graphics edit", "own": true, "label": { "format": "", "category": "", "result": "42K plays" }, "muxPlaybackId": null, "ready": false },
+        { "id": "unrot-01", "title": "Unrot video 1", "own": false, "label": { "format": "", "category": "", "result": "" }, "muxPlaybackId": null, "ready": false, "blockedOn": "Adrian's sign-off" }
+      ]
+    }
+  ]
+}

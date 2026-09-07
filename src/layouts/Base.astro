@@ -1,0 +1,47 @@
+---
+import "../styles/global.css";
+
+/**
+ * Site-wide shell: meta, fonts, analytics slot.
+ * Real title/description/OG copy lands in block 5 from the Notion Site row.
+ */
+
+// Pre-launch: keep the *.pages.dev URL out of search results.
+// Flip to false in block 6, once work.dpy2k.com is the live hostname.
+const NOINDEX = true;
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {NOINDEX && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {/* og:image — block 5 */}
+
+    <meta name="theme-color" content="#0a0a0b" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    {/* Cloudflare Web Analytics — block 5 */}
+  </head>
+
+  <body class="bg-ink text-paper antialiased">
+    <slot />
+  </body>
+</html>

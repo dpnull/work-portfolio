@@ -1,0 +1,40 @@
+---
+import Base from "../layouts/Base.astro";
+
+// Placeholder for block 0 — proves the token pipeline and the deploy path.
+// Blocks 1-4 replace everything below the layout with the real page.
+const email = "dprzewozny2k@icloud.com";
+---
+
+<Base
+  title="Dom Przewozny — short-form video"
+  description="Short-form video that sells to men 18-34. London."
+>
+  <main class="mx-auto flex min-h-dvh max-w-(--container-page) flex-col justify-between px-6 py-10 sm:px-8">
+    <header>
+      <a href="/" class="font-display text-lg font-semibold tracking-tight">dpy2k</a>
+    </header>
+
+    <div class="py-16">
+      <p class="text-paper-dim font-mono text-xs tracking-widest uppercase">
+        Portfolio — in build
+      </p>
+      <h1 class="font-display text-hero mt-5 max-w-3xl text-balance">
+        Short-form video that sells to men 18&ndash;34.
+      </h1>
+      <p class="text-paper-dim mt-6 max-w-md text-lg">
+        London. Full site landing shortly.
+      </p>
+      <a
+        href={`mailto:${email}`}
+        class="bg-accent text-accent-ink mt-9 inline-block rounded-full px-6 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5"
+      >
+        {email}
+      </a>
+    </div>
+
+    <footer class="border-line text-paper-dim border-t pt-6 text-xs">
+      &copy; {new Date().getFullYear()} Dom Przewozny
+    </footer>
+  </main>
+</Base>
