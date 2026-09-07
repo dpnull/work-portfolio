@@ -1,16 +1,25 @@
 ---
 /**
- * Hero media slot — the crop Dom set in the tuner (3012x2133 of the source). It fills its parent and is cropped by
- * object-cover, so the parent owns the size, the position and the mask that
- * dissolves the left edge into the ground (see Hero.astro).
+ * Hero media slot — two art-directed crops of the same photograph. It fills its
+ * parent and is cropped by object-cover, so the parent owns the size, the
+ * position and the mask that dissolves an edge into the ground (see Hero.astro).
+ *
+ *   >= 1024px  the LANDSCAPE crop (3012x2133 of the source, the tuner's frame),
+ *              pinned right and dissolved on its left.
+ *   <  1024px  a PORTRAIT 4:5 crop (1848x2310 of the source). The landscape
+ *              asset forced into a 4:5 box showed mostly sky with him small in
+ *              frame; this is cut for the box it actually lands in.
+ *
+ * The portrait entries carry `media="(max-width: 1023px)"`, so a desktop
+ * browser never downloads them and a phone never downloads the landscape set.
  *
  * Image first: the poster is the LCP element, so it is never lazy and carries
  * fetchpriority="high". When `video` is set, a muted looping clip layers over
  * the poster and the poster stays as its fallback frame.
  *
- * `poster` is the .jpg path; the -1000 variant and the .webp siblings are
- * derived from it, so all four files must be generated together
- * (see PROGRESS.md for the crop recipe).
+ * `poster` is the landscape .jpg path; every sibling is derived from it — the
+ * -1000 variant, the .webp twins and the `-m` portrait set — so all of them
+ * must be generated together (crop recipes are in PROGRESS.md).
  */
 interface Props {
   poster: string;
@@ -19,12 +28,20 @@ interface Props {
 }
 const { poster, alt, video = null } = Astro.props;
 const base = poster.replace(/\.jpg$/, "");
+
+// Landscape (desktop): 2000w + 1000w. The photo is 69vw from 1024 up.
 const srcset = (ext: string) => `${base}-1000.${ext} 1000w, ${base}.${ext} 2000w`;
-// Desktop the photo is 69vw; on phones it is the full column width.
 const sizes = "(min-width: 1024px) 69vw, 100vw";
+
+// Portrait (tablet + phone): 1200w + 800w. A 46vw column on tablets,
+// the full viewport width on phones.
+const mSrcset = (ext: string) => `${base}-m-800.${ext} 800w, ${base}-m.${ext} 1200w`;
+const mSizes = "(min-width: 768px) 46vw, 100vw";
 ---
 
 <picture>
+  <source media="(max-width: 1023px)" type="image/webp" srcset={mSrcset("webp")} sizes={mSizes} />
+  <source media="(max-width: 1023px)" type="image/jpeg" srcset={mSrcset("jpg")} sizes={mSizes} />
   <source type="image/webp" srcset={srcset("webp")} sizes={sizes} />
   <img
     src={poster}

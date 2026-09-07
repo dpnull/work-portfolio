@@ -4,11 +4,23 @@ import HeroMedia from "./HeroMedia.astro";
 const { hero } = site;
 
 /**
- * Hero — copy left, photo pinned to the right edge and dissolved into the
- * ground on its left. Every number below came out of the hero tuner
- * (scratchpad/hero-tuner.html, published as an Artifact); Dom dialled them on
- * 2026-09-07. Don't eyeball changes to them — re-open the tuner, move the
- * sliders, and paste the settings block back.
+ * Hero — four responsive bands. Read the band you are touching; they are
+ * deliberately independent, because the composition changes, not just the size.
+ *
+ *   A  >= 1280px   copy left, photo pinned right and dissolved into the ground
+ *                  on its left. DOM'S TUNED VALUES — do not alter (see below).
+ *   B  1024-1279   same composition, made to scale: height derived from the
+ *                  photo's aspect, copy column tied to the viewport, and the
+ *                  photo anchored to its own left edge so the dissolve zone
+ *                  shows the same sky at every width.
+ *   C  768-1023    two columns, no overlap: copy left, a portrait photo flush
+ *                  to the right edge with a short feathered left edge.
+ *   D  < 768px     photo first as a 4:5 block, copy under it.
+ *
+ * Band A's numbers came out of the hero tuner (scratchpad/hero-tuner.html,
+ * published as an Artifact); Dom dialled them on 2026-09-07. Don't eyeball
+ * changes to them — re-open the tuner, move the sliders, and paste the
+ * settings block back.
  *
  *   photo width 69%   crop x=0 y=915 w=3012 h=2133 of the 3024x4537 source
  *   dissolve  floor 48%, feather 6%, solid at 22%, eased
@@ -21,11 +33,11 @@ const { hero } = site;
  *
  * The lede's measure (33ch) breaks the sentence over FOUR lines, which is what
  * carries it into the picture. The four-line band is ~29ch-34ch. If the
- * sentence is rewritten, re-check the line count.
+ * sentence is rewritten, re-check the line count in every band.
  *
- * Below 1024px the overlap is dropped: text over an image at phone width is
- * where the idea breaks, so the photo becomes a block with a soft bottom edge
- * and the copy sits under it.
+ * Below 1024px the overlap is dropped: text over an image at that width is
+ * where the idea breaks. The photo becomes a column (C) or a block (D), and
+ * the media slot switches to a 4:5 crop cut for those boxes.
  */
 ---
 
@@ -41,10 +53,10 @@ const { hero } = site;
 
     <p class="lede text-pretty"><span>{hero.lede}</span></p>
 
-    <div class="border-line mt-7 grid max-w-[46ch] gap-5 border-t pt-5 text-[0.9375rem]">
+    <div class="hero-blocks border-line mt-7 grid gap-5 border-t pt-5">
       {hero.blocks.map((block) => (
         <div>
-          <p class="text-ink-dim mb-1 text-xs font-semibold tracking-[0.11em] uppercase">
+          <p class="hero-label text-ink-dim mb-1 text-xs font-semibold tracking-[0.11em] uppercase">
             {block.label}
           </p>
           <p>{block.body}</p>
@@ -52,9 +64,9 @@ const { hero } = site;
       ))}
     </div>
 
-    {/* Full-strength ink, not ink-dim: the tail of this line sits over the
-        darkest part of the photo, where dim grey measured 2.6:1. */}
-    <p class="mt-5 text-[0.8125rem]">{hero.tools}</p>
+    {/* Full-strength ink, not ink-dim: in bands A and B the tail of this line
+        sits over the darkest part of the photo, where dim grey measured 2.6:1. */}
+    <p class="hero-tools mt-5 text-[0.8125rem]">{hero.tools}</p>
   </div>
 </section>
 
@@ -82,34 +94,119 @@ const { hero } = site;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* His face sits at 41% across and 51% down the crop. Anchoring there keeps
-       him framed the same way when the box aspect drifts from the asset's. */
-    object-position: 41% 51%;
-  }
-
-  /* Phone: no overlap. Photo is a 4:5 block that fades into the ground at the
-     bottom, copy underneath. Capped against the viewport so the stats stay
-     within reach on a short screen. */
-  .media :global(img),
-  .media :global(video) {
-    aspect-ratio: 4 / 5;
-    max-height: 62svh;
-    -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
   }
   .media :global(video) {
     position: absolute;
     inset: 0;
   }
 
+  /* ── Band D — phone (< 768px) ────────────────────────────────────────────
+     No overlap. The photo is the portrait 4:5 crop shown at its own aspect,
+     fading into the ground at the bottom, with the copy underneath. Capped
+     against the viewport so the stats stay within reach on a short screen. */
+  .media :global(img),
+  .media :global(video) {
+    aspect-ratio: 4 / 5;
+    max-height: 55svh;
+    /* His face sits at 50% across and 37% down the portrait crop. */
+    object-position: 50% 37%;
+    -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  }
+
+  /* The lede's measure is what makes the plates read as a stack rather than
+     two long strips running the width of the screen. */
+  .lede {
+    font-size: 1.25rem;
+    font-weight: 500;
+    max-width: 26ch;
+    line-height: calc(1.12em + 4px); /* plate height + gap */
+  }
+  .hero-blocks {
+    font-size: 0.9375rem;
+    max-width: 46ch;
+  }
+
   /* The photo darkens towards the bottom (his jacket), and that is exactly
-     where the supporting copy sits. The veil brings the ground back under the
-     lower-left copy only: it is masked away above the lede, so the sentence
-     keeps sitting on open sky. */
+     where the supporting copy sits in bands A and B. The veil brings the
+     ground back under the lower-left copy only: it is masked away above the
+     lede, so the sentence keeps sitting on open sky. Bands C and D put no
+     text over the photo, so they need no veil. */
   .veil {
     display: none;
   }
 
+  /* ── Band C — tablet (768-1023px) ────────────────────────────────────────
+     Two columns and no overlap: copy left, the portrait crop as a full-height
+     column flush to the right viewport edge and to the top of the hero. Only a
+     short feathered left edge — not the 48%-floor dissolve and no veil — so it
+     reads as a column of photograph, not a wash. */
+  @media (min-width: 48rem) and (max-width: 63.9375rem) {
+    .media {
+      position: absolute;
+      inset: 0 0 0 auto;
+      width: 46%;
+    }
+    .media :global(img),
+    .media :global(video) {
+      aspect-ratio: auto;
+      max-height: none;
+      /* Smootherstep over the leftmost 9% of the photo, 0 -> 100%. A two-stop
+         linear fade this short reads as a hard edge. */
+      -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        rgb(0 0 0 / 0.007) 0.82%,
+        rgb(0 0 0 / 0.045) 1.64%,
+        rgb(0 0 0 / 0.129) 2.45%,
+        rgb(0 0 0 / 0.257) 3.27%,
+        rgb(0 0 0 / 0.415) 4.09%,
+        rgb(0 0 0 / 0.585) 4.91%,
+        rgb(0 0 0 / 0.743) 5.73%,
+        rgb(0 0 0 / 0.871) 6.55%,
+        rgb(0 0 0 / 0.955) 7.36%,
+        rgb(0 0 0 / 0.993) 8.18%,
+        #000 9%
+      );
+      mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        rgb(0 0 0 / 0.007) 0.82%,
+        rgb(0 0 0 / 0.045) 1.64%,
+        rgb(0 0 0 / 0.129) 2.45%,
+        rgb(0 0 0 / 0.257) 3.27%,
+        rgb(0 0 0 / 0.415) 4.09%,
+        rgb(0 0 0 / 0.585) 4.91%,
+        rgb(0 0 0 / 0.743) 5.73%,
+        rgb(0 0 0 / 0.871) 6.55%,
+        rgb(0 0 0 / 0.955) 7.36%,
+        rgb(0 0 0 / 0.993) 8.18%,
+        #000 9%
+      );
+    }
+    /* Reserve the photo column plus a gutter. The page container is wider than
+       the viewport in this band, so `%` here resolves against the viewport. */
+    .wrap {
+      padding-right: calc(46% + 1.5rem);
+    }
+    /* The vw term is set so the lede actually moves across this band: at 2.2vw
+       it sat on the 1.375rem floor the whole way and left the wide end of the
+       column half empty. 2.9vw puts it just off the floor at 768 and on the
+       1.75rem ceiling by 1023, which is also a clean hand-off to band B's 3vw.
+       The measure is in ch, so the line count does not move with it. */
+    .lede {
+      font-size: clamp(1.375rem, 2.9vw, 1.75rem);
+      max-width: 27ch;
+      line-height: calc(1.12em + 6px); /* plate height + a 6px gap */
+      letter-spacing: var(--text-lede--letter-spacing);
+    }
+    .hero-blocks {
+      font-size: 0.875rem;
+      max-width: none;
+    }
+  }
+
+  /* ── Bands A + B — the overlap composition (>= 1024px) ───────────────── */
   @media (min-width: 64rem) {
     .hero {
       display: flex;
@@ -128,6 +225,8 @@ const { hero } = site;
     .media :global(video) {
       aspect-ratio: auto;
       max-height: none;
+      /* His face sits at 41% across and 51% down the landscape crop. */
+      object-position: 41% 51%;
       -webkit-mask-image: linear-gradient(
         to right,
         transparent 0,
@@ -187,6 +286,58 @@ const { hero } = site;
       -webkit-mask-image: linear-gradient(to bottom, transparent 48%, #000 68%);
       mask-image: linear-gradient(to bottom, transparent 48%, #000 68%);
     }
+    .lede {
+      max-width: 33ch; /* four lines - see the note above */
+      font-size: var(--text-lede);
+      line-height: calc(1.12em + 6px); /* plate height + a 6px gap */
+      letter-spacing: var(--text-lede--letter-spacing);
+      font-weight: 500;
+    }
+    .hero-blocks {
+      font-size: 0.9375rem;
+      max-width: 46ch;
+    }
+  }
+
+  /* ── Band B only — 1024-1279px ───────────────────────────────────────────
+     Band A's fixed 44rem was the bug: below 1440 it left the photo box a
+     different shape from the asset, so object-cover re-cropped the frame Dom
+     tuned. Three changes, none of which touch band A:
+
+     1. The height is derived from the photo's own aspect (69vw wide, 3012:2133),
+        which lands on 44rem at 1440 and shrinks with the viewport. It is a
+        MINIMUM, so long copy still grows the hero.
+     2. The photo is anchored to its own LEFT edge. Whenever the box is
+        narrower than the asset's aspect the scale is height-driven, so
+        anchoring left means the dissolve zone shows exactly the sky, palms and
+        lamp it shows at 1440, and everything over-wide is clipped off the
+        right instead. At 1440 the box matches the asset, so this is a no-op —
+        which is why band A can keep 41% without differing.
+     3. The copy column is tied to the viewport as well as the measure, so its
+        tail keeps roughly the same relation to the dissolve as at 1440 (where
+        the blocks reach 8.5% into the photo). The body steps down one notch to
+        0.875rem, which also shortens the hero. */
+  @media (min-width: 64rem) and (max-width: 79.9375rem) {
+    .hero {
+      min-height: calc(69vw * 2133 / 3012);
+    }
+    .media :global(img),
+    .media :global(video) {
+      object-position: left 51%;
+    }
+    .hero-blocks {
+      font-size: 0.875rem;
+      max-width: min(46ch, 34vw);
+    }
+    /* The tools line is the one piece of copy with a FIXED pixel length, so as
+       the viewport narrows its tail reaches proportionally further into the
+       photo than anything else — at 1024 it landed on the dark palms and
+       measured 3.75:1 against ink. Capping it to the copy column wraps it onto
+       a second line (as band C already does) and brings it back to the same
+       relation to the dissolve it has at 1440. Band A keeps it running long. */
+    .hero-tools {
+      max-width: min(46ch, 34vw);
+    }
   }
 
   /* Plate: each line of the lede carries its own solid block, the way a
@@ -212,18 +363,5 @@ const { hero } = site;
     -webkit-box-decoration-break: clone;
     padding: 0 10px;
     margin-left: -10px;
-  }
-  .lede {
-    font-size: 1.125rem;
-    line-height: calc(1.12em + 4px); /* plate height + gap */
-  }
-  @media (min-width: 64rem) {
-    .lede {
-      max-width: 33ch; /* four lines - see the note above */
-      font-size: var(--text-lede);
-      line-height: calc(1.12em + 6px); /* plate height + a 6px gap */
-      letter-spacing: var(--text-lede--letter-spacing);
-      font-weight: 500;
-    }
   }
 </style>
