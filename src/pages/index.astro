@@ -2,23 +2,31 @@
 import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
-import Stats from "../components/Stats.astro";
+import Proof from "../components/Proof.astro";
 import WorkGrid from "../components/WorkGrid.astro";
 import site from "../data/site.json";
 ---
 
-<Base
-  title={site.meta.title}
-  description={site.meta.description}
->
+<Base title={site.meta.title} description={site.meta.description}>
   <Header />
   <main>
     <Hero />
-    <Stats />
+    <Proof />
     <WorkGrid />
-    {/* Blocks 3-4: lanes + rates (#rates), results, about, footer (#contact) */}
+    <section aria-labelledby="about-heading" class="about mx-auto max-w-(--container-page) border-t border-line px-6 py-10 sm:px-8">
+      <h2 id="about-heading" class="font-display text-section">About</h2>
+      <p class="mt-6 max-w-3xl text-base leading-relaxed">{site.hero.summary}</p>
+    </section>
   </main>
-  <footer id="contact" class="border-line text-ink-dim mx-auto max-w-(--container-page) border-t px-6 py-8 text-xs sm:px-8">
-    &copy; {new Date().getFullYear()} {site.name}
+  <footer id="contact" class="mx-auto max-w-(--container-page) border-t border-line px-6 py-8 text-sm sm:px-8">
+    <div class="flex flex-wrap items-center justify-between gap-6">
+      <span>&copy; {new Date().getFullYear()} {site.name}</span>
+      <a href={`mailto:${site.email}`} class="underline underline-offset-4">{site.email}</a>
+      <nav aria-label="Social profiles" class="flex flex-wrap gap-5">
+        {site.social.filter((profile) => profile.id !== "email" && profile.href).map((profile) => (
+          <a href={profile.href} target="_blank" rel="noopener noreferrer" class="hover:underline underline-offset-4">{profile.label}</a>
+        ))}
+      </nav>
+    </div>
   </footer>
 </Base>

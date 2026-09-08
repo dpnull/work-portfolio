@@ -1,26 +1,128 @@
 {
-  "_note": "Single source for every clip on the page. muxPlaybackId is filled in after upload; `ready` gates a clip out of the build until it has one. Labels are the 3-part rule: format · category · result.",
+  "_note": "Single source for every clip on the page. A clip ships only when `ready` is true AND it has either `src` (self-hosted MP4 in public/clips/, written by scripts/encode-features.sh) or `muxPlaybackId`. Both fields exist on every entry so switching hosts later is a data edit, not a rewrite. `duration` is the encoded length in seconds — it is rendered on the poster, so a visitor knows what they are committing to before they tap. Labels are the 3-part rule: format · category · result.",
+  "_resultsAreDoms": "The `result` figures are Dom's own numbers. Never invent one — an unverified figure on a portfolio is a fabricated credential. Empty string = still to confirm.",
   "hero": {
     "id": "hero-loop",
     "title": "Hero talking-head loop",
+    "src": null,
+    "poster": null,
     "muxPlaybackId": null,
     "durationTarget": "10-15s",
     "ready": false
   },
   "groups": [
     {
-      "heading": "PLACEHOLDER — format heading (block 2)",
+      "heading": "PLACEHOLDER — format heading (Dom to name; not rendered yet)",
+      "_order": "Dom's pick, 2026-09-08: chosen on EDIT QUALITY, not on reach — 'theyre all high converting anyway'. Water leads because tile one is the one everyone watches and it is the highest-retention piece (29s average watch on a 54s cut).",
       "clips": [
-        { "id": "glow-up-976k", "title": "Glow-up reel", "own": true, "label": { "format": "", "category": "", "result": "976K plays" }, "muxPlaybackId": null, "ready": false },
-        { "id": "ice-face", "title": "Ice face", "own": true, "label": { "format": "", "category": "", "result": "6.9K saves" }, "muxPlaybackId": null, "ready": false },
-        { "id": "ah-ep5-mewing", "title": "Atomic Habits EP5 — Mewing", "own": true, "label": { "format": "", "category": "", "result": "175K plays" }, "muxPlaybackId": null, "ready": false },
-        { "id": "ah-ep3-posture", "title": "Atomic Habits EP3 — Posture", "own": true, "label": { "format": "", "category": "", "result": "77K plays" }, "muxPlaybackId": null, "ready": false },
-        { "id": "ah-ep6-water", "title": "Atomic Habits EP6 — Water", "own": true, "label": { "format": "", "category": "", "result": "76K plays" }, "muxPlaybackId": null, "ready": false },
-        { "id": "experiment-opener", "title": "30-Day Experiment opener", "own": true, "label": { "format": "", "category": "", "result": "51K plays" }, "muxPlaybackId": null, "ready": false },
-        { "id": "native-talking-head", "title": "Native talking head", "own": true, "label": { "format": "", "category": "", "result": "53K plays" }, "muxPlaybackId": null, "ready": false },
-        { "id": "motion-graphics", "title": "Motion-graphics edit", "own": true, "label": { "format": "", "category": "", "result": "42K plays" }, "muxPlaybackId": null, "ready": false },
-        { "id": "unrot-01", "title": "Unrot video 1", "own": false, "label": { "format": "", "category": "", "result": "" }, "muxPlaybackId": null, "ready": false, "blockedOn": "Adrian's sign-off" }
+        {
+          "id": "water",
+          "title": "Why I Drink So Much Water",
+          "label": {
+            "format": "Visual explainer",
+            "category": "Performance",
+            "result": "76K plays"
+          },
+          "stats": {
+            "views": "76.6K",
+            "likes": "2.8K",
+            "saves": "1.8K"
+          },
+          "duration": 54,
+          "description": "A visual story about drinking enough water for better energy, focus and appearance.",
+          "src": "/clips/water.mp4",
+          "poster": "/clips/water.jpg",
+          "posterWebp": "/clips/water.webp",
+          "muxPlaybackId": null,
+          "ready": true
+        },
+        {
+          "id": "mewing",
+          "title": "How to Mew Properly",
+          "label": {
+            "format": "Character-led tutorial",
+            "category": "Appearance",
+            "result": "175K plays"
+          },
+          "stats": {
+            "views": "175K",
+            "likes": "3.1K",
+            "saves": "3.4K"
+          },
+          "duration": 40,
+          "description": "A two-character tutorial showing correct tongue posture and how to make it automatic.",
+          "src": "/clips/mewing.mp4",
+          "poster": "/clips/mewing.jpg",
+          "posterWebp": "/clips/mewing.webp",
+          "muxPlaybackId": null,
+          "ready": true
+        },
+        {
+          "id": "ice-face",
+          "title": "Ice Water Won’t Transform Your Face",
+          "label": {
+            "format": "Myth-busting",
+            "category": "Self-improvement",
+            "result": "6.9K saves"
+          },
+          "stats": {
+            "views": "",
+            "likes": "",
+            "saves": "6.9K"
+          },
+          "duration": 40,
+          "description": "A myth-bust about why cold water helps temporarily—but discipline creates lasting change.",
+          "src": "/clips/ice-face.mp4",
+          "poster": "/clips/ice-face.jpg",
+          "posterWebp": "/clips/ice-face.webp",
+          "muxPlaybackId": null,
+          "ready": true
+        },
+        {
+          "id": "posture",
+          "title": "Fix Your Posture With Wall Slides",
+          "label": {
+            "format": "Character-led demo",
+            "category": "Posture",
+            "result": "2.6K saves"
+          },
+          "stats": {
+            "views": "77.3K",
+            "likes": "1.7K",
+            "saves": "2.6K"
+          },
+          "duration": 28,
+          "description": "A practical wall-slide demonstration showing an easier way to improve posture.",
+          "src": "/clips/posture.mp4",
+          "poster": "/clips/posture.jpg",
+          "posterWebp": "/clips/posture.webp",
+          "muxPlaybackId": null,
+          "ready": true
+        },
+        {
+          "id": "its-all-a-lie",
+          "title": "It's all a lie",
+          "label": {
+            "format": "Cinematic short",
+            "category": "",
+            "result": "28K plays"
+          },
+          "stats": {
+            "views": "28.3K",
+            "likes": "576",
+            "saves": "290"
+          },
+          "duration": 24,
+          "description": "",
+          "src": "/clips/its-all-a-lie.mp4",
+          "poster": "/clips/its-all-a-lie.jpg",
+          "posterWebp": "/clips/its-all-a-lie.webp",
+          "muxPlaybackId": null,
+          "ready": true
+        }
       ]
     }
-  ]
+  ],
+  "_stats": "`stats` is the dusk foot on each tile: views / likes / saves as short display strings (\"976K\"). Same rule as results: Dom's numbers only, \"\" = unknown and that stat is not rendered; a clip with no stats at all gets no foot. `description` is one line under the title, DRAFT until Dom rewrites it.",
+  "_ownership": "The `own` flag is gone (Dom, 2026-09-08): everything on this page is his own audience-tested work, so there is no client work for it to be confused with and nothing to disambiguate. If client deliverables ever land here, the distinction has to come back — the blueprint's rule against blurring the two still stands, it simply has nothing to act on yet."
 }

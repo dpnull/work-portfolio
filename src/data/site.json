@@ -14,28 +14,54 @@
       "href": "#rates"
     }
   ],
+  "_socialNote": "Hero social rail (Dom, 2026-09-08). Instagram's URL is the one on the Notion Site page. RedNote and LinkedIn came from Dom on 2026-09-08 (the RedNote one is an xhslink.cn share link, which is what the app hands out — it redirects to the profile). An empty href renders that cell inert rather than guessing an address. The email cell copies the address above, it does not open a mail client.",
+  "social": [
+    {
+      "id": "instagram",
+      "label": "Instagram",
+      "handle": "@dpy2k",
+      "href": "https://www.instagram.com/dpy2k/"
+    },
+    {
+      "id": "rednote",
+      "label": "RedNote",
+      "handle": "",
+      "href": "https://xhslink.cn/m/7NU6VLakjl9"
+    },
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "handle": "dominik-przewozny",
+      "href": "https://www.linkedin.com/in/dominik-przewozny/"
+    },
+    {
+      "id": "email",
+      "label": "Email",
+      "handle": "",
+      "href": ""
+    }
+  ],
   "meta": {
     "title": "Dom Przewozny — social media creator",
     "description": "Social media creator who scripts, films and edits. 12K audience in men’s beauty and self-improvement, London."
   },
   "hero": {
-    "_note": "No visible title or eyebrow by Dom's call (2026-09-07) — the lede carries the hero, set over the photo. srHeading is the visually-hidden h1 that keeps the page structurally valid. The lede must break over FOUR lines at desktop; if you rewrite it, re-check the line count against the 33ch measure in Hero.astro.",
-    "srHeading": "Dom Przewozny — social media creator",
-    "lede": "Social media creator with a computer science background. I script, film and edit, then use AI and automation to make the content convert.",
-    "blocks": [
-      {
-        "label": "Growth",
-        "body": "Took an Instagram account from zero to 12K in six months, built a second audience of 10K on Xiaohongshu, and turned that into 1,750 email subscribers through a funnel I built myself. I plan topics and film for a creator with 7M followers."
-      },
-      {
-        "label": "Production",
-        "body": "Full production from plan to delivery: budgets, schedules, locations, crew and on-set. Premiere Pro and CapCut for edit and grade, Figma for design, Notion for the system behind it. Camera and drone."
-      }
-    ],
-    "tools": "Premiere Pro · CapCut · Figma · Canva · Notion · camera & drone",
+    "_note": "Billboard direction approved 2026-09-08. Visible headline, short support and work link; omit the name/role eyebrow and production-process corner label. Full biography is retained below Work.",
+    "summary": "Grew Instagram account from zero to 12K in six months, built a 10K audience on Xiaohongshu, and converted that attention into 1,750 email subscribers through a funnel I built myself. I also plan topics and film for a 7M-follower creator, and run production end to end — from budgets, schedules, locations and crew to shooting, drone work, editing and grading in Premiere Pro and CapCut, with Notion supporting the system behind it.",
     "poster": "/hero-portrait.jpg",
     "posterAlt": "Dom Przewozny at dusk, palm trees and a sodium lamp behind him",
-    "video": null
+    "video": null,
+    "headline": [
+      "Educational",
+      "videos.",
+      "Built for inbound."
+    ],
+    "support": "From the first idea to the final cut.",
+    "proof": {
+      "value": "1,750",
+      "label": "email subscribers",
+      "context": "From a funnel I built myself."
+    }
   },
   "stats": [
     {
@@ -44,17 +70,16 @@
       "_calc": "1,750 sign-ups / 12,500 followers"
     },
     {
+      "value": "7M",
+      "label": "follower creator I plan and film for"
+    },
+    {
       "value": "95%",
       "label": "male audience"
     },
     {
       "value": "18–34",
       "label": "core age range"
-    },
-    {
-      "value": "XX%",
-      "label": "sign-up page conversion",
-      "_todo": "PLACEHOLDER — Dom to supply the real landing-page conversion rate (visitors → sign-ups). Replace XX before deploy."
     }
   ]
 }

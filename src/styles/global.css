@@ -2,15 +2,16 @@
 
 /* ─────────────────────────────────────────────────────────────
    TYPEFACES — self-hosted, latin subset, OFL.
-   Hanken Grotesk: neutral Swiss grotesque, variable 400–700. Softer and
-   more professional than the Chakra Petch it replaced (Dom, 2026-09-07).
+   Instrument Sans: humanist grotesque, variable 400–700. Picked in the
+   ground picker (Dom, 2026-09-07) over Hanken Grotesk — same cleanliness,
+   more warmth in the curves. Latin subset from Google Fonts v4, 30 KB.
    Kode Mono: variable terminal mono for labels and code-ish bits — the
    one place the Y2K note still lives in the type.
    Files live in public/fonts/. Latin only — ~40 KB for both.
    ───────────────────────────────────────────────────────────── */
 @font-face {
-  font-family: "Hanken Grotesk";
-  src: url("/fonts/hanken-400-700.woff2") format("woff2");
+  font-family: "Instrument Sans";
+  src: url("/fonts/instrument-sans-400-700.woff2") format("woff2");
   font-weight: 400 700;
   font-style: normal;
   font-display: swap;
@@ -34,29 +35,76 @@
   /* Colour — "Sand" light palette (Dom, 2026-09-07). Warm greige paper against
      a cool dusk photograph: the ground sits opposite the sky's hue (≈208°)
      instead of matching it, which is what makes the blue read as colour rather
-     than as more background. The strip stays the dusk sky, so the page runs
-     warm → photo → dark blue as you scroll.
+     than as more background.
+     The scroll order changed on 2026-09-08: the strip used to be a dark dusk
+     mesh, so the page ran pale → photo → near-black. It is now one flat bright
+     colour, so it runs pale → photo → COLOUR — the photograph is the dark step
+     and the strip is the loud one. See the strip block below.
      Naming: `ground` is the page, `ink` is text, `plate` is the solid block
      behind each line of the hero lede. Lime is a FILL only — it fails as text
-     on any of these grounds — so numbers on the strip use `ice`.
+     on any of these grounds.
      NOTE: lime does ONE job now, the CTA (Dom moved the plate to white,
      2026-09-07). That is the point of it — the button is the only lime object
      on the page and therefore the loudest. Don't spend the colour anywhere
      else.
      Superseded: "Ice" #dfe6ec (blue-grey), "Bone" #f2eee7 (lighter warm). */
-  --color-ground: #e9e1d5;       /* page background */
-  --color-surface: #ded2c1;      /* cards, tiles */
-  --color-surface-2: #d7c8b2;    /* raised / hover */
-  --color-line: #cdbba0;         /* hairline borders */
-  --color-ink: #0f161e;          /* primary text on ground (13.7:1) */
-  --color-ink-dim: #48586a;      /* secondary text (5.6:1) */
+  --color-ground: #ebe6f1;       /* page background — "Lilac haze", picker 2026-09-07, oklch(0.932 0.016 306): the hero's cloud shadows. Sand #e9e1d5 blended to the cyan sky through grey-mauve; this is adjacent to the sky's hue so the dissolve stays clean. */
+  --color-surface: #e0dae6;      /* cards, tiles */
+  --color-surface-2: #d8d2de;    /* raised / hover */
+  --color-line: #cbc5d1;         /* hairline borders */
+  --color-ink: #191320;          /* primary text on ground (16:1), ground hue darkened */
+  --color-ink-dim: #61546f;      /* secondary text (5.9:1) */
   --color-accent: #e5ff3d;       /* CTA fill only */
   --color-accent-ink: #0a0a0b;   /* text on accent (13:1) */
-  --color-dusk: #16202c;         /* stats strip ground: hero sky, darkened */
+  /* The dusk set. It ran the stats strip until 2026-09-08, when the strip went
+     flat and bright; its ONLY remaining job is the foot on each video tile in
+     WorkGrid (views / likes / saves over the poster). Values unchanged — the
+     tile foot still sits on a photograph, so it still needs light-on-dark. */
+  --color-dusk: #16202c;         /* video-tile foot ground: hero sky, darkened */
   --color-dusk-line: #2b3a4a;    /* lines on dusk */
-  --color-ice: #e8eff6;          /* numbers on the strip */
-  --color-mist: #9db2c6;         /* labels on the strip: the sky, desaturated */
-  --color-tile-line: rgb(129 171 205 / 0.3); /* stat tile hairlines: the sky at 30% */
+  --color-ice: #e8eff6;          /* numbers on the tile foot */
+  --color-mist: #9db2c6;         /* icons/labels on the tile foot: the sky, desaturated */
+
+  /* ── THE STATS STRIP — FLAT COLOUR (Dom, 2026-09-08) ──────────────────
+     Dom: "i need the colours on the strip to become flat. no depth no nothing
+     ... 5 colour choices which arent dark, something brighter ... give the site
+     a bit more colour." So: one solid colour, no gradient, no wash, no seam.
+
+     TO SWITCH THE STRIP, CHANGE ONE LINE — `--color-strip` below. Nothing else
+     moves: the ink, the dim ink and the hairline are the SAME ink at three
+     alphas, so they re-tune themselves against whichever colour is set. All
+     five candidates were measured against them (numbers ≥ 8.9:1, labels ≥
+     5.4:1, both far past the 4.5:1 floor).
+
+       #c8a9f9  Periwinkle   numbers 9.09:1  labels 5.49:1   ← IN USE
+       #7dc1ff  Sky          numbers 9.47:1  labels 5.68:1
+       #4fd3c4  Aqua         numbers 9.91:1  labels 5.92:1
+       #f2a76d  Apricot      numbers 9.11:1  labels 5.54:1   (warm)
+       #fb9ba7  Rose         numbers 8.96:1  labels 5.46:1   (warm)
+
+     WHY THESE FIVE, AND WHY THEY ARE SIBLINGS. Every one is oklch(0.79 0.116 h)
+     — identical perceptual lightness and chroma, hue as the only variable — so
+     the choice is a hue choice and the contrast maths cannot break by picking a
+     different one. Hues: 185 / 247 / 302 / 12 / 58.
+
+     WHY CHROMA IS CAPPED AT 0.116. The lime CTA is oklch(0.950 0.203 117) — it
+     is only 1.09:1 against the ground, so it is loud by CHROMA, not by value.
+     The strip is a huge area and the button is a small one; at ~57% of the
+     lime's chroma the button still wins per square inch and stays the loudest
+     object on the page, which is the rule for lime. Do not push this past
+     ~0.13, and do not pick a hue near 117 — Apricot at 58 is the closest any of
+     these gets, and it is deliberately orange rather than amber for that reason.
+
+     WHY PERIWINKLE IS THE DEFAULT. It is the page ground's own hue (302 against
+     the ground's 306) at seven times the chroma, so it reads as this site's
+     colour turned up rather than a new colour imported. It is also 176° from
+     the lime — near enough the complement that the two make each other louder
+     instead of muddying. Sky (247) is the alternative: it is the hero sky's
+     exact hue, so it reads as the photograph continuing rather than answering. */
+  --color-strip: #c8a9f9;                    /* ← the one line to change */
+  --color-strip-ink: #191320;                /* numbers + caption title; = --color-ink */
+  --color-strip-ink-dim: rgb(25 19 32 / 0.76); /* labels + caption body */
+  --color-strip-line: rgb(25 19 32 / 0.2);   /* hairlines between the figures */
   /* Solid block behind each line of the hero lede. Chalk white, picked in the
      plate tuner (Dom, 2026-09-07) over lime: 18.2:1 for ink on the plate, and
      1.30:1 against the ground — soft separation, so it reads as paper laid on
@@ -64,7 +112,7 @@
   --color-plate: #ffffff;
 
   /* Type — neutral grotesque + terminal mono, no display face. */
-  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system,
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-display: var(--font-sans);
   --font-mono: "Kode Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
@@ -79,10 +127,14 @@
   --text-section--letter-spacing: -0.02em;
   /* The hero lede carries the hero on its own — no title above it. Desktop
      only: it is set over the photo, and its measure (33ch, in Hero.astro) is
-     tuned so it breaks over four lines. On phones the lede is body size. */
-  --text-lede: clamp(1.5rem, 3vw, 2.375rem);
+     tuned so it breaks over four lines. On phones the lede is body size.
+     Stepped down from clamp(1.5rem, 3vw, 2.375rem) on 2026-09-07 when the hero
+     band was shortened (see --hero-keep in Hero.astro): the shorter band had to
+     hold the same copy. The measure is in `ch`, so it still breaks over FOUR
+     lines at every width — that is the thing to re-check if this moves. */
+  --text-lede: clamp(1.25rem, 2.5vw, 2rem);
   --text-lede--line-height: 1.22;
-  --text-lede--letter-spacing: -0.022em;
+  --text-lede--letter-spacing: -0.01em; /* Instrument Sans at weight 600 (picker) */
 
   --text-stat: clamp(1.75rem, 6vw, 2.75rem);
   --text-stat--line-height: 1;
@@ -140,6 +192,24 @@
     max-width: 100%;
     height: auto;
   }
+}
+
+/* ── FILM GRAIN (Dom, 2026-09-07, picker: 33%) ──────────────────────────
+   One grain over ground AND photograph, which is what makes them read as the
+   same roll of film — it is the layer, not the ground, that ties the hero
+   photo to the page. Fixed, full-viewport, multiply, pointer-events none.
+   The SVG is inline so it costs no request; 220px tile, fractal noise. Drop
+   the opacity, never the blend mode: at 33% it is texture, at 60% it is fog. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.33;
+  mix-blend-mode: multiply;
+  background-size: 220px 220px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Honour the OS setting — a page of looping video has to be stoppable. */

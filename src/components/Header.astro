@@ -26,6 +26,14 @@ import site from "../data/site.json";
 // hairlines rather than beside them. Keep the two together: drop the negative
 // margin and the button gains a doubled edge.
 //
+// The email CELL COPIES rather than opening a mail client (Dom, 2026-09-07):
+// clicking it writes the address to the clipboard and the label flashes
+// "Copied" for 1.6s. `navigator.clipboard.writeText` needs no permission
+// prompt for a WRITE — only reads prompt — provided it runs in a secure
+// context off a real user gesture, which a click handler is. The
+// `execCommand` path below it is the fallback for a non-secure context
+// (an http staging host) where the modern API is simply absent.
+//
 // 640–1023: the email cell is dropped and an empty flex spacer cell holds its
 // slot, so the rail language survives. <640: the two tiers described above; no
 // email on phones (see the open flag in PROGRESS.md; block 4's contact section
@@ -39,7 +47,16 @@ import site from "../data/site.json";
     {site.nav.map((item) => (
       <a href={item.href} class="rail-cell rail-link text-sm">{item.label}</a>
     ))}
-    <a href={`mailto:${site.email}`} class="rail-cell rail-email text-sm">{site.email}</a>
+    <button
+      type="button"
+      class="rail-cell rail-email text-sm"
+      data-copy-email={site.email}
+      aria-label={`Copy email address ${site.email}`}
+      title="Click to copy"
+    >
+      <span data-copy-label>{site.email}</span>
+      <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
+    </button>
     <div class="rail-spacer" aria-hidden="true"></div>
   </nav>
 
@@ -115,9 +132,30 @@ import site from "../data/site.json";
     padding-inline: 12px;
   }
 
+  /* The email is a <button>, not a mailto link (Dom, 2026-09-07: a mail client
+     firing off unasked is a worse outcome than a copied string). So the UA's
+     button chrome has to come off — .rail-cell supplies the rest. font-SIZE is
+     left alone: the `text-sm` utility owns it, and the scoped selector here
+     outranks it. */
   .rail-email {
     color: var(--color-ink-dim);
     padding-inline: 24px;
+    appearance: none;
+    background: none;
+    border: 0;
+    font-family: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+  }
+
+  /* While the "Copied" flash is up the cell goes full ink — the one moment it
+     is louder than the two nav links beside it. Hover and focus are excluded
+     BY HAND: the invert below is a plain `.rail-cell:hover`, which this
+     attribute selector would otherwise outrank, painting ink on ink for the
+     whole 1.6s — and you have to be hovering to have clicked. */
+  .rail-email[data-copied]:not(:hover):not(:focus-visible) {
+    color: var(--color-ink);
   }
 
   /* Hidden on phones; the spacer wakes up at 640, the email at 1024. */
@@ -209,3 +247,60 @@ import site from "../data/site.json";
     }
   }
 </style>
+
+<script>
+  // Progressive enhancement, deliberately JS-only: with scripts off the cell is
+  // still the address, legible and selectable, which is what people do by hand
+  // anyway. Nothing else on the rail depends on this running.
+  document.querySelectorAll<HTMLButtonElement>("[data-copy-email]").forEach((button) => {
+    const address = button.dataset.copyEmail ?? "";
+    const label = button.querySelector<HTMLElement>("[data-copy-label]");
+    const status = button.querySelector<HTMLElement>("[data-copy-status]");
+    if (!address || !label || !status) return;
+
+    let timer: number | undefined;
+
+    async function write(text: string) {
+      if (window.isSecureContext && navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch {
+          // Denied or unavailable — drop through to the legacy path.
+        }
+      }
+      const scratch = document.createElement("textarea");
+      scratch.value = text;
+      scratch.setAttribute("readonly", "");
+      scratch.style.cssText = "position:fixed;top:-9999px;opacity:0";
+      document.body.append(scratch);
+      scratch.select();
+      let ok = false;
+      try {
+        ok = document.execCommand("copy");
+      } catch {
+        ok = false;
+      }
+      scratch.remove();
+      return ok;
+    }
+
+    button.addEventListener("click", async () => {
+      const ok = await write(address);
+      window.clearTimeout(timer);
+
+      // Sighted feedback is the label swap; the live region is the same news
+      // for a screen reader, which would not otherwise hear the button's own
+      // content change.
+      label.textContent = ok ? "Copied" : "Copy failed";
+      status.textContent = ok ? `Copied ${address}` : `Could not copy. The address is ${address}`;
+      button.toggleAttribute("data-copied", ok);
+
+      timer = window.setTimeout(() => {
+        label.textContent = address;
+        status.textContent = "";
+        button.removeAttribute("data-copied");
+      }, 1600);
+    });
+  });
+</script>
