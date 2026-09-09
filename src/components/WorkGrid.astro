@@ -7,7 +7,7 @@ const cinematic = clips.groups.filter(g => g.id === "cinematic").flatMap(g => g.
 ---
 <div id="portfolio-work">
   <section id="work" aria-labelledby="work-heading" class="mx-auto max-w-(--container-page) px-6 pt-10 pb-8 sm:px-8">
-    <h2 id="work-heading" class="font-display text-section">Work</h2>
+    <h2 id="work-heading" class="font-display text-section">Videos</h2>
     <ul id="work-grid" class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6" role="list">
       {educational.map(clip => <VideoTile clip={clip} />)}
     </ul>
