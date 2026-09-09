@@ -1,383 +1,46 @@
 ---
-/**
- * Block 2 — the work grid.
- *
- * Interaction model (Dom, 2026-09-07): **nothing autoplays.** A tile is a
- * poster until the visitor taps it, and only ONE clip plays at a time —
- * starting a second stops the first. This replaces the earlier
- * play-on-intersection behaviour in PLAN.md; four clips moving at once was
- * the thing he objected to.
- *
- * The rest of the video rules still hold, don't relax them:
- *   · tiles are POSTERS; the <video> ships with no src at all
- *   · src is attached on the first tap, so scrolling past costs zero bytes
- *   · `playsinline` is an HTML attribute, not a JS property — iOS ignores it set late
- *   · preload="none"; the grid is below the fold, nothing here is LCP
- *
- * FULL LENGTH, WITH SOUND (Dom, 2026-09-08). These are 24-54s finished edits,
- * not the 12s silent cuts this grid was built for, and three of the old rules
- * died with that change:
- *
- *   · NO `loop`. Looping a 12s teaser is a design; looping a 54s narrative is
- *     a bug — it restarts over the viewer just as they finish it. `ended` puts
- *     the tile back to its poster instead.
- *   · NO `muted`. Dom chose these on the EDIT, and half of an edit is sound.
- *     Autoplay policy is not in the way: play() here is always inside a click
- *     handler, and a user gesture buys audible playback. The tiles still start
- *     silent for anyone who has muted them once — see MUTE below.
- *   · A DURATION and a PROGRESS BAR. At 12s neither earned its pixels. At 54s
- *     nobody taps without knowing the cost or stays without knowing where they
- *     are.
- *
- * There is no prefers-reduced-motion branch any more and none is needed:
- * motion only ever happens because someone asked for it.
- *
- * The tile is a <button>, not a <div>. Tap-to-play is now the only way in, so
- * it has to answer to Enter/Space and announce itself; a div does neither.
- * The mute control is therefore a SIBLING of that button rather than a child:
- * a button inside a button is invalid and the inner one never receives the
- * click. Same reason the <video> has no `controls` — without it a video is not
- * interactive content and may legally sit inside the button.
- *
- * A clip ships when `ready` is true and it has a src. Host swap (self-hosted
- * MP4 ↔ Mux) is a clips.json edit — see `srcFor` below.
- */
 import clips from "../data/clips.json";
-
-const TILE_COUNT = 8;
-
-const srcFor = (c: { src: string | null; muxPlaybackId: string | null }) =>
-  c.src ?? (c.muxPlaybackId ? `https://stream.mux.com/${c.muxPlaybackId}/low.mp4` : null);
-
-/* The dusk foot (Dom picked it from five mocks, 2026-09-07 — board:
- * https://claude.ai/code/artifact/cda7c69b-fe54-49e2-ad30-34b6c8e8ffc6).
- * Views / likes / saves sit on the poster's bottom edge in a dusk band, ice
- * numbers on mist icons — the stats strip's palette, so the tile echoes the
- * section above it. Only stats with a value render, and a clip with none gets
- * no band at all: an empty band would be a promise of numbers we don't have.
- * Icons are Instagram's: insights eye, heart, bookmark. */
-const STAT_KEYS = [
-  { key: "views", label: "Views" },
-  { key: "likes", label: "Likes" },
-  { key: "saves", label: "Saves" },
-] as const;
-
-const tiles = clips.groups
-  .flatMap((g) => g.clips)
-  .filter((c) => c.ready && srcFor(c))
-  .slice(0, TILE_COUNT);
+import VideoTile from "./VideoTile.astro";
+const ready = (c: (typeof clips.groups)[number]["clips"][number]) => c.ready && (c.src || c.muxPlaybackId);
+const educational = clips.groups.filter(g => g.id !== "cinematic").flatMap(g => g.clips).filter(ready);
+const cinematic = clips.groups.filter(g => g.id === "cinematic").flatMap(g => g.clips).filter(ready);
 ---
-
-<!-- pt-10 (40px), not the pb-16 (64px) below it. The top of this section abuts
-     the full-bleed dark stats strip, which is already a hard divider; 64px of
-     empty Sand on top of that read as a hole, and it left the heading with twice
-     as much air above (64px) as below (mt-8, 32px), so "Work" floated between
-     the strip and its own grid instead of leading it. 40/32 puts it back on its
-     grid. The BOTTOM stays 64px: it meets the footer's hairline, which needs the
-     space to separate. Asymmetric on purpose — the two edges are different jobs.
-     Dom, 2026-09-07. -->
-<section id="work" aria-labelledby="work-heading" class="mx-auto max-w-(--container-page) px-6 pt-10 pb-16 sm:px-8">
-  <h2 id="work-heading" class="font-display text-section">Work</h2>
-
-  <ul id="work-grid" class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6" role="list">
-    {
-      tiles.map((clip) => {
-        const stats = STAT_KEYS.filter(({ key }) => clip.stats?.[key]);
-        const mmss = clip.duration
-          ? `${Math.floor(clip.duration / 60)}:${String(clip.duration % 60).padStart(2, "0")}`
-          : "";
-        return (
-          <li class="relative">
-            <button
-              type="button"
-              class="tile bg-surface border-line relative block aspect-[9/16] w-full overflow-hidden border"
-              data-clip
-              data-src={srcFor(clip)}
-              data-title={clip.title}
-              aria-label={`Play ${clip.title}`}
-            >
-              <picture>
-                <source srcset={clip.posterWebp} type="image/webp" />
-                <img
-                  src={clip.poster}
-                  alt=""
-                  width="720"
-                  height="1280"
-                  loading="lazy"
-                  decoding="async"
-                  class="absolute inset-0 h-full w-full object-cover"
-                />
-              </picture>
-              {/* No src, no poster attr — the <img> above IS the poster, so it gets webp + lazy.
-                  Without `controls` a <video> is not interactive content, so it is legal
-                  inside a <button> and will not swallow the tap. */}
-              <video
-                class="tile-video absolute inset-0 h-full w-full object-cover opacity-0"
-                playsinline
-                preload="none"
-                disablepictureinpicture
-                tabindex="-1"
-                aria-hidden="true"
-              />
-              <span class="tile-cue" aria-hidden="true"></span>
-              {mmss && <span class="tile-time" aria-hidden="true">{mmss}</span>}
-              {/* Width comes from a custom property the timeupdate handler sets,
-                  so the bar animates without touching layout. */}
-              <span class="tile-progress" aria-hidden="true" />
-              {stats.length > 0 && (
-                <span class="tile-foot">
-                  {stats.map(({ key, label }) => (
-                    <span class="tile-stat">
-                      <svg class="tile-icon" viewBox="0 0 24 24" aria-hidden="true">
-                        {key === "views" && (
-                          <>
-                            <path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z" />
-                            <circle cx="12" cy="12" r="3" />
-                          </>
-                        )}
-                        {key === "likes" && (
-                          <path d="M12 20.8s-7.4-4.5-9.3-9C1.2 8 3.6 4.6 7.1 4.6c2 0 3.6 1.1 4.9 2.9 1.3-1.8 2.9-2.9 4.9-2.9 3.5 0 5.9 3.4 4.4 7.2-1.9 4.5-9.3 9-9.3 9z" />
-                        )}
-                        {key === "saves" && <path d="M6 3.5h12v17l-6-4.6-6 4.6z" />}
-                      </svg>
-                      <span class="sr-only">{label} </span>
-                      {clip.stats[key]}
-                    </span>
-                  ))}
-                </span>
-              )}
-            </button>
-            {/* Outside the tile button on purpose — see the note at the top.
-                Hidden until the clip is running: with nothing playing there is
-                no sound to mute, and a dead control on every poster is noise. */}
-            <button type="button" class="tile-mute" data-mute hidden aria-pressed="false">
-              <span class="sr-only">Mute</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M4 9v6h4l5 4V5L8 9H4z" />
-                <path class="mute-on" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" />
-                <path class="mute-off" d="M17 9.5l5 5m0-5l-5 5" />
-              </svg>
-            </button>
-            <p class="mt-4 text-base leading-snug font-medium tracking-[-0.01em]">{clip.title}</p>
-            {clip.description && (
-              <p class="text-ink-dim mt-2 max-w-[32ch] text-sm leading-relaxed [font-weight:450]">
-                {clip.description}
-              </p>
-            )}
-          </li>
-        );
-      })
-    }
-  </ul>
-</section>
-
+<div id="portfolio-work">
+  <section id="work" aria-labelledby="work-heading" class="mx-auto max-w-(--container-page) px-6 pt-10 pb-8 sm:px-8">
+    <h2 id="work-heading" class="font-display text-section">Work</h2>
+    <ul id="work-grid" class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6" role="list">
+      {educational.map(clip => <VideoTile clip={clip} />)}
+    </ul>
+  </section>
+  <section class="cinematic" aria-label="Cinematic work">
+    <div class="cinematic-inner">
+      <div class="cinematic-frame">
+        <div class="cinematic-tab" aria-hidden="true">CINEMATIC</div>
+        <ul class="cinematic-grid" role="list">
+          {cinematic.map(clip => <VideoTile clip={clip} cinematic />)}
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
 <style>
-  .tile {
-    cursor: pointer;
+  .cinematic { position: relative; margin-top: 30px; border-top: 1px solid var(--color-cinema-line); background: var(--color-cinema); color: var(--color-cinema-ink); padding-block: 40px; }
+  .cinematic-inner { box-sizing: border-box; width: 100%; max-width: var(--container-page); margin-inline: auto; padding-inline: 32px; }
+  .cinematic-frame { position: relative; }
+  .cinematic-tab { position: absolute; inset-block-start: -70px; inset-inline-start: 0; display: inline-flex; align-items: center; height: 30px; padding-inline: 14px; border: 1px solid var(--color-cinema-line); border-bottom: 0; background: var(--color-cinema); color: var(--color-cinema-ink); font-family: var(--font-mono); font-size: var(--text-label); font-weight: 600; letter-spacing: var(--tracking-label); }
+  .cinematic-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 46px 16px; }
+  @media (min-width: 64rem) {
+    .cinematic-frame { width: calc(75% - 6px); margin-inline: auto; }
+    .cinematic-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; }
   }
-  .tile-video {
-    transition: opacity 300ms ease;
-  }
-  .tile-video[data-playing] {
-    opacity: 1;
-  }
-
-  /* The play affordance. Tapping is the ONLY way to start a clip now, so this
-     is the primary control rather than a fallback — it sits centred and stays
-     put, at 44px so it clears the minimum touch target on its own even though
-     the whole tile is tappable. Square, because --radius-* are all 0. */
-  .tile-cue {
-    position: absolute;
-    inset-block-start: 50%;
-    inset-inline-start: 50%;
-    translate: -50% -50%;
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    background: color-mix(in srgb, var(--color-ink) 78%, transparent);
-    color: var(--color-ground);
-    font-size: 0.9rem;
-    line-height: 1;
-    transition:
-      opacity 200ms ease,
-      background-color 200ms ease;
-  }
-  .tile-cue::before {
-    content: "\25B6"; /* ▶ */
-  }
-  /* Once it is running the cue gets out of the way, and comes back on hover or
-     keyboard focus so there is always a visible way to stop it. */
-  .tile[data-playing] .tile-cue {
-    opacity: 0;
-  }
-  .tile[data-playing] .tile-cue::before {
-    content: "\275A\275A"; /* ❚❚ */
-  }
-  .tile:hover .tile-cue,
-  .tile:focus-visible .tile-cue {
-    opacity: 1;
-    background: var(--color-ink);
-  }
-
-  /* The dusk foot. Sits over the poster AND the video, so it stays put while
-     a clip plays. The band is the stats strip's dusk, run to transparent over
-     the bottom ~30% of the tile so it reads as the photo darkening rather
-     than a bar laid on top. Ice numbers, mist icons — same pairing as the
-     strip. pointer-events: none so it can't steal the tap. */
-  .tile-foot {
-    position: absolute;
-    inset-inline: 0;
-    inset-block-end: 0;
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 34px 12px 10px;
-    background: linear-gradient(
-      to top,
-      rgb(22 32 44 / 0.92) 0%,
-      rgb(22 32 44 / 0.78) 38%,
-      rgb(22 32 44 / 0.36) 70%,
-      transparent 100%
-    );
-    color: var(--color-ice);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    pointer-events: none;
-    text-align: left;
-  }
-  /* THREE stats, not two (Dom added likes, 2026-09-08), and three is what makes
-     the foot a width problem. MEASURED at 375: the row needed 175px inside a
-     154px tile, because the grid is 2-across all the way up to lg and the tile
-     is only ~156px wide on a phone. So the metrics below compact under 30rem —
-     padding, gaps, icons and type all step down together, which buys back the
-     ~20px. Do not solve this by dropping a stat: views is the headline number
-     and hiding it on phones would show a different clip to different people.
-     Wrapping is the safety valve for the narrowest phones (~320px), where even
-     the compact row cannot fit three figures on one line. */
-  .tile-stat {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .tile-icon {
-    width: 14px;
-    height: 14px;
-    flex: none;
-    fill: none;
-    stroke: var(--color-mist);
-    stroke-width: 1.75;
-    stroke-linejoin: round;
-    stroke-linecap: round;
-  }
-
-  @media (max-width: 30rem) {
-    .tile-foot {
-      flex-wrap: wrap;
-      gap: 3px 4px;
-      padding: 30px 6px 8px;
-      font-size: 0.63rem;
-    }
-    .tile-icon {
-      width: 11px;
-      height: 11px;
-    }
-    .tile-stat {
-      gap: 3px;
-    }
-  }
-
-  /* Runtime, on the poster's top-left. Answers "how long is this?" before the
-     tap — the reason it exists at 54s and did not at 12s. It hides while the
-     clip runs, because the progress bar is then telling a better version of
-     the same story. */
-  .tile-time {
-    position: absolute;
-    inset-block-start: 8px;
-    inset-inline-start: 8px;
-    padding: 2px 6px;
-    background: color-mix(in srgb, var(--color-ink) 78%, transparent);
-    color: var(--color-ground);
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    font-variant-numeric: tabular-nums;
-    line-height: 1.35;
-    transition: opacity 200ms ease;
-  }
-  .tile[data-playing] .tile-time {
-    opacity: 0;
-  }
-
-  /* 3px on the tile's bottom edge, over the dusk foot. Scaled rather than
-     resized: transform runs off the main thread, and a width animation on a
-     timeupdate (4-5 times a second) would lay out the tile each time. */
-  .tile-progress {
-    position: absolute;
-    inset-inline: 0;
-    inset-block-end: 0;
-    height: 3px;
-    background: var(--color-accent);
-    transform: scaleX(var(--progress, 0));
-    transform-origin: left;
-    opacity: 0;
-    transition: opacity 200ms ease;
-    pointer-events: none;
-  }
-  .tile[data-playing] .tile-progress {
-    opacity: 1;
-  }
-
-  /* Sits over the tile's top-right corner but is a SIBLING of it in the DOM,
-     so the `li` is the positioning context, not the button. */
-  .tile-mute {
-    position: absolute;
-    inset-block-start: 8px;
-    inset-inline-end: 8px;
-    display: grid;
-    place-items: center;
-    width: 32px;
-    height: 32px;
-    background: color-mix(in srgb, var(--color-ink) 78%, transparent);
-    color: var(--color-ground);
-    cursor: pointer;
-  }
-  .tile-mute:hover,
-  .tile-mute:focus-visible {
-    background: var(--color-ink);
-  }
-  .tile-mute svg {
-    width: 17px;
-    height: 17px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.9;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-  .tile-mute svg path:first-child {
-    fill: currentColor;
-  }
-  /* One icon, two states: the waves show when sound is on, the cross when it
-     is off. aria-pressed carries the state for anyone not looking at it. */
-  .tile-mute[aria-pressed="true"] .mute-on,
-  .tile-mute[aria-pressed="false"] .mute-off {
-    display: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .tile-video,
-    .tile-cue,
-    .tile-time,
-    .tile-progress {
-      transition: none;
-    }
+  @media (max-width: 40rem) {
+    .cinematic { padding-block: 32px 40px; }
+    .cinematic-inner { padding-inline: 24px; }
+    .cinematic-tab { inset-block-start: -62px; }
   }
 </style>
-
 <script>
-  const grid = document.getElementById("work-grid");
+  const grid = document.getElementById("portfolio-work");
   if (grid) {
     const tiles = Array.from(grid.querySelectorAll<HTMLButtonElement>("[data-clip]"));
     const videoOf = (tile: HTMLElement) => tile.querySelector<HTMLVideoElement>("video")!;

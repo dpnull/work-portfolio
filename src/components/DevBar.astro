@@ -25,6 +25,11 @@
  * live token value is only overridden once something has actually been picked.
  */
 const DEV = import.meta.env.DEV;
+const PALETTES = [
+  { id: "editorial", name: "01 · Ivory & oxblood", colors: ["#F5F1E8", "#202124", "#625C58", "#762F43", "#A9CEE5"] },
+  { id: "coastal", name: "02 · Sky & midnight", colors: ["#EAF3F7", "#172C40", "#506373", "#255E95", "#E8B58F"] },
+  { id: "sunroom", name: "03 · Butter & forest", colors: ["#F6F1DA", "#23382D", "#596451", "#35604A", "#C98263"] },
+];
 
 // The five from the strip picker (agent, 2026-09-08). Hue only — see above.
 const SWATCHES = [
@@ -63,6 +68,11 @@ const CSS = `
 }
 
 #devbar .g { display: flex; flex-direction: column; gap: 8px; }
+#devbar .palette {display:grid;gap:8px;padding:10px;border:1px solid #b7b4b0;background:#fff;color:#202124;text-align:left;font:inherit;font-size:11px;cursor:pointer}
+#devbar .palette[aria-pressed="true"] {outline:2px solid #202124;outline-offset:1px}
+#devbar .palette-colors {display:flex;height:20px}
+#devbar .palette-colors i {flex:1}
+#devbar .reset {font:inherit;font-size:11px;text-decoration:underline;color:#202124;cursor:pointer;padding:6px}
 /* Groups added later separate themselves; no headings, by Dom's call. */
 #devbar .g + .g {
   margin-top: 14px; padding-top: 14px;
@@ -113,6 +123,15 @@ const CSS = `
       <button id="devbar-toggle" class="tab" type="button" aria-label="Toggle dev bar" />
 
       <div class="body">
+        <section class="g" aria-label="Site palettes">
+          {PALETTES.map((palette) => (
+            <button type="button" class="palette" data-palette={palette.id} data-colors={JSON.stringify(palette.colors)} aria-pressed="false">
+              <span>{palette.name}</span>
+              <span class="palette-colors" aria-hidden="true">{palette.colors.map((color) => <i style={`background:${color}`} />)}</span>
+            </button>
+          ))}
+          <button type="button" class="reset" id="palette-reset">Site default · Butter & forest</button>
+        </section>
         <section class="g">
           <div class="row">
             {SWATCHES.map((s) => (
@@ -155,6 +174,33 @@ const CSS = `
         const pin = document.getElementById("ramp-pin");
         const hexBtn = document.getElementById("hex");
         const root = document.documentElement;
+        const paletteKey = "devbar:site-palette";
+        const paletteButtons = [...bar.querySelectorAll("[data-palette]")];
+        const paletteTokens = ["ground", "ink", "ink-dim", "accent", "accent-ink", "surface", "surface-2", "line", "cinema", "cinema-ink", "cinema-dim", "cinema-line"];
+        const selectPalette = (button) => {
+          paletteButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+          if (!button) {
+            paletteTokens.forEach((token) => root.style.removeProperty(`--color-${token}`));
+            return;
+          }
+          const [ground, ink, dim, accent, secondary] = JSON.parse(button.dataset.colors);
+          const values = [ground, ink, dim, accent, ground,
+            `color-mix(in srgb, ${secondary} 20%, ${ground})`,
+            `color-mix(in srgb, ${secondary} 35%, ${ground})`,
+            `color-mix(in srgb, ${ink} 20%, ${ground})`, ink, ground,
+            `color-mix(in srgb, ${ground} 75%, ${ink})`,
+            `color-mix(in srgb, ${ground} 25%, ${ink})`];
+          paletteTokens.forEach((token, i) => root.style.setProperty(`--color-${token}`, values[i]));
+        };
+        paletteButtons.forEach((button) => button.addEventListener("click", () => {
+          selectPalette(button);
+          localStorage.setItem(paletteKey, button.dataset.palette);
+        }));
+        document.getElementById("palette-reset").addEventListener("click", () => {
+          selectPalette(null);
+          localStorage.removeItem(paletteKey);
+        });
+        selectPalette(paletteButtons.find((button) => button.dataset.palette === localStorage.getItem(paletteKey)));
 
         /* oklch -> sRGB hex. Needed because the token has to be pasted into
            global.css as a hex, and because a hue that leaves the sRGB gamut at

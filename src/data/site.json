@@ -3,27 +3,30 @@
   "wordmark": "@dpy2k",
   "name": "Dom Przewozny",
   "email": "dprzewozny2k@icloud.com",
-  "bookUrl": "#contact",
+  "bookUrl": "#book-call",
+  "bookingUrl": "https://cal.com/dominic-przewozny-2lpyjr/creative-intro",
   "nav": [
     {
       "label": "Work",
       "href": "#work"
     },
     {
-      "label": "Rates",
-      "href": "#rates"
+      "label": "Work with me",
+      "href": "#work-with-me"
     }
   ],
   "_socialNote": "Hero social rail (Dom, 2026-09-08). Instagram's URL is the one on the Notion Site page. RedNote and LinkedIn came from Dom on 2026-09-08 (the RedNote one is an xhslink.cn share link, which is what the app hands out — it redirects to the profile). An empty href renders that cell inert rather than guessing an address. The email cell copies the address above, it does not open a mail client.",
   "social": [
     {
       "id": "instagram",
+      "followers": "12.5K",
       "label": "Instagram",
       "handle": "@dpy2k",
       "href": "https://www.instagram.com/dpy2k/"
     },
     {
       "id": "rednote",
+      "followers": "9K",
       "label": "RedNote",
       "handle": "",
       "href": "https://xhslink.cn/m/7NU6VLakjl9"
@@ -46,21 +49,20 @@
     "description": "Social media creator who scripts, films and edits. 12K audience in men’s beauty and self-improvement, London."
   },
   "hero": {
-    "_note": "Billboard direction approved 2026-09-08. Visible headline, short support and work link; omit the name/role eyebrow and production-process corner label. Full biography is retained below Work.",
+    "_note": "Hard-split local trial approved 2026-09-08. Personal headline and separate portrait, without eyebrow or portrait label. Preserve rectangular Work CTA, separate proof strip and existing Work section.",
     "summary": "Grew Instagram account from zero to 12K in six months, built a 10K audience on Xiaohongshu, and converted that attention into 1,750 email subscribers through a funnel I built myself. I also plan topics and film for a 7M-follower creator, and run production end to end — from budgets, schedules, locations and crew to shooting, drone work, editing and grading in Premiere Pro and CapCut, with Notion supporting the system behind it.",
     "poster": "/hero-portrait.jpg",
     "posterAlt": "Dom Przewozny at dusk, palm trees and a sodium lamp behind him",
     "video": null,
     "headline": [
-      "Educational",
-      "videos.",
-      "Built for inbound."
+      "I make high-converting, highly educational & relatable videos for Gen Z & Gen X."
     ],
-    "support": "From the first idea to the final cut.",
+    "support": "Computer Science background. Content strategy, full-service production and AI automation—built on experience growing audiences, generating leads and producing for a 7M-follower creator.",
     "proof": {
+      "followers": "12K",
       "value": "1,750",
       "label": "email subscribers",
-      "context": "From a funnel I built myself."
+      "context": "Self-built funnel · 28 questions capturing locations, needs & gaps."
     }
   },
   "stats": [

@@ -7,9 +7,8 @@ import DevBar from "../components/DevBar.astro";
  * Real title/description/OG copy lands in block 5 from the Notion Site row.
  */
 
-// Pre-launch: keep the *.pages.dev URL out of search results.
-// Flip to false in block 6, once work.dpy2k.com is the live hostname.
-const NOINDEX = true;
+// The canonical public site is live at work.dpy2k.com.
+const NOINDEX = false;
 
 interface Props {
   title: string;
@@ -46,7 +45,7 @@ const canonical = new URL(path, Astro.site);
       crossorigin
     />
 
-    <meta name="theme-color" content="#ebe6f1" />
+    <meta name="theme-color" content="#F6F1DA" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
     {/* Cloudflare Web Analytics — block 5 */}

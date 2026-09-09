@@ -1,20 +1,31 @@
 ---
 import site from "../data/site.json";
-// Tiles: fused hairlines in the sky blue (Dom, 2026-09-07) — each tile owns its right
-// and bottom edge, the list owns the top and left, so neighbours share one line.
-// Background: AI render (nano-banana-2, 21:9) of a blue-hour promenade echoing the hero
-// photo — palms, one sodium lamp. Chosen by Dom 2026-09-07 from 8 candidates. Files in
-// public/stats-bg{,-1200}.{webp,jpg}; regenerate the four together. The gradient keeps
-// the strip's mean luminance low so the ice numbers stay AAA at any viewport.
+// FOUR FIGURES, NO CAPTION, NO HAIRLINES (Dom, 2026-09-08). The "Who watches"
+// lead-in column is gone — that is what the row gave up to go from five columns
+// to four — and with it the framing that the strip is audience data: it now
+// mixes proof (14%), the 7M credit, and audience fit. The fused left-edge
+// hairlines between figures went in the same pass. Space separates the columns
+// now, which is the same argument as the flat background: on a solid block a
+// drawn line is depth the design already refused.
+// Background: ONE FLAT COLOUR, see the style block.
 ---
 
-<section aria-label="Results at a glance" class="border-line stats-strip relative border-y">
+<!-- NO HAIRLINE, TOP OR BOTTOM. The strip is a solid colour block: the colour
+     change IS the divider at both edges, and a rule drawn on top of it is a
+     line that has nothing to separate. The top rule went on 2026-09-07 (it was
+     `border-y`; --color-line is a warm grey and the hero photo's bottom edge is
+     near-black, so it read as a bright wire drawn across the picture and Dom
+     circled it). The BOTTOM rule went on 2026-09-08 with the flattening: below
+     it the page returns to the pale ground, and --color-line sits in value
+     between the strip and the ground, so it read as a dirty grey seam under a
+     saturated band. Full-value section changes do not need help. -->
+<section aria-label="Results at a glance" class="stats-strip relative">
   <div class="mx-auto max-w-(--container-page) px-6 py-10 sm:px-8">
-    <dl class="stats-tiles relative grid grid-cols-2 lg:grid-cols-4">
+    <dl class="stats-tiles relative grid grid-cols-2 items-start gap-x-8 gap-y-9 lg:grid-cols-4 lg:gap-x-10">
       {site.stats.map((stat) => (
-        <div class="px-6 py-7 text-center">
-          <dd class="font-display text-stat text-ice font-semibold">{stat.value}</dd>
-          <dt class="text-mist mt-2 text-sm text-balance">{stat.label}</dt>
+        <div>
+          <dd class="font-display text-stat text-strip-ink font-semibold">{stat.value}</dd>
+          <dt class="text-strip-ink-dim mt-2 text-sm text-balance">{stat.label}</dt>
         </div>
       ))}
     </dl>
@@ -22,27 +33,43 @@ import site from "../data/site.json";
 </section>
 
 <style>
-  .stats-tiles {
-    border-top: 1px solid var(--color-tile-line);
-    border-left: 1px solid var(--color-tile-line);
-  }
-  .stats-tiles > div {
-    border-right: 1px solid var(--color-tile-line);
-    border-bottom: 1px solid var(--color-tile-line);
-  }
+  /* The row has no CSS of its own any more. It was a captioned row (Dom,
+     picker, 2026-09-07 — layout 5 of the strip board): a 200px lead-in column
+     naming what the figures were for, each figure owning a left hairline so
+     neighbours shared one line. Both are gone on Dom's call (2026-09-08), and
+     the grid is four equal columns spaced by a gap, 2x2 on phones. Cells are
+     top-aligned, not centred — the labels run to different line counts, and
+     centring them would leave the four big figures sitting at four different
+     heights. --color-strip-line in global.css now has no user.
+
+     ── FLAT (Dom, 2026-09-08) ───────────────────────────────────────────────
+     One colour. No gradient, no wash, no vignette, no texture — Dom: "no depth
+     no nothing, we need to keep it simple."
+
+     WHAT WAS HERE AND WHY IT IS GONE. Two layers, both removed on Dom's call:
+
+       THE DUSK MESH — a dusk base under three radial gradients in the hero's
+       own colours (sky blue low-left, sodium amber mid, navy top-right) plus an
+       ink wash. It existed to make the strip read as the same photograph as the
+       hero. A flat strip does not want to be a photograph, so the whole
+       argument for it goes with it.
+
+       THE SEAM — an extra 56px gradient at the top that darkened the strip to
+       within ~20 levels of the hero photo's near-black bottom row, so the join
+       between two dark images did not read as a cut. IT IS NOT NEEDED NOW AND
+       CANNOT BE REINSTATED: it worked by darkening, and this strip is bright.
+       There is no longer a near-match to preserve — the photo's dark bottom
+       meets a bright colour, which is a full-value change and therefore reads
+       as a deliberate section break rather than a mistake. That is what flat
+       design wants at a join, and it is why nothing replaced the layer.
+
+     The old public/stats-bg* render files remain unused (they were already
+     dead after 2026-09-07).
+
+     THE COLOUR ITSELF lives in --color-strip in global.css, along with the
+     other four candidates and the reasoning. Change it there, not here — the
+     ink and hairline are the same ink at three alphas and follow it. */
   .stats-strip {
-    background-color: var(--color-dusk);
-    background-image:
-      linear-gradient(to bottom, rgb(10 10 11 / 0.35), rgb(10 10 11 / 0.15) 40%, rgb(10 10 11 / 0.55)),
-      image-set(url("/stats-bg-1200.webp") type("image/webp"), url("/stats-bg-1200.jpg") type("image/jpeg"));
-    background-size: cover;
-    background-position: 62% 45%; /* keeps the lamp between the 2nd and 3rd figure */
-  }
-  @media (min-width: 1200px) {
-    .stats-strip {
-      background-image:
-        linear-gradient(to bottom, rgb(10 10 11 / 0.35), rgb(10 10 11 / 0.15) 40%, rgb(10 10 11 / 0.55)),
-        image-set(url("/stats-bg.webp") type("image/webp"), url("/stats-bg.jpg") type("image/jpeg"));
-    }
+    background-color: var(--color-strip);
   }
 </style>

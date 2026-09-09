@@ -32,6 +32,10 @@
    the codebase should hardcode a colour, font or radius.
    ───────────────────────────────────────────────────────────── */
 @theme {
+  --color-cinema: #23382D;
+  --color-cinema-ink: #F6F1DA;
+  --color-cinema-dim: color-mix(in srgb, #F6F1DA 75%, #23382D);
+  --color-cinema-line: color-mix(in srgb, #F6F1DA 25%, #23382D);
   /* Colour — "Sand" light palette (Dom, 2026-09-07). Warm greige paper against
      a cool dusk photograph: the ground sits opposite the sky's hue (≈208°)
      instead of matching it, which is what makes the blue read as colour rather
@@ -48,14 +52,15 @@
      on the page and therefore the loudest. Don't spend the colour anywhere
      else.
      Superseded: "Ice" #dfe6ec (blue-grey), "Bone" #f2eee7 (lighter warm). */
-  --color-ground: #ebe6f1;       /* page background — "Lilac haze", picker 2026-09-07, oklch(0.932 0.016 306): the hero's cloud shadows. Sand #e9e1d5 blended to the cyan sky through grey-mauve; this is adjacent to the sky's hue so the dissolve stays clean. */
-  --color-surface: #e0dae6;      /* cards, tiles */
-  --color-surface-2: #d8d2de;    /* raised / hover */
-  --color-line: #cbc5d1;         /* hairline borders */
-  --color-ink: #191320;          /* primary text on ground (16:1), ground hue darkened */
-  --color-ink-dim: #61546f;      /* secondary text (5.9:1) */
-  --color-accent: #e5ff3d;       /* CTA fill only */
-  --color-accent-ink: #0a0a0b;   /* text on accent (13:1) */
+  /* Butter & forest — selected by Dom, 2026-09-09. */
+  --color-ground: #F6F1DA;
+  --color-surface: color-mix(in srgb, #C98263 20%, #F6F1DA);
+  --color-surface-2: color-mix(in srgb, #C98263 35%, #F6F1DA);
+  --color-line: color-mix(in srgb, #23382D 20%, #F6F1DA);
+  --color-ink: #23382D;
+  --color-ink-dim: #596451;
+  --color-accent: #35604A;
+  --color-accent-ink: #F6F1DA;
   /* The dusk set. It ran the stats strip until 2026-09-08, when the strip went
      flat and bright; its ONLY remaining job is the foot on each video tile in
      WorkGrid (views / likes / saves over the poster). Values unchanged — the
@@ -117,6 +122,10 @@
   --font-display: var(--font-sans);
   --font-mono: "Kode Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
     monospace;
+
+  /* UI labels: runtimes, bookmark tabs and compact schematic marks. */
+  --text-label: 0.6875rem;
+  --tracking-label: 0.14em;
 
   /* Fluid display sizes — phone first */
   --text-hero: clamp(2.25rem, 8vw, 4.5rem);

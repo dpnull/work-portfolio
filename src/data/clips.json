@@ -29,7 +29,7 @@
             "saves": "1.8K"
           },
           "duration": 54,
-          "description": "A visual story about drinking enough water for better energy, focus and appearance.",
+          "description": "Reframed a basic hydration habit through appearance, not health.",
           "src": "/clips/water.mp4",
           "poster": "/clips/water.jpg",
           "posterWebp": "/clips/water.webp",
@@ -50,7 +50,7 @@
             "saves": "3.4K"
           },
           "duration": 40,
-          "description": "A two-character tutorial showing correct tongue posture and how to make it automatic.",
+          "description": "Turned an insecurity-led hook into one technique and a repeatable cue.",
           "src": "/clips/mewing.mp4",
           "poster": "/clips/mewing.jpg",
           "posterWebp": "/clips/mewing.webp",
@@ -71,7 +71,7 @@
             "saves": "6.9K"
           },
           "duration": 40,
-          "description": "A myth-bust about why cold water helps temporarily—but discipline creates lasting change.",
+          "description": "Used a familiar glow-up hack to expose productive procrastination.",
           "src": "/clips/ice-face.mp4",
           "poster": "/clips/ice-face.jpg",
           "posterWebp": "/clips/ice-face.webp",
@@ -92,13 +92,20 @@
             "saves": "2.6K"
           },
           "duration": 28,
-          "description": "A practical wall-slide demonstration showing an easier way to improve posture.",
+          "description": "Used a vanity promise to get viewers repeating exercises that actually improve posture.",
           "src": "/clips/posture.mp4",
           "poster": "/clips/posture.jpg",
           "posterWebp": "/clips/posture.webp",
           "muxPlaybackId": null,
           "ready": true
-        },
+        }
+      ],
+      "id": "educational"
+    },
+    {
+      "id": "cinematic",
+      "heading": "Cinematic",
+      "clips": [
         {
           "id": "its-all-a-lie",
           "title": "It's all a lie",
@@ -113,10 +120,52 @@
             "saves": "290"
           },
           "duration": 24,
-          "description": "",
+          "description": "Cut through contradictory diet advice with one rule: choose what you can sustain.",
           "src": "/clips/its-all-a-lie.mp4",
           "poster": "/clips/its-all-a-lie.jpg",
           "posterWebp": "/clips/its-all-a-lie.webp",
+          "muxPlaybackId": null,
+          "ready": true
+        },
+        {
+          "id": "530am-run",
+          "title": "5:30am Run",
+          "label": {
+            "format": "Cinematic short",
+            "category": "Personal series",
+            "result": ""
+          },
+          "stats": {
+            "views": "",
+            "likes": "",
+            "saves": ""
+          },
+          "duration": 77,
+          "description": "Tested 5:30am discipline—and found the right hard thing matters more.",
+          "src": "/clips/530am-run.mp4",
+          "poster": "/clips/530am-run.jpg",
+          "posterWebp": "/clips/530am-run.webp",
+          "muxPlaybackId": null,
+          "ready": true
+        },
+        {
+          "id": "unrot",
+          "title": "Unrot — Brand Film",
+          "label": {
+            "format": "Cinematic short",
+            "category": "Client work",
+            "result": ""
+          },
+          "stats": {
+            "views": "",
+            "likes": "",
+            "saves": ""
+          },
+          "duration": 34,
+          "description": "Made app accountability visible through a dialogue-free, split-night brand film.",
+          "src": "/clips/unrot.mp4",
+          "poster": "/clips/unrot.jpg",
+          "posterWebp": "/clips/unrot.webp",
           "muxPlaybackId": null,
           "ready": true
         }
@@ -124,5 +173,5 @@
     }
   ],
   "_stats": "`stats` is the dusk foot on each tile: views / likes / saves as short display strings (\"976K\"). Same rule as results: Dom's numbers only, \"\" = unknown and that stat is not rendered; a clip with no stats at all gets no foot. `description` is one line under the title, DRAFT until Dom rewrites it.",
-  "_ownership": "The `own` flag is gone (Dom, 2026-09-08): everything on this page is his own audience-tested work, so there is no client work for it to be confused with and nothing to disambiguate. If client deliverables ever land here, the distinction has to come back — the blueprint's rule against blurring the two still stands, it simply has nothing to act on yet."
+  "_ownership": "Educational clips, It’s all a lie, and 5:30am Run are personal work. Unrot is a client brand film, explicitly identified in its title. No client performance figures are claimed."
 }

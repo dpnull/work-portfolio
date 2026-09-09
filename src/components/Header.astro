@@ -60,7 +60,10 @@ import site from "../data/site.json";
     <div class="rail-spacer" aria-hidden="true"></div>
   </nav>
 
-  <a href={site.bookUrl} class="rail-cell rail-cta text-sm font-semibold">Book a free video call</a>
+  <a href={site.bookUrl} class="rail-cell rail-cta text-sm font-semibold">
+    <span>Book a free video call</span>
+    <span class="rail-cta-mark" aria-hidden="true">↗</span>
+  </a>
 </header>
 
 <style>
@@ -174,11 +177,25 @@ import site from "../data/site.json";
   .rail-cta {
     order: 1;
     flex: 0 0 auto;
-    background-color: var(--color-ground);
+    background-color: color-mix(in srgb, var(--color-accent) 16%, var(--color-ground));
     color: var(--color-ink);
-    border: 1px solid var(--color-ink);
+    border: 1px solid var(--color-line);
+    box-shadow: inset 0 -4px 0 var(--color-accent);
     margin-block: -1px;
     padding-inline: 16px;
+    gap: 12px;
+  }
+
+  .rail-cta-mark {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-left: 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+    padding-left: 10px;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    line-height: 1;
   }
 
   /* Invert: ink ground, page-colour text. The rules stay put. */
@@ -186,6 +203,16 @@ import site from "../data/site.json";
   .rail-cell:focus-visible {
     background-color: var(--color-ink);
     color: var(--color-ground);
+  }
+
+  .rail-cta:hover,
+  .rail-cta:focus-visible {
+    box-shadow: inset 0 -4px 0 var(--color-accent);
+  }
+
+  .rail-cta:hover .rail-cta-mark,
+  .rail-cta:focus-visible .rail-cta-mark {
+    border-left-color: color-mix(in srgb, var(--color-ground) 45%, transparent);
   }
 
   /* The global focus ring is ink, which vanishes against the inverted ink

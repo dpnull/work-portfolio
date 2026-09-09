@@ -1,22 +1,19 @@
 ---
 import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
-import Hero from "../components/Hero.astro";
 import Proof from "../components/Proof.astro";
 import WorkGrid from "../components/WorkGrid.astro";
+import AudienceOptions from "../components/AudienceOptions.astro";
 import site from "../data/site.json";
 ---
 
 <Base title={site.meta.title} description={site.meta.description}>
   <Header />
   <main>
-    <Hero />
+    <AudienceOptions opening />
     <Proof />
     <WorkGrid />
-    <section aria-labelledby="about-heading" class="about mx-auto max-w-(--container-page) border-t border-line px-6 py-10 sm:px-8">
-      <h2 id="about-heading" class="font-display text-section">About</h2>
-      <p class="mt-6 max-w-3xl text-base leading-relaxed">{site.hero.summary}</p>
-    </section>
+    <AudienceOptions />
   </main>
   <footer id="contact" class="mx-auto max-w-(--container-page) border-t border-line px-6 py-8 text-sm sm:px-8">
     <div class="flex flex-wrap items-center justify-between gap-6">

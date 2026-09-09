@@ -1,0 +1,74 @@
+---
+import site from "../data/site.json";
+import SocialRail from "./SocialRail.astro";
+import Hero from "./Hero.astro";
+import Services from "./Services.astro";
+const { opening = false } = Astro.props;
+---
+<!-- Instagram demographics: May 2026 snapshot. User selected media-kit design on 9 Sep 2026. -->
+<div id={opening ? "about" : "audience-options"} class="audience">
+  <section id={opening ? "introduction" : "audience-03"} aria-label={opening ? "About me" : "Audience and content"}>
+    {!opening && <div class="kit">
+      <div class="metric">
+        <svg viewBox="0 0 80 80" role="img" aria-label="95 percent male audience"><circle class="track" cx="40" cy="40" r="33"/><circle class="portion" cx="40" cy="40" r="33" pathLength="100" stroke-dasharray="95 5" transform="rotate(-90 40 40)"/><text x="40" y="46" text-anchor="middle">95%</text></svg>
+        <span>Male audience</span>
+      </div>
+      <span class="divider" aria-hidden="true"></span>
+      <div class="metric"><strong>18–34</strong><span>Age range</span></div>
+    </div>}
+    {opening ? <div class="about-story">
+      <div class="photo-notes">
+        <figure class="photo-main"><img src="/hero-portrait-m-800.webp" alt={site.hero.posterAlt} width="800" height="1067" fetchpriority="high"/><figcaption>Me, off-script.</figcaption></figure>
+        <figure class="photo-detail"><video id="about-preview" src="/clips/about-preview.mp4" width="540" height="960" autoplay muted loop playsinline preload="auto" aria-label="Dom’s on-camera preview"></video><figcaption>And on camera. <button type="button" class="preview-toggle" aria-controls="about-preview" aria-label="Pause preview">Pause</button></figcaption></figure>
+      </div>
+      <div class="story-copy">
+        <h1>Hi, I’m Dom.</h1>
+        <p class="intro">Computer Science background.<br/>Big nerd and a social media creator & professional assistant.</p>
+        <p>I make educational videos that feel relatable, from the first idea to the final edit. I’ve grown my own audiences, built a funnel that brought in 1,750 email subscribers, and plan topics and film for a 7M-follower creator.</p>
+        <dl>
+          <div><dt>Behind the content</dt><dd>Research, scripts, filming, editing & colour grading.</dd></div>
+          <div><dt>Behind the scenes</dt><dd>Production planning, drone work & AI workflows.</dd></div>
+        </dl>
+        <SocialRail inline horizontal />
+      </div>
+    </div> : <><Services /><Hero /></>}
+  </section>
+</div>
+<style>
+.audience{max-width:var(--container-page);margin:auto;padding:40px 24px}
+section{scroll-margin-top:100px}
+.about-story{display:grid;grid-template-columns: .9fr 1.1fr;gap:clamp(32px,7vw,100px);padding:48px 0 20px;align-items:center}
+.photo-notes{position:relative;padding:0 20% 45px 3%;max-width:480px}
+.photo-notes figure{margin:0;background:var(--color-plate);padding:8px;border:1px solid var(--color-line)}
+.photo-main{transform:rotate(-3deg)}
+.photo-main img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.photo-notes .photo-detail{position:absolute;width:43%;right:0;bottom:0;transform:rotate(5deg)}
+.photo-detail video{width:100%;height:auto;aspect-ratio:9/16;object-fit:cover}
+.preview-toggle{float:right;font:inherit;text-decoration:underline;cursor:pointer}
+figcaption{font-size:12px;padding:8px 2px 2px}
+.story-copy{max-width:48ch;padding-bottom:24px}
+.story-copy h1{font-size:clamp(28px,3vw,40px);line-height:1.1;letter-spacing:-.035em;margin:0 0 16px}
+.story-copy p{font-size:16px;line-height:1.6;margin:0 0 20px}
+.story-copy .intro{font-size:20px;line-height:1.4}
+dl{margin:28px 0 0;display:grid;gap:18px}dt{font-size:13px;font-weight:650}dd{margin:4px 0 0;font-size:15px;color:var(--color-ink-dim)}
+@media(max-width:700px){.about-story{grid-template-columns:1fr;gap:32px;padding-top:32px}.photo-notes{width:85%;max-width:360px}.story-copy{padding:0}}
+.kit{display:flex;justify-content:center;align-items:center;gap:40px;padding:22px 0;border-block:1px solid var(--color-line)}
+.metric{display:flex;align-items:center;justify-content:center;gap:12px;font-size:16px;font-weight:600}
+.metric strong{font-size:clamp(24px,2.4vw,34px);line-height:1;letter-spacing:-.045em;font-weight:650}
+.divider{width:1px;height:32px;background:var(--color-line);flex-shrink:0}
+svg{width:64px;height:64px;flex-shrink:0}circle{fill:none;stroke-width:5px}.track{stroke:var(--color-line)}.portion{stroke:var(--color-ink)}text{fill:var(--color-ink);font-size:23px;font-weight:600}
+@media(min-width:640px){.audience{padding-inline:32px}}
+@media(max-width:550px){.kit{gap:16px}.metric{gap:8px;font-size:14px;flex:1}.metric:last-child{flex-direction:column}svg{width:56px;height:56px}}
+</style>
+<script>
+  const preview = document.querySelector<HTMLVideoElement>('#about-preview');
+  const toggle = document.querySelector<HTMLButtonElement>('.preview-toggle');
+  if (preview && toggle) {
+    const sync = () => { toggle.textContent = preview.paused ? 'Play' : 'Pause'; toggle.setAttribute('aria-label', preview.paused ? 'Play preview' : 'Pause preview'); };
+    toggle.addEventListener('click', () => { if (preview.paused) void preview.play().catch(sync); else preview.pause(); });
+    preview.addEventListener('play', sync);
+    preview.addEventListener('pause', sync);
+    preview.muted = true;
+    void preview.play().catch(sync);
+  }
+</script>

@@ -4,16 +4,20 @@
  * parent and is cropped by object-cover, so the parent owns the size, the
  * position and the mask that dissolves an edge into the ground (see Hero.astro).
  *
- *   >= 1024px  the LANDSCAPE crop (3012x2133 of the source, the tuner's frame),
- *              pinned right and dissolved on its left.
- *   <  1024px  a PORTRAIT 3:4 crop (1848x2464 of the source), served 1200w +
- *              800w. The aspect is load-bearing, not cosmetic: band D sets the
- *              photo box to exactly 3:4, so object-cover has nothing to crop
- *              and his head holds the same fraction of the box at every phone
- *              width. Re-cutting this asset to a different aspect means
- *              changing `--m-aspect` in Hero.astro in the same commit.
+ *   >= 768px   the LANDSCAPE crop (3012x2133 of the source, the tuner's frame),
+ *              pinned right and dissolved on its left. Tablets joined this set
+ *              on 2026-09-07, when the overlap composition was extended down
+ *              from 1024 to 768 — a portrait column in an overlap layout would
+ *              be cropped to a sliver.
+ *   <  768px   a PORTRAIT 3:4 crop (1848x2464 of the source), served 1200w +
+ *              800w. Band D crops it to a CONSTANT box aspect — square on a
+ *              phone, 6:5 from 600 to 767 — so object-cover takes the same
+ *              slice at every width in each band and his head holds the same
+ *              fraction of the box. Re-cutting this asset to a different aspect
+ *              means re-deriving both `--m-aspect` values and the
+ *              object-position that goes with them, in the same commit.
  *
- * The portrait entries carry `media="(max-width: 1023px)"`, so a desktop
+ * The portrait entries carry `media="(max-width: 767px)"`, so a desktop
  * browser never downloads them and a phone never downloads the landscape set.
  *
  * Image first: the poster is the LCP element, so it is never lazy and carries
@@ -32,19 +36,19 @@ interface Props {
 const { poster, alt, video = null } = Astro.props;
 const base = poster.replace(/\.jpg$/, "");
 
-// Landscape (desktop): 2000w + 1000w. The photo is 69vw from 1024 up.
+// Landscape (tablet + desktop): 2000w + 1000w. The photo is 69vw from 768 up.
 const srcset = (ext: string) => `${base}-1000.${ext} 1000w, ${base}.${ext} 2000w`;
-const sizes = "(min-width: 1024px) 69vw, 100vw";
+const sizes = "(min-width: 768px) 69vw, 100vw";
 
-// Portrait (tablet + phone): 1200w + 800w. A 46vw column on tablets,
-// the full viewport width on phones. 600px is band C's start (see Hero.astro).
+// Portrait (small tablet + phone): 1200w + 800w. A 46vw column on small
+// tablets, the full viewport width on phones. 600px is band C's start.
 const mSrcset = (ext: string) => `${base}-m-800.${ext} 800w, ${base}-m.${ext} 1200w`;
 const mSizes = "(min-width: 600px) 46vw, 100vw";
 ---
 
 <picture>
-  <source media="(max-width: 1023px)" type="image/webp" srcset={mSrcset("webp")} sizes={mSizes} />
-  <source media="(max-width: 1023px)" type="image/jpeg" srcset={mSrcset("jpg")} sizes={mSizes} />
+  <source media="(max-width: 767px)" type="image/webp" srcset={mSrcset("webp")} sizes={mSizes} />
+  <source media="(max-width: 767px)" type="image/jpeg" srcset={mSrcset("jpg")} sizes={mSizes} />
   <source type="image/webp" srcset={srcset("webp")} sizes={sizes} />
   <img
     src={poster}
