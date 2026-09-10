@@ -164,7 +164,7 @@ const CSS = `
 
 {
   DEV && (
-    <script is:inline>
+    <script is:inline data-astro-rerun>
       (() => {
         const KEY = "devbar:strip-hue";
         const L = 0.79;
@@ -294,6 +294,7 @@ const CSS = `
         // to check a breakpoint is exactly when the rail is in the way, and a
         // load-time-only check leaves it open over the layout being inspected.
         addEventListener("resize", autoOpen);
+        document.addEventListener('astro:before-swap', () => removeEventListener('resize', autoOpen), { once: true });
 
         // Only override the real token once a pick has been made — with nothing
         // stored, the page must show what global.css actually says.

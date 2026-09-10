@@ -1,0 +1,47 @@
+---
+import { ClientRouter } from 'astro:transitions';
+---
+<ClientRouter fallback="swap" />
+<link rel="preload" as="image" href="/clips/its-all-a-lie.webp" />
+<link rel="preload" as="image" href="/work-with-me.webp" />
+<style is:inline>
+  /* Astro restores history inside the swap; smooth scrolling must not animate it. */
+  html[data-astro-transition] { scroll-behavior: auto !important; }
+
+  [data-ugc-photo] { view-transition-name: ugc-photo; }
+  [data-ugc-title] { view-transition-name: ugc-title; }
+  [data-tech-photo] { view-transition-name: tech-photo; }
+  [data-tech-title] { view-transition-name: tech-title; }
+
+  ::view-transition-group(ugc-photo),
+  ::view-transition-group(ugc-title),
+  ::view-transition-group(tech-photo),
+  ::view-transition-group(tech-title) {
+    animation-duration: 420ms;
+    animation-timing-function: cubic-bezier(.22, .8, .2, 1);
+  }
+  ::view-transition-group(ugc-photo), ::view-transition-group(tech-photo) { z-index: 2; }
+  ::view-transition-group(ugc-title), ::view-transition-group(tech-title) { z-index: 3; }
+  ::view-transition-image-pair(ugc-photo), ::view-transition-image-pair(tech-photo) { isolation: auto; }
+  ::view-transition-old(ugc-photo), ::view-transition-old(tech-photo) { display: none; }
+  ::view-transition-new(ugc-photo), ::view-transition-new(tech-photo) {
+    animation: none;
+    mix-blend-mode: normal;
+    height: 100%;
+    object-fit: cover;
+  }
+  ::view-transition-old(root) { animation: portfolio-out 140ms ease both; }
+  ::view-transition-new(root) { animation: portfolio-in 260ms 100ms ease both; }
+  @keyframes portfolio-out { to { opacity: 0; } }
+  @keyframes portfolio-in { from { opacity: 0; } to { opacity: 1; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    @view-transition { navigation: none; }
+    [data-ugc-photo], [data-ugc-title], [data-tech-photo], [data-tech-title] { view-transition-name: none; }
+    ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation-duration: .01ms !important; animation-delay: 0ms !important; }
+  }
+</style>
+<script>
+  import '../scripts/portfolio-preload';
+  import '../scripts/portfolio-scroll';
+</script>

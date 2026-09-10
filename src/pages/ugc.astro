@@ -7,19 +7,41 @@ import AudienceOptions from "../components/AudienceOptions.astro";
 import Footer from "../components/Footer.astro";
 ---
 
-<Base title="UGC & Video Production — Dom Przewozny" description="Creator-led UGC, educational social videos and brand films. Explore Dom’s work, audience results and video production services.">
+<Base title="UGC & Video Production — Dom Przewozny" description="Creator-led UGC, educational social videos and brand films. Explore Dom’s work, audience results and video production services." photoTransition>
   <Header active="ugc" />
   <main>
-    <AudienceOptions opening />
-    <nav class="page-links" aria-label="UGC sections"><a href="#work">Explore the videos ↓</a><a href="#work-with-me">Services & pricing</a></nav>
-    <Proof />
+    <section class="portfolio-opening" aria-labelledby="ugc-heading">
+      <figure class="opening-print">
+        <img data-ugc-photo src="/clips/its-all-a-lie.webp" alt="A frame from Dom’s personal cinematic short, It’s all a lie" width="720" height="1280" fetchpriority="high" />
+        <figcaption>It’s all a lie <span>Personal film</span></figcaption>
+      </figure>
+      <div class="opening-copy">
+        <a class="back-cover" href="/covers/1" data-photo-link>← Back to cover</a>
+        <h1 id="ugc-heading" data-ugc-title>UGC & Video</h1>
+        <p>Brand films, educational videos and creative production.</p>
+        <nav class="opening-links" aria-label="UGC sections"><a href="#work">Explore the videos ↓</a><a href="#work-with-me">Services & pricing</a></nav>
+      </div>
+    </section>
     <WorkGrid />
+    <Proof />
     <AudienceOptions />
     <aside class="other-path"><p>Looking for the systems behind the content?</p><a href="/creative-tech">Explore creative tech & content systems →</a></aside>
   </main>
   <Footer />
 </Base>
 <style>
+  .portfolio-opening{max-width:var(--container-page);margin:auto;padding:36px 32px 8px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center}
+  .opening-print{margin:0;padding:9px 9px 0;background:white;box-shadow:0 3px 10px #23382d18}
+  .opening-print img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:50% 35%}
+  .opening-print figcaption{display:flex;justify-content:space-between;gap:16px;padding:12px 5px;font-size:14px}
+  .opening-print figcaption span{color:var(--color-ink-dim)}
+  .back-cover{font-size:14px;text-underline-offset:5px}
+  .back-cover:hover{text-decoration:underline}
+  .opening-copy h1{font-size:clamp(32px,3.5vw,46px);font-weight:500;letter-spacing:-.04em;line-height:1.1;margin:26px 0 18px;width:fit-content}
+  .opening-copy p{font-size:18px;line-height:1.5;max-width:30ch}
+  .opening-links{display:flex;flex-wrap:wrap;gap:16px 24px;margin-top:26px;font-size:16px}
+  .opening-links a{text-decoration:underline;text-underline-offset:5px}
+  @media(max-width:639px){.portfolio-opening{padding:24px 24px 0;grid-template-columns:1fr;gap:22px}.opening-print{max-width:440px;width:100%;margin:auto}.opening-copy h1{margin:16px 0 12px}.opening-copy p{font-size:16px;max-width:none}.opening-links{margin-top:18px}}
   .page-links,.other-path{max-width:var(--container-page);margin:auto;padding:0 32px 32px;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;font-size:16px}
   .page-links a,.other-path a{text-decoration:underline;text-underline-offset:5px}.other-path{padding-block:32px;line-height:1.6}
   @media(max-width:639px){.page-links,.other-path{padding-inline:24px}}

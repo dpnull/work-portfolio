@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import DevBar from "../components/DevBar.astro";
+import PhotoTransition from "../components/PhotoTransition.astro";
 
 /**
  * Site-wide shell: meta, fonts, analytics slot.
@@ -13,9 +14,10 @@ const NOINDEX = false;
 interface Props {
   title: string;
   description: string;
+  photoTransition?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, photoTransition = false } = Astro.props;
 // build.format "file" emits /index.html, which must not leak into the canonical.
 const path = Astro.url.pathname.replace(/index\.html$/, "").replace(/\.html$/, "");
 const canonical = new URL(path, Astro.site);
@@ -47,6 +49,7 @@ const canonical = new URL(path, Astro.site);
 
     <meta name="theme-color" content="#F6F1DA" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {photoTransition && <PhotoTransition />}
 
     {/* Cloudflare Web Analytics — block 5 */}
   </head>

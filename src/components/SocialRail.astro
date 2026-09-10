@@ -280,6 +280,8 @@ const cells = site.social ?? [];
 </style>
 
 <script>
+  import { onPageReady } from '../scripts/page-ready';
+  onPageReady(() => {
   // Progressive enhancement, JS-only on purpose: with scripts off the cell is
   // still a labelled button and the address is in its accessible name. The two
   // paths mirror Header.astro's — the modern API where the page is a secure
@@ -330,5 +332,6 @@ const cells = site.social ?? [];
         status.textContent = "";
       }, 1600);
     });
+  });
   });
 </script>

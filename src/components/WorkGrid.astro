@@ -40,6 +40,8 @@ const cinematic = clips.groups.filter(g => g.id === "cinematic").flatMap(g => g.
   }
 </style>
 <script>
+  import { onPageReady } from '../scripts/page-ready';
+  onPageReady(() => {
   const grid = document.getElementById("portfolio-work");
   if (grid) {
     const tiles = Array.from(grid.querySelectorAll<HTMLButtonElement>("[data-clip]"));
@@ -183,8 +185,16 @@ const cinematic = clips.groups.filter(g => g.id === "cinematic").flatMap(g => g.
 
     // Browsers suspend media in a hidden document and returning to the tab
     // moves nothing, so without this the clip the visitor started stays dead.
-    document.addEventListener("visibilitychange", () => {
+    const resume = () => {
       if (!document.hidden && current) videoOf(current).play().catch(() => {});
-    });
+    };
+    document.addEventListener("visibilitychange", resume);
+    return () => {
+      current = null;
+      io.disconnect();
+      document.removeEventListener('visibilitychange', resume);
+      tiles.forEach(tile => videoOf(tile).pause());
+    };
   }
+  });
 </script>

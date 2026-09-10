@@ -1,0 +1,113 @@
+---
+import Base from '../../layouts/Base.astro';
+import SocialRail from '../../components/SocialRail.astro';
+export function getStaticPaths(){return ['1','2','3'].map(choice=>({params:{choice}}));}
+const choice=Astro.params.choice;
+const names=['Lifted prints','Fanned notes','Picture notes'];
+---
+<Base title={`Dom — ${names[Number(choice)-1]}`} description="UGC, video and creative technology by Dom Przewozny." photoTransition={choice === '1'}>
+<div class:list={['cover',`cover-${choice}`]}>
+  <header><a class="wordmark" href="/">@dpy2k</a><nav aria-label="Portfolio"><a href="/ugc">UGC & video</a><a href="/creative-tech">Creative tech</a><a href="mailto:dprzewozny2k@icloud.com">Email me</a></nav></header>
+  <main>
+    <section class="personal" aria-label="About Dom">
+      <div class="collage">
+        <a class="collage-link" href="/ugc" aria-label="Explore Dom’s UGC and video portfolio">
+          <figure class="portrait print"><img src="/hero-portrait-m-800.webp" alt="Dom at dusk beneath palm trees" width="800" height="1067" fetchpriority="high"/><figcaption>Me, off-script.</figcaption></figure>
+          <figure class="reel print"><video id="cover-preview" src="/clips/about-preview.mp4" poster="/clips/water.webp" autoplay muted loop playsinline preload="auto" aria-label="Dom’s best-cut on-camera preview"></video><figcaption>And on camera.</figcaption></figure>
+          <span class="collage-cue">Explore my videos ↗</span>
+        </a>
+      </div>
+      <div class="bio"><h1>Hi, I’m Dom.</h1><SocialRail inline horizontal /><p>Computer Science background.<br/>Big nerd & social media creator.</p><p class="small">Videos, creative production, and the things I build behind the scenes.</p></div>
+    </section>
+    <section class="notes" aria-label="Explore my portfolios">
+      <a class="note video-note" href="/ugc" data-photo-link={choice === '1' ? '' : undefined}>
+        <div class="note-photo"><img data-ugc-photo={choice === '1' ? '' : undefined} src="/clips/its-all-a-lie.webp" alt="A frame from Dom’s personal cinematic short, It’s all a lie" width="720" height="1280" fetchpriority="high"/><span class="photo-label">It’s all a lie / personal film</span></div>
+        <div class="paper"><h2 data-ugc-title={choice === '1' ? '' : undefined}>UGC & Video</h2><p>Brand films, educational videos and creative production.</p><span class="open">View videos <span aria-hidden="true">↗</span></span></div>
+      </a>
+      <a class="note tech-note" href="/creative-tech" data-photo-link={choice === '1' ? '' : undefined}>
+        <div class="note-photo"><img data-tech-photo={choice === '1' ? '' : undefined} src="/work-with-me.webp" alt="Dom looking over the city at sunset" width="800" height="800"/><span class="photo-label">Me / behind the scenes</span></div>
+        <div class="paper"><h2 data-tech-title={choice === '1' ? '' : undefined}>Creative Tech & Content Systems</h2><p>I built a 28-question audience assessment to understand the people watching.</p><span class="open">View projects <span aria-hidden="true">↗</span></span></div>
+      </a>
+    </section>
+  </main>
+  <footer><span>Dom Przewozny</span><a href="mailto:dprzewozny2k@icloud.com">dprzewozny2k@icloud.com</a></footer>
+</div>
+<nav class="compare" aria-label="Compare cover designs">{names.map((name,i)=><a href={`/covers/${i+1}`} aria-current={Number(choice)===i+1?'page':undefined}>{i+1}<span>{name}</span></a>)}</nav>
+</Base>
+<style>
+.cover{max-width:1360px;margin:auto;padding:0 45px 100px}header{display:flex;justify-content:space-between;align-items:center;padding:25px 0}.wordmark{font-size:23px;font-weight:650;letter-spacing:-.05em}header nav,.bio nav{display:flex;gap:26px;font-size:14px}a{text-underline-offset:5px}header a:hover,.bio a:hover,footer a:hover{text-decoration:underline}main{display:grid;grid-template-columns:37% 1fr;gap:6%;padding-top:36px;align-items:start}h1,h2,p,figure{margin:0}h1{font-size:36px;line-height:1.1;letter-spacing:-.04em;font-weight:500}h2{font-size:29px;font-weight:500;letter-spacing:-.04em;line-height:1.1}.collage{position:relative;margin:0 0 30px;padding-bottom:24px}.collage-link{display:block;position:relative;padding:10px 22% 40px 3%}.print{padding:8px 8px 0;background:white;box-shadow:0 2px 5px #23382d15;transition:transform .32s cubic-bezier(.2,.8,.2,1),box-shadow .32s}.portrait{transform:rotate(-4deg)}.portrait img{width:100%;aspect-ratio:4/5;object-fit:cover}.reel{position:absolute;right:0;bottom:0;width:43%;transform:rotate(5deg)}.reel video{width:100%;aspect-ratio:9/16;object-fit:cover}figcaption{font-size:14px;padding:10px 2px}.collage-cue{position:absolute;left:8%;bottom:48px;padding:10px 14px;background:var(--color-ink);color:var(--color-ground);font-size:14px;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s}.collage-link:hover .portrait,.collage-link:focus-visible .portrait{transform:translate(-5px,-7px) rotate(-7deg);box-shadow:0 15px 28px #23382d25}.collage-link:hover .reel,.collage-link:focus-visible .reel{transform:translate(6px,-9px) rotate(8deg);box-shadow:0 15px 28px #23382d25}.collage-link:hover .collage-cue,.collage-link:focus-visible .collage-cue{opacity:1;transform:none}.pause{position:absolute;bottom:-7px;right:0;font:14px var(--font-sans);padding:10px 0;text-decoration:underline;text-underline-offset:4px;cursor:pointer}.bio{padding:10px 0 0 12px}.bio p{font-size:18px;line-height:1.5;margin-top:15px}.bio p.small{font-size:16px;max-width:32ch}.bio nav{margin-top:22px}.notes{display:grid;grid-template-columns:1fr 1fr;gap:30px;padding-top:14px;align-items:start}.note{display:block;min-width:0;background:white;padding:9px;text-decoration:none;box-shadow:0 3px 8px #23382d18;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,outline-color .3s;outline:2px solid transparent;outline-offset:5px}.video-note{transform:rotate(2deg)}.tech-note{transform:rotate(-2deg);margin-top:65px}.note-photo{position:relative;overflow:hidden}.note-photo img{width:100%;height:250px;object-fit:cover;transition:transform .4s}.video-note .note-photo img{object-fit:contain;background:#111}.tech-note .note-photo img{object-position:50% 45%}.photo-label{position:absolute;bottom:0;left:0;background:var(--color-ink);color:var(--color-ground);padding:6px 9px;font-size:12px}.paper{padding:22px 14px 15px}small{font-size:14px;line-height:1.4;color:var(--color-ink-dim);display:block}.paper h2{margin:18px 0 14px}.paper p{font-size:16px;line-height:1.5}.open{display:flex;gap:10px;justify-content:space-between;align-items:center;font-size:14px;margin-top:25px;padding-top:12px;text-decoration:underline;text-underline-offset:5px;transition:background .2s,color .2s,padding .2s}.open>span{font-size:24px;text-decoration:none;transition:transform .2s}.note:hover,.note:focus-visible{transform:translateY(-12px) rotate(0);box-shadow:0 20px 35px #23382d30;outline-color:var(--color-ink)}.note:hover .open,.note:focus-visible .open{background:var(--color-ink);color:var(--color-ground);padding:12px}.note:hover .open>span,.note:focus-visible .open>span{transform:translate(2px,-2px)}.note:active{transform:translateY(-4px) scale(.99)}footer{display:flex;justify-content:space-between;margin-top:65px;gap:20px;font-size:14px;color:var(--color-ink-dim)}.compare{position:fixed;z-index:10000;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:5px;padding:7px;background:var(--color-ink);color:var(--color-ground);max-width:calc(100% - 20px);box-shadow:0 5px 25px #0002}.compare a{display:flex;gap:8px;padding:10px 13px;font-size:14px;white-space:nowrap}.compare a[aria-current]{background:var(--color-ground);color:var(--color-ink)}
+/* 2: separate photographic and written sheets open into a small fan. */
+.cover-2 .notes{gap:36px;padding-top:48px}.cover-2 .note{background:none;box-shadow:none;padding:0;outline-offset:10px}.cover-2 .note-photo{margin:0 15px -25px 0;transform:rotate(-4deg);padding:8px;background:white;overflow:visible;box-shadow:0 3px 10px #23382d20;transition:transform .3s}.cover-2 .note-photo img{height:235px}.cover-2 .photo-label{bottom:8px;left:8px}.cover-2 .paper{position:relative;margin-left:13px;transform:rotate(3deg);background:white;padding:25px 20px;box-shadow:0 3px 10px #23382d20;transition:transform .3s}.cover-2 .tech-note{margin-top:55px}.cover-2 .note:hover,.cover-2 .note:focus-visible{box-shadow:none;outline-color:transparent;transform:translateY(-8px)}.cover-2 .note:hover .note-photo,.cover-2 .note:focus-visible .note-photo{transform:translate(-7px,-8px) rotate(-8deg)}.cover-2 .note:hover .paper,.cover-2 .note:focus-visible .paper{transform:translate(5px,0) rotate(0)}.cover-2 .note:focus-visible .paper{outline:2px solid var(--color-ink);outline-offset:4px}
+/* 3: large photographs with notes overlapping their lower edges. */
+.cover-3 main{grid-template-columns:33% 1fr;gap:7%}.cover-3 .notes{gap:25px;padding-top:5px}.cover-3 .note{padding:0;background:none;box-shadow:none}.cover-3 .note-photo{padding:8px;background:white}.cover-3 .note-photo img{height:345px}.cover-3 .paper{position:relative;margin:-35px 10px 0 18px;padding:24px 20px;background:white;box-shadow:0 4px 12px #23382d20;transform:rotate(-3deg);transition:transform .3s}.cover-3 .tech-note{margin-top:55px}.cover-3 .tech-note .paper{transform:rotate(3deg)}.cover-3 .note:hover .paper,.cover-3 .note:focus-visible .paper{transform:rotate(0) translateY(-5px)}.cover-3 .note:hover .note-photo img,.cover-3 .note:focus-visible .note-photo img{transform:scale(1.025)}
+@media(max-width:1050px){.cover{padding-inline:28px}main,.cover-3 main{grid-template-columns:32% 1fr;gap:5%}.notes{gap:22px}.paper{padding:18px 10px 12px}h2{font-size:25px}.note-photo img{height:215px}.cover-2 .notes{gap:25px}.cover-2 .paper,.cover-3 .paper{padding:20px 15px}.cover-3 .note-photo img{height:280px}}
+@media(max-width:760px){.cover{padding:0 22px 100px}header{gap:20px;align-items:start}header nav{gap:12px;flex-wrap:wrap;justify-content:flex-end}main,.cover-3 main{display:block;padding-top:20px}.personal{display:grid;grid-template-columns:1fr 1fr;gap:25px;align-items:center}.collage{margin-bottom:15px}.bio{padding:0}.bio h1{font-size:30px}.bio p{font-size:16px}.bio p.small{display:none}.bio nav{gap:14px}.notes,.cover-2 .notes,.cover-3 .notes{margin-top:35px;padding-top:0;gap:25px}.tech-note,.cover-2 .tech-note,.cover-3 .tech-note{margin-top:35px}figcaption{font-size:12px;padding:8px 0}.print{padding:5px 5px 0}.pause{font-size:13px}.collage-cue{display:none}.collage-link:focus-visible{outline:2px solid var(--color-ink)}.cover-2 .note-photo img{height:210px}.cover-3 .note-photo img{height:260px}footer{flex-wrap:wrap}.compare a{padding:10px;font-size:13px}}
+@media(max-width:470px){.personal{display:flex;flex-direction:column;align-items:stretch;gap:15px}.collage{max-width:320px;width:95%;margin:0 auto 15px}.bio p.small{display:block}.notes,.cover-2 .notes,.cover-3 .notes{display:block;margin-top:40px}.note{max-width:340px;margin:0 auto 45px}.tech-note,.cover-2 .tech-note,.cover-3 .tech-note{margin-top:0}.note-photo img,.cover-2 .note-photo img{height:290px}.cover-3 .note-photo img{height:340px}.paper h2{font-size:30px}.compare a>span{display:none}.compare a[aria-current]>span{display:inline}}
+@media(hover:none){.open{background:var(--color-ink);color:var(--color-ground);padding:12px}.collage-link{outline:1px solid transparent}.note:active{outline-color:var(--color-ink)}}
+</style>
+<style>
+/* Identical crop at both ends: enlarge the photograph, never stretch it. */
+.cover-1 header { padding-block: 18px; }
+.cover-1 main { padding-top: 20px; }
+.cover-1 .collage { margin-bottom: 14px; padding-bottom: 8px; }
+.cover-1 .bio { padding-top: 0; }
+.bio :global(.social-horizontal) { margin-top: 14px; }
+.cover-1 .bio p { margin-top: 10px; }
+@media (min-width:761px) {
+  /* Limit the tall print on shorter laptops without shrinking the type or links. */
+  .cover-1 .collage { max-width: clamp(250px, calc(65svh - 180px), 360px); }
+}
+@media (max-width:470px) {
+  .cover-1 .collage { max-width: 300px; }
+}
+.cover-1 .video-note .note-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 50% 35%;
+}
+.cover-1 .tech-note .note-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 50% 45%;
+}
+@media (max-width:760px), (hover:none) {
+  .collage-cue {
+    display: block;
+    position: relative;
+    left: auto;
+    bottom: auto;
+    width: fit-content;
+    margin: 22px auto 0;
+    opacity: 1;
+    transform: none;
+    font-size: 14px;
+  }
+  .collage-link { padding-bottom: 0; }
+  .reel { bottom: 64px; }
+}
+</style>
+<script>
+import { onPageReady } from '../../scripts/page-ready';
+onPageReady(() => {
+const preview=document.querySelector<HTMLVideoElement>('#cover-preview');
+if(preview){
+  preview.muted=true;
+  const motion=window.matchMedia('(prefers-reduced-motion: reduce)');
+  const sync=()=>{if(document.hidden||motion.matches)preview.pause();else void preview.play().catch(()=>{});};
+  sync();
+  motion.addEventListener('change',sync);
+  document.addEventListener('visibilitychange',sync);
+  return () => {
+    motion.removeEventListener('change',sync);
+    document.removeEventListener('visibilitychange',sync);
+    preview.pause();
+  };
+}
+});
+</script>

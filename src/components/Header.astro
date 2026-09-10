@@ -284,6 +284,8 @@ const contactUrl = active === "ugc" ? "#book-call" : "#contact";
 </style>
 
 <script>
+  import { onPageReady } from '../scripts/page-ready';
+  onPageReady(() => {
   // Progressive enhancement, deliberately JS-only: with scripts off the cell is
   // still the address, legible and selectable, which is what people do by hand
   // anyway. Nothing else on the rail depends on this running.
@@ -337,5 +339,6 @@ const contactUrl = active === "ugc" ? "#book-call" : "#contact";
         button.removeAttribute("data-copied");
       }, 1600);
     });
+  });
   });
 </script>
