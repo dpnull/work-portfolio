@@ -1,29 +1,70 @@
 ---
 import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
-import Proof from "../components/Proof.astro";
-import WorkGrid from "../components/WorkGrid.astro";
-import AudienceOptions from "../components/AudienceOptions.astro";
-import site from "../data/site.json";
+import Footer from "../components/Footer.astro";
 ---
-
-<Base title={site.meta.title} description={site.meta.description}>
+<Base title="Dom Przewozny — UGC, creative tech & content systems" description="I create content and build the systems behind it. Explore Dom’s UGC videos, creative production and content systems.">
   <Header />
-  <main>
-    <AudienceOptions opening />
-    <Proof />
-    <WorkGrid />
-    <AudienceOptions />
+  <main class="hub">
+    <section class="hub-intro" aria-labelledby="intro-heading">
+      <div>
+        <p class="eyebrow">Dom Przewozny · Content, technology & production</p>
+        <h1 id="intro-heading">I create content.<br/><span>And build the systems behind it.</span></h1>
+      </div>
+      <p class="intro-note">A Computer Science background.<br/>A creator’s eye. Hands-on from the first idea to the final detail.</p>
+    </section>
+    <section class="paths" aria-label="Explore my work">
+      <a class="path path-video" href="/ugc">
+        <div class="path-top"><span class="eyebrow">01 / On camera & behind it</span><span aria-hidden="true">↗</span></div>
+        <div class="video-preview"><img src="/hero-portrait-m-800.webp" alt="Dom at dusk" width="800" height="1067" fetchpriority="high"/><div class="preview-caption"><span>Concept. Camera. Cut.</span><span>UGC / Social / Brand films</span></div></div>
+        <div class="path-copy"><h2>UGC & Video<br/>Production</h2><p>Creator-led videos for brands. Audience-tested ideas, relatable storytelling and the final edit.</p></div>
+        <div class="path-link">View UGC work <span aria-hidden="true">→</span></div>
+      </a>
+      <a class="path path-tech" href="/creative-tech">
+        <div class="path-top"><span class="eyebrow">02 / The thinking & the systems</span><span aria-hidden="true">↗</span></div>
+        <div class="system-preview" aria-hidden="true"><div class="system-row"><span>01</span><strong>Audience insight</strong></div><div class="system-row"><span>02</span><strong>Content & production</strong></div><div class="system-row"><span>03</span><strong>Tools & workflows</strong></div><p>Creative × Technical × Operator</p></div>
+        <div class="path-copy"><h2>Creative Tech<br/>& Content Systems</h2><p>Connecting content, technology and operations. Audience funnels, production workflows and things I’ve built.</p></div>
+        <div class="path-link">View creative-tech work <span aria-hidden="true">→</span></div>
+      </a>
+    </section>
+    <p class="hub-note">Two sides of the same work. Making something people connect with—and getting it out into the world.</p>
   </main>
-  <footer id="contact" class="mx-auto max-w-(--container-page) border-t border-line px-6 py-8 text-sm sm:px-8">
-    <div class="flex flex-wrap items-center justify-between gap-6">
-      <span>&copy; {new Date().getFullYear()} {site.name}</span>
-      <a href={`mailto:${site.email}`} class="underline underline-offset-4">{site.email}</a>
-      <nav aria-label="Social profiles" class="flex flex-wrap gap-5">
-        {site.social.filter((profile) => profile.id !== "email" && profile.href).map((profile) => (
-          <a href={profile.href} target="_blank" rel="noopener noreferrer" class="hover:underline underline-offset-4">{profile.label}</a>
-        ))}
-      </nav>
-    </div>
-  </footer>
+  <Footer />
 </Base>
+<style>
+  .hub{max-width:var(--container-page);margin:auto;padding:64px 32px 32px}
+  .hub-intro{display:grid;grid-template-columns:1fr 260px;align-items:end;gap:40px;margin-bottom:44px}
+  .eyebrow{font-size:13px;line-height:1.5;letter-spacing:.035em}
+  .hub-intro .eyebrow{margin-bottom:20px;color:var(--color-ink-dim)}
+  h1{font-size:clamp(36px,4.5vw,62px);line-height:1.06;letter-spacing:-.045em;max-width:22ch}
+  h1 span{color:var(--color-ink-dim)}
+  .intro-note{font-size:16px;line-height:1.6;max-width:28ch;padding-bottom:4px}
+  .paths{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--color-line)}
+  .path{display:flex;flex-direction:column;min-width:0;padding:24px 28px 0}
+  .path-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
+  .path-top>span:last-child{font-size:24px}
+  .path-tech{background:var(--color-cinema);color:var(--color-cinema-ink)}
+  .video-preview{height:220px;position:relative;overflow:hidden;background:var(--color-dusk);color:var(--color-ice)}
+  .video-preview img{width:100%;height:100%;object-fit:cover;object-position:50% 32%}
+  .preview-caption{position:absolute;inset:auto 0 0;display:flex;justify-content:space-between;gap:12px;background:var(--color-dusk);padding:12px 14px;font-size:12px}
+  .system-preview{height:220px;display:flex;flex-direction:column;justify-content:center}
+  .system-row{display:flex;align-items:center;gap:20px;padding:14px 0;border-top:1px solid var(--color-cinema-line)}
+  .system-row span{font-family:var(--font-mono);font-size:13px;color:var(--color-cinema-dim)}
+  .system-row strong{font-size:20px;font-weight:500;letter-spacing:-.02em}
+  .system-preview p{font-size:13px;border-top:1px solid var(--color-cinema-line);padding-top:16px;color:var(--color-cinema-dim)}
+  .path-copy{padding:26px 0 28px;flex:1}
+  h2{font-size:clamp(28px,3vw,40px);line-height:1.08;letter-spacing:-.035em;margin-bottom:16px}
+  .path-copy p{font-size:16px;line-height:1.6;max-width:44ch}
+  .path-link{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--color-line);padding:20px 0;font-size:16px;font-weight:600}
+  .path-tech .path-link{border-color:var(--color-cinema-line)}
+  .path:hover .path-link{text-decoration:underline;text-underline-offset:5px}
+  .path:focus-visible{outline:3px solid var(--color-accent);outline-offset:5px}
+  .hub-note{font-size:14px;line-height:1.6;padding-top:24px;color:var(--color-ink-dim)}
+  @media(max-width:900px){.hub-intro{grid-template-columns:1fr;gap:20px}.intro-note{max-width:55ch}.intro-note br{display:none}}
+  @media(max-width:639px){.hub{padding:36px 24px 28px}.hub-intro{margin-bottom:28px}.paths{grid-template-columns:1fr}.path{padding:22px 20px 0}.video-preview,.system-preview{height:190px}.preview-caption{flex-direction:column;gap:2px}.hub-note{max-width:40ch}}
+</style>
+<script>
+  // Preserve inbound links to sections that lived on the original homepage.
+  const legacy = new Set(['#work', '#work-with-me', '#book-call', '#about', '#introduction', '#portfolio-work', '#audience-03', '#audience-options']);
+  if (legacy.has(window.location.hash)) window.location.replace(`/ugc${window.location.hash}`);
+</script>

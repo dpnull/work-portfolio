@@ -22,8 +22,9 @@ const { opening = false } = Astro.props;
         <figure class="photo-detail"><video id="about-preview" src="/clips/about-preview.mp4" width="540" height="960" autoplay muted loop playsinline preload="auto" aria-label="Dom’s on-camera preview"></video><figcaption>And on camera. <button type="button" class="preview-toggle" aria-controls="about-preview" aria-label="Pause preview">Pause</button></figcaption></figure>
       </div>
       <div class="story-copy">
-        <h1>Hi, I’m Dom.</h1>
-        <p class="intro">Computer Science background.<br/>Big nerd and a social media creator & professional assistant.</p>
+        <p class="page-label">UGC & Video Production</p>
+        <h1>Hi, I’m Dom.<br/>I bring ideas to video.</h1>
+        <p class="intro">Creator-led videos, from the first idea to the final edit.</p>
         <p>I make educational videos that feel relatable, from the first idea to the final edit. I’ve grown my own audiences, built a funnel that brought in 1,750 email subscribers, and plan topics and film for a 7M-follower creator.</p>
         <dl>
           <div><dt>Behind the content</dt><dd>Research, scripts, filming, editing & colour grading.</dd></div>
@@ -50,6 +51,7 @@ figcaption{font-size:12px;padding:8px 2px 2px}
 .story-copy h1{font-size:clamp(28px,3vw,40px);line-height:1.1;letter-spacing:-.035em;margin:0 0 16px}
 .story-copy p{font-size:16px;line-height:1.6;margin:0 0 20px}
 .story-copy .intro{font-size:20px;line-height:1.4}
+.story-copy .page-label{font-size:14px;color:var(--color-ink-dim);margin-bottom:16px}
 dl{margin:28px 0 0;display:grid;gap:18px}dt{font-size:13px;font-weight:650}dd{margin:4px 0 0;font-size:15px;color:var(--color-ink-dim)}
 @media(max-width:700px){.about-story{grid-template-columns:1fr;gap:32px;padding-top:32px}.photo-notes{width:85%;max-width:360px}.story-copy{padding:0}}
 .kit{display:flex;justify-content:center;align-items:center;gap:40px;padding:22px 0;border-block:1px solid var(--color-line)}
