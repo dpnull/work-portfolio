@@ -1,9 +1,9 @@
 import type { TransitionBeforePreparationEvent, TransitionBeforeSwapEvent } from 'astro:transitions/client';
 
 type Position = { x: number; y: number };
-const cover = '/covers/1';
+const covers = new Set(['/', '/covers/1']);
 const key = 'portfolio:cover-scroll';
-const pathOf = (url: URL) => url.pathname.replace(/\.html$/, '').replace(/\/$/, '');
+const pathOf = (url: URL) => url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
 let lastCover: Position | null = null;
 let returning: { traverse: boolean } | null = null;
 try {
@@ -13,14 +13,14 @@ try {
 
 document.addEventListener('astro:before-preparation', event => {
   const navigation = event as TransitionBeforePreparationEvent;
-  if (pathOf(navigation.from) !== cover || pathOf(navigation.to) === cover) return;
+  if (!covers.has(pathOf(navigation.from)) || covers.has(pathOf(navigation.to))) return;
   lastCover = { x: window.scrollX, y: window.scrollY };
   try { sessionStorage.setItem(key, JSON.stringify(lastCover)); } catch { /* In-memory fallback. */ }
 });
 
 document.addEventListener('astro:before-swap', event => {
   const navigation = event as TransitionBeforeSwapEvent;
-  returning = pathOf(navigation.to) === cover && !navigation.to.hash
+  returning = covers.has(pathOf(navigation.to)) && !navigation.to.hash
     ? { traverse: navigation.navigationType === 'traverse' } : null;
 });
 

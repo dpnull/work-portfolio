@@ -1,16 +1,7 @@
 ---
-import Base from "../layouts/Base.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import AudienceOptions from "../components/AudienceOptions.astro";
+import PortfolioCover from '../components/PortfolioCover.astro';
 ---
-<Base title="Dom Przewozny — UGC & creative tech" description="Computer Science background. Social media creator and creative technologist. Explore my videos and the work behind them.">
-  <Header />
-  <main>
-    <AudienceOptions opening hub />
-  </main>
-  <Footer />
-</Base>
+<PortfolioCover choice="1" />
 <script>
   // Preserve inbound links to sections that lived on the original homepage.
   const legacy = new Set(['#work', '#work-with-me', '#book-call', '#about', '#introduction', '#portfolio-work', '#audience-03', '#audience-options']);
