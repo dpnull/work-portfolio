@@ -30,6 +30,17 @@ import { ClientRouter } from 'astro:transitions';
     height: 100%;
     object-fit: cover;
   }
+  /* The cover names both cards; a portfolio page names only its own. The unpaired
+     card must leave and arrive with the page, not linger above it. */
+  ::view-transition-old(ugc-photo):only-child, ::view-transition-old(ugc-title):only-child,
+  ::view-transition-old(tech-photo):only-child, ::view-transition-old(tech-title):only-child {
+    display: block;
+    animation: portfolio-out 140ms ease both;
+  }
+  ::view-transition-new(ugc-photo):only-child, ::view-transition-new(ugc-title):only-child,
+  ::view-transition-new(tech-photo):only-child, ::view-transition-new(tech-title):only-child {
+    animation: portfolio-in 260ms 100ms ease both;
+  }
   ::view-transition-old(root) { animation: portfolio-out 140ms ease both; }
   ::view-transition-new(root) { animation: portfolio-in 260ms 100ms ease both; }
   @keyframes portfolio-out { to { opacity: 0; } }

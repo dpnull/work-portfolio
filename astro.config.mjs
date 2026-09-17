@@ -7,7 +7,9 @@ export default defineConfig({
   site: 'https://work.dpy2k.com',
   output: 'static',
   trailingSlash: 'never',
-  build: { format: 'file' },
+  // Inline CSS applies the instant Astro swaps a page in. Linked sheets load after
+  // the view transition captures, so the new page flashed unstyled mid-morph.
+  build: { format: 'file', inlineStylesheets: 'always' },
   vite: {
     plugins: [tailwindcss()],
   },
