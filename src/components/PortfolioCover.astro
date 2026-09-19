@@ -68,7 +68,9 @@ const names=['Lifted prints','Fanned notes','Picture notes'];
 @media (min-width:761px) {
   .cover-1 { display: flex; flex-direction: column; min-height: 100svh; padding-bottom: clamp(14px, 2.6svh, 44px); }
   .cover-1 header { padding-block: clamp(11px, 2.1svh, 20px); }
-  .cover-1 main { flex: 1 1 auto; align-content: center; padding-top: clamp(4px, 1.4svh, 22px); }
+  /* `safe` so a window shorter than the composition falls back to start: centred
+     overflow would push the top of the collage above the scroll origin. */
+  .cover-1 main { flex: 1 1 auto; align-content: safe center; padding-top: clamp(4px, 1.4svh, 22px); }
   /* Limit the tall print on shorter laptops without shrinking the type or links. */
   .cover-1 .collage { max-width: clamp(206px, calc(79svh - 301px), 360px); margin-bottom: clamp(4px, 1.2svh, 14px); padding-bottom: clamp(0px, 1svh, 8px); }
   .cover-1 .collage figcaption { padding-block: clamp(6px, 1svh, 10px); }
