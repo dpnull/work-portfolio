@@ -35,7 +35,7 @@ const linkedin = site.social.find(profile => profile.id === "linkedin")!;
         <div class="work-copy"><p>A home for my video and technical work, built with AI-assisted development. Each portfolio has its own page, with a shared design and navigation.</p><p>The video grid uses self-hosted clips, loaded on demand, with one video playing at a time.</p><a href="/">Back to the homepage</a></div>
       </article>
     </section>
-    <section class="work-together" aria-labelledby="together-heading">
+    <section id="lets-talk" class="work-together" aria-labelledby="together-heading">
       <div><h2 id="together-heading"><span>Let’s talk about your project.</span></h2><p>Content, production or the systems around them. I’m open to project work, ongoing support and team opportunities.</p></div>
       <div class="contact-links"><a class="contact-button" href={`mailto:${site.email}`}>Email me <span aria-hidden="true">↗</span></a><a href={linkedin.href} target="_blank" rel="noopener noreferrer">Experience & background on LinkedIn</a></div>
     </section>
@@ -54,12 +54,15 @@ const linkedin = site.social.find(profile => profile.id === "linkedin")!;
   .intro-copy p{font-size:16px;line-height:1.6;margin-bottom:20px}.intro-copy .intro{font-size:20px;line-height:1.4}
   dl{margin:28px 0 0;display:grid;gap:18px}dt{font-size:13px;font-weight:650}dd{margin:4px 0 0;font-size:15px;color:var(--color-ink-dim)}
   .selected{padding-top:20px}.selected h2{margin-bottom:32px}
-  .work-row{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,7vw,100px);padding:30px 0;border-top:1px solid var(--color-line);scroll-margin-top:100px}
+  /* Rules only BETWEEN projects. The heading opens the list and whitespace closes it; the footer owns the page's one section rule. */
+  .work-row{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,7vw,100px);padding:30px 0;scroll-margin-top:100px}
+  .work-row+.work-row{border-top:1px solid var(--color-line)}
+  .selected h2+.work-row{padding-top:0}
   h3{font-size:22px;font-weight:500;letter-spacing:-.02em;line-height:1.3;margin-bottom:10px}
   .work-note{font-size:14px;line-height:1.5;color:var(--color-ink-dim)}
   .work-copy{max-width:48ch}.work-copy p{font-size:16px;line-height:1.6;margin-bottom:16px}
   .work-copy a,.contact-links>a:not(.contact-button){font-size:14px;line-height:1.6;text-decoration:underline;text-underline-offset:4px}
-  .work-together{border-top:1px solid var(--color-line);margin-top:16px;padding:48px 0 16px;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+  .work-together{margin-top:16px;padding:48px 0 16px;scroll-margin-top:24px;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
   .work-together h2{font-size:clamp(26px,3vw,36px);line-height:1.25;letter-spacing:-.03em;margin-bottom:20px}
   .work-together h2 span{background:var(--color-plate);padding:0 .16em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
   .work-together p{font-size:16px;line-height:1.6;max-width:44ch}

@@ -6,45 +6,30 @@ const nav = [
   { label: "UGC & Video", href: "/ugc", id: "ugc" },
   { label: "Creative Tech", href: "/creative-tech", id: "creative-tech" },
 ];
-const contactUrl = active === "ugc" ? "#book-call" : "#contact";
-// THE RAIL (Dom's pick from a five-option board, 2026-09-07).
-// Full-bleed row of fused hairline cells — same construction as the stats strip:
-// neighbours share one 1px `line` rule, there are no gaps, and the button IS the
-// cell. Order at >=1024: wordmark | Work | Rates | email | Book a free video call.
+// The CTA is the same cell on every page; only where it lands differs.
+const ctaTarget = { ugc: "#book-call", "creative-tech": "#lets-talk" } as const;
+const ctaHref = active ? ctaTarget[active] : "#contact";
+// THE RAIL. Shared by /ugc and /creative-tech and IDENTICAL on both: same
+// labels, same cell geometry at every width. The only thing that changes
+// between the two pages is which link carries aria-current (an inset underline,
+// so it costs no layout). The cover has its own wordmark-only header.
 //
-// Dom's revisions (2026-09-07, second pass):
-//  · STICKY. The rail freezes to the top of the viewport, so it needs an opaque
-//    ground of its own — the hero photo scrolls underneath it.
-//  · NO LIME. The CTA was a lime fill; it is now ground with an `ink` border.
-//    Lime survives nowhere on the page now — the hero's lede plates went white
-//    on 2026-09-07 too.
-//  · INSTANT hover. No transition on any cell: the invert snaps.
-//  · The email is set in the sans, not Kode Mono.
-//  · The CTA reads "Book a free video call", which is too long for a third of a
-//    phone row, so the phone tiers were re-cut: tier one is wordmark + CTA,
-//    tier two is Work | Rates. The CTA is therefore a direct child of <header>
-//    rather than a child of <nav> — it has to be able to share tier one with
-//    the wordmark while the nav wraps below it.
-//
-// The CTA's border is 1px on all four sides — the same weight as every other
-// rule in the rail (Dom, 2026-09-07; it was 2px and read as heavy). It still
-// sits 1px proud of the row (`margin-block: -1px` on a stretched flex item),
-// which now lands its ink border exactly ON the rail's top and bottom
-// hairlines rather than beside them. Keep the two together: drop the negative
-// margin and the button gains a doubled edge.
-//
-// The email CELL COPIES rather than opening a mail client (Dom, 2026-09-07):
-// clicking it writes the address to the clipboard and the label flashes
-// "Copied" for 1.6s. `navigator.clipboard.writeText` needs no permission
-// prompt for a WRITE — only reads prompt — provided it runs in a secure
-// context off a real user gesture, which a click handler is. The
-// `execCommand` path below it is the fallback for a non-secure context
-// (an http staging host) where the modern API is simply absent.
-//
-// 640–1023: the email cell is dropped and an empty flex spacer cell holds its
-// slot, so the rail language survives. <640: the two tiers described above; no
-// email on phones (see the open flag in PROGRESS.md; block 4's contact section
-// is the fix).
+//  · Full-bleed row of fused hairline cells: neighbours share one 1px `line`
+//    rule, no gaps. Sticky and opaque, since the page scrolls underneath it.
+//  · >=1024: wordmark | UGC & Video | Creative Tech | email (grows) | Let's talk.
+//    640-1023: the email is swapped for an empty spacer cell.
+//    <640: two 44px tiers. Wordmark left and CTA right, then the two page
+//    links as equal halves. A single row does not fit below ~400px.
+//  · The CTA is a tinted cell with an accent underline, pulled 1px proud
+//    (`margin-block: -1px`) so its border lands ON the rail's hairlines rather
+//    than beside them. It is a child of <header>, not <nav>, so it can share
+//    tier one with the wordmark on phones.
+//  · Hover and focus invert a cell instantly (no transition; Dom, 2026-09-07).
+//  · The email cell COPIES the address instead of opening a mail client, and
+//    flashes "Copied" for 1.6s. No email cell below 1024.
+//  · The rail has its own view-transition-name, so it holds still while the
+//    page underneath cross-fades between the two portfolios. See the global
+//    style block at the bottom.
 ---
 
 <header class="rail">
@@ -67,8 +52,8 @@ const contactUrl = active === "ugc" ? "#book-call" : "#contact";
     <div class="rail-spacer" aria-hidden="true"></div>
   </nav>
 
-  <a href={contactUrl} class="rail-cell rail-cta text-sm font-semibold">
-    <span>{active === "ugc" ? "Book a free video call" : "Let’s talk"}</span>
+  <a href={ctaHref} class="rail-cell rail-cta text-sm font-semibold">
+    <span>Let’s talk</span>
     <span class="rail-cta-mark" aria-hidden="true">↗</span>
   </a>
 </header>
@@ -89,6 +74,8 @@ const contactUrl = active === "ugc" ? "#book-call" : "#contact";
     background-color: var(--color-ground);
     border-top: 1px solid var(--color-line);
     border-bottom: 1px solid var(--color-line);
+    /* Its own snapshot during page swaps: see the global block below. */
+    view-transition-name: site-rail;
   }
 
   /* Tier one is wordmark + CTA, tier two is the nav. Both tiers are pinned to
@@ -104,7 +91,6 @@ const contactUrl = active === "ugc" ? "#book-call" : "#contact";
   .rail-mark {
     flex: 1 1 auto;
     padding-inline: 24px;
-    justify-content: flex-start;
     letter-spacing: -0.02em;
   }
 
@@ -127,6 +113,13 @@ const contactUrl = active === "ugc" ? "#book-call" : "#contact";
     text-align: center;
     white-space: nowrap;
     color: var(--color-ink);
+  }
+
+  /* On phones the wordmark's cell is wide (it takes what the CTA leaves), so
+     the mark sits at the left margin, opposite the CTA, not centred in it.
+     After .rail-cell on purpose: same specificity, later wins. */
+  .rail-mark {
+    justify-content: flex-start;
   }
 
   .rail-nav > * {
@@ -176,12 +169,11 @@ const contactUrl = active === "ugc" ? "#book-call" : "#contact";
   }
 
   /* ── The CTA ──────────────────────────────────────────────────────
-     No fill: ground, ink text, a 1px ink border on all four sides — rail
-     weight, not a heavier one — pulled 1px proud top and bottom so the border
-     lands exactly on the rail's hairlines rather than beside them. What marks
-     it as the button is that the border is INK while every other rule in the
-     rail is `line`. On phones it shares tier one with the wordmark and its
-     right border sits on the viewport edge. */
+     A faint accent tint, ink text, an accent underline, and a 1px `line`
+     border at rail weight, pulled 1px proud top and bottom so the border lands
+     exactly on the rail's hairlines rather than beside them. On phones it
+     shares tier one with the wordmark and its right border sits on the
+     viewport edge. */
   .rail-cta {
     order: 1;
     flex: 0 0 auto;
@@ -280,6 +272,48 @@ const contactUrl = active === "ugc" ? "#book-call" : "#contact";
       display: flex;
       flex: 1 1 0;
     }
+  }
+
+  /* PhotoTransition drops its named elements under reduced motion; so does the rail. */
+  @media (prefers-reduced-motion: reduce) {
+    .rail {
+      view-transition-name: none;
+    }
+  }
+</style>
+
+<style is:global>
+  /* The rail is its own view-transition group, so on /ugc <-> /creative-tech it
+     is lifted out of the page's cross-fade. Both snapshots are the same pixels
+     in the same place, so the default cross-fade between them reads as
+     stillness; only the aria-current underline moves. Painted above the photo
+     morph (z-index 2/3 in PhotoTransition), as the live sticky rail is.
+     To and from the cover there is no counterpart, so the rail leaves and
+     arrives on the page's own timings (PhotoTransition: out 140ms, in 260ms
+     after 100ms) instead of the UA default. */
+  ::view-transition-group(site-rail) { z-index: 4; }
+  ::view-transition-old(site-rail):only-child { animation: rail-out 140ms ease both; }
+  ::view-transition-new(site-rail):only-child { animation: rail-in 260ms 100ms ease both; }
+  @keyframes rail-out { to { opacity: 0; } }
+  @keyframes rail-in { from { opacity: 0; } to { opacity: 1; } }
+
+  /* The film grain (body::after in global.css, fixed, multiply) normally lands
+     in the ROOT snapshot, which sits UNDER every named group. A rail lifted out
+     of root would therefore lose its grain for the length of the transition:
+     measured +10 levels of brightness (221.6 -> 231.8 mean RGB) for ~360ms,
+     which reads as a flash. So on pages that have the rail, the grain is a
+     group of its own above everything, where it is on the live page. Its
+     multiply blend is carried by the group. Between the two portfolios it does
+     not animate at all; to and from the cover (whose grain stays in root) it
+     keeps the page's fade timings. */
+  body::after { view-transition-name: film-grain; }
+  ::view-transition-group(film-grain) { z-index: 10; animation: none; }
+  ::view-transition-old(film-grain) { display: none; }
+  ::view-transition-new(film-grain) { animation: none; }
+  ::view-transition-old(film-grain):only-child { display: block; animation: rail-out 140ms ease both; }
+  ::view-transition-new(film-grain):only-child { animation: rail-in 260ms 100ms ease both; }
+  @media (prefers-reduced-motion: reduce) {
+    body::after { view-transition-name: none; }
   }
 </style>
 
