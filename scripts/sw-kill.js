@@ -1,5 +1,5 @@
 /* KILL SWITCH for the service worker. Not served as-is: `SW_KILL=1 npx astro build`
-   makes astro.config.mjs write this file to dist/sw.js in place of public/sw.js.
+   makes scripts/sw-manifest.mjs write this file to dist/sw.js in place of public/sw.js.
 
    Browsers re-fetch /sw.js, bypassing the old worker, whenever a page registers it. This
    replacement has no fetch handler, so the moment it activates every request goes to the
