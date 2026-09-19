@@ -12,8 +12,8 @@ const names=['Lifted prints','Fanned notes','Picture notes'];
     <section class="personal" aria-label="About Dom">
       <div class="collage">
         <a class="collage-link" href="/ugc" aria-label="Explore Dom’s UGC and video portfolio">
-          <figure class="portrait print"><img src="/hero-portrait-m-800.webp" alt="Dom at dusk beneath palm trees" width="800" height="1067" fetchpriority="high"/><figcaption>Me, off-script.</figcaption></figure>
-          <figure class="reel print"><span class="reel-media"><img class="reel-still" src="/clips/about-preview-still.webp" alt="" width="432" height="768" fetchpriority="high"/><video id="cover-preview" src="/clips/about-preview.mp4" poster="/clips/about-preview-still.webp" autoplay muted loop playsinline preload="auto" aria-label="Dom’s best-cut on-camera preview"></video></span><figcaption>And on camera.</figcaption></figure>
+          <figure class="portrait print"><img src="/hero-portrait-m-800.webp" srcset="/hero-portrait-m-600.webp 600w, /hero-portrait-m-800.webp 800w" sizes="(max-width: 470px) 233px, (max-width: 1050px) 242px, 276px" alt="Dom at dusk beneath palm trees" width="800" height="1067" fetchpriority="high"/><figcaption>Me, off-script.</figcaption></figure>
+          <figure class="reel print"><span class="reel-media"><img class="reel-still" src="/clips/about-preview-still.webp" alt="" width="432" height="768" fetchpriority="high"/><video id="cover-preview" src="/clips/about-preview-432.mp4" poster="/clips/about-preview-still.webp" autoplay muted loop playsinline preload="auto" aria-label="Dom’s best-cut on-camera preview"></video></span><figcaption>And on camera.</figcaption></figure>
           <span class="collage-cue">Explore my videos ↗</span>
         </a>
       </div>
@@ -25,7 +25,7 @@ const names=['Lifted prints','Fanned notes','Picture notes'];
         <div class="paper"><h2 data-ugc-title={choice === '1' ? '' : undefined}>UGC & Video</h2><p>Brand films, educational videos and creative production.</p><span class="open">View videos <span aria-hidden="true">↗</span></span></div>
       </a>
       <a class="note tech-note" href="/creative-tech" data-photo-link={choice === '1' ? '' : undefined}>
-        <div class="note-photo"><img data-tech-photo={choice === '1' ? '' : undefined} src="/work-with-me.webp" alt="Dom looking over the city at sunset" width="800" height="800"/><span class="photo-label">Me / behind the scenes</span></div>
+        <div class="note-photo"><img data-tech-photo={choice === '1' ? '' : undefined} src="/work-with-me.webp" alt="Dom looking over the city at sunset" width="1000" height="1334"/><span class="photo-label">Me / behind the scenes</span></div>
         <div class="paper"><h2 data-tech-title={choice === '1' ? '' : undefined}>Creative Tech & Content Systems</h2><p>I built a 28-question audience assessment to understand the people watching.</p><span class="open">View projects <span aria-hidden="true">↗</span></span></div>
       </a>
     </section>

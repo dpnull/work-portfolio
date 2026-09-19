@@ -8,21 +8,9 @@
    Kode Mono: variable terminal mono for labels and code-ish bits — the
    one place the Y2K note still lives in the type.
    Files live in public/fonts/. Latin only — ~40 KB for both.
+   The @font-face rules live in src/layouts/Base.astro so they can persist
+   across page swaps.
    ───────────────────────────────────────────────────────────── */
-@font-face {
-  font-family: "Instrument Sans";
-  src: url("/fonts/instrument-sans-400-700.woff2") format("woff2");
-  font-weight: 400 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Kode Mono";
-  src: url("/fonts/kode-400-700.woff2") format("woff2");
-  font-weight: 400 700;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* ─────────────────────────────────────────────────────────────
    DESIGN TOKENS
