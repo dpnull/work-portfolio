@@ -1,43 +1,47 @@
 ---
 import site from "../data/site.json";
+// One calm block for the numbers: the funnel result on the left, who the
+// audience is on the right. No rules and no dividers. The two columns are the
+// same 1fr/1fr grid (and the same 64px gutter) as the two offers in
+// Services.astro directly below, so alignment does the organising.
+// Figures are Dom's: 12K, 1,750 and the 28-question context come from
+// site.json; 95% male / 18–34 is the May 2026 Instagram snapshot.
 ---
-<section class="proof" aria-label="Audience result">
-  <p class="proof-line">
-    <span class="proof-comparison">
-    <span class="proof-metric"><strong class="proof-value">{site.hero.proof.followers}</strong> <span class="proof-label">followers</span></span>
-    <span class="proof-equals">=</span>
-    <span class="proof-metric"><strong class="proof-value">{site.hero.proof.value}</strong> <span class="proof-label">{site.hero.proof.label}</span></span>
-    </span>
-    <span class="proof-rule" aria-hidden="true"></span>
-    <span class="proof-context">{site.hero.proof.context}</span>
-  </p>
+<section class="proof" aria-label="Audience results">
+  <div class="proof-funnel">
+    <p class="proof-comparison">
+      <span class="proof-metric"><strong>{site.hero.proof.followers}</strong> followers</span>
+      <span class="proof-metric"><span aria-hidden="true">=</span><span class="sr-only">equals</span> <strong>{site.hero.proof.value}</strong> {site.hero.proof.label}</span>
+    </p>
+    <p class="proof-context">{site.hero.proof.context}</p>
+  </div>
+  <div class="proof-audience">
+    <div class="proof-metric">
+      <svg viewBox="0 0 80 80" role="img" aria-label="95 percent male audience"><circle class="track" cx="40" cy="40" r="33"/><circle class="portion" cx="40" cy="40" r="33" pathLength="100" stroke-dasharray="95 5" transform="rotate(-90 40 40)"/><text x="40" y="46" text-anchor="middle">95%</text></svg>
+      <span>Male audience</span>
+    </div>
+    <div class="proof-metric"><strong>18–34</strong> <span>Age range</span></div>
+  </div>
 </section>
 <style>
-  .proof { display: grid; place-items: center; padding: 22px 5%; border-block: 1px solid var(--color-line); }
-  .proof-line { display: flex; align-items: baseline; justify-content: center; gap: 10px; margin: 0; }
-  .proof-value { font-size: clamp(24px, 2.4vw, 34px); font-weight: 650; line-height: 1; letter-spacing: -.045em; }
-  .proof-label { font-size: 16px; font-weight: 600; }
-  .proof-rule { align-self: stretch; width: 1px; min-height: 26px; margin-inline: 8px; background: var(--color-line); }
-  .proof-context { color: var(--color-ink); font-size: 16px; font-weight: 600; }
-  .proof-line { text-align: center; }
-  .proof-metric { display: inline-flex; align-items: baseline; gap: 8px; }
-  .proof-equals { font-size: 22px; font-weight: 600; }
-  .proof-context { max-width: 38ch; }
-  .proof-rule { align-self: center; height: 32px; min-height: 0; flex-shrink: 0; }
-  .proof-line {display:grid;grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr);width:100%;max-width:1100px;gap:32px;align-items:center}
-  .proof-comparison{display:flex;align-items:baseline;justify-content:center;gap:10px;flex-wrap:wrap}
-  .proof-rule{margin:0}
-  .proof-context{justify-self:center}
-  @media (max-width: 1000px) {
-    .proof-line { display:flex;flex-direction:column;gap:8px; }
-    .proof-context { flex-basis: 100%; max-width: none; margin-top: 8px; }
-    .proof-rule { display: none; }
-  }
-  @media (max-width: 650px) {
-    .proof { padding: 20px 6%; }
-    .proof-line { flex-wrap: wrap; gap: 4px 8px; max-width: 24rem; }
-    .proof-label { font-size: 15px; }
-    .proof-rule { display: none; }
-    .proof-context { flex-basis: 100%; font-size: 15px; }
-  }
+  /* Two sizes only: 28px figures, 16px for every word. Labels are 600; the
+     context sentence is the same size and ink at 400, the way a description
+     sits under its name in Services. When the equation cannot fit on one line
+     (phones) it breaks BEFORE the equals sign, never after it. */
+  .proof { max-width: var(--container-page); margin: auto; padding: 56px 24px 0; display: grid; grid-template-columns: 1fr 1fr; column-gap: 64px; row-gap: 28px; align-items: center; font-size: 16px; font-weight: 600; line-height: 1.5; }
+  p { margin: 0; }
+  strong { font-size: 28px; font-weight: 650; line-height: 1; letter-spacing: -.045em; }
+  .proof-comparison { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .proof-metric { display: inline-flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+  .proof-context { margin-top: 10px; font-weight: 400; text-wrap: balance; }
+  .proof-audience { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 48px; }
+  .proof-audience .proof-metric { align-items: center; gap: 12px; }
+  svg { width: 64px; height: 64px; flex-shrink: 0; }
+  circle { fill: none; stroke-width: 5px; }
+  .track { stroke: var(--color-line); }
+  .portion { stroke: var(--color-ink); }
+  text { fill: var(--color-ink); font-size: 23px; font-weight: 600; }
+  @media (min-width: 640px) { .proof { padding-inline: 32px; } }
+  @media (max-width: 899px) { .proof { grid-template-columns: 1fr; padding-top: 40px; } }
+  @media (max-width: 400px) { .proof-audience { column-gap: 28px; } svg { width: 56px; height: 56px; } }
 </style>

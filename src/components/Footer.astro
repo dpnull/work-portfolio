@@ -13,9 +13,11 @@ import site from "../data/site.json";
   </div>
 </footer>
 <style>
-  .footer{max-width:var(--container-page);margin:auto;padding:28px 32px;border-top:1px solid var(--color-line);font-size:14px;scroll-margin-top:100px}
+  /* The rule is on the inner row, so it spans the content width like every other rule on the page, not the padding box. */
+  .footer{max-width:var(--container-page);margin:auto;padding:0 32px;font-size:14px;scroll-margin-top:100px}
+  .footer-top{padding-block:28px;border-top:1px solid var(--color-line)}
   .footer-top,nav{display:flex;flex-wrap:wrap;align-items:center;gap:20px}
   .footer-top{justify-content:space-between}nav{gap:24px}
   a{overflow-wrap:anywhere;text-underline-offset:4px}a:hover{text-decoration:underline}
-  @media(max-width:639px){.footer{padding:24px}.footer-top{align-items:flex-start;flex-direction:column}}
+  @media(max-width:639px){.footer{padding:0 24px}.footer-top{padding-block:24px;align-items:flex-start;flex-direction:column}}
 </style>
