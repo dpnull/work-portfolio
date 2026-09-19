@@ -2,8 +2,9 @@
 import { ClientRouter } from 'astro:transitions';
 ---
 <ClientRouter fallback="swap" />
-<link rel="preload" as="image" href="/clips/its-all-a-lie.webp" />
-<link rel="preload" as="image" href="/work-with-me.webp" />
+{/* No static image hints here: each page's own photograph is an <img> the preload scanner
+    already finds, and the other page's photograph competed with it for the first paint.
+    portfolio-preload.ts warms the other routes once this one has loaded. */}
 <style is:inline>
   /* Astro restores history inside the swap; smooth scrolling must not animate it. */
   html[data-astro-transition] { scroll-behavior: auto !important; }

@@ -18,7 +18,11 @@ const mmss = clip.duration ? `${Math.floor(clip.duration / 60)}:${String(clip.du
               aria-label={`Play ${clip.title}`}
             >
               <picture>
-                <source srcset={clip.posterWebp} type="image/webp" />
+                <source
+                  srcset={`${clip.posterWebp.replace(/\.webp$/, "-540.webp")} 540w, ${clip.posterWebp} 720w`}
+                  sizes="(min-width: 64rem) 270px, calc(50vw - 32px)"
+                  type="image/webp"
+                />
                 <img
                   src={clip.poster}
                   alt=""

@@ -39,17 +39,32 @@ const canonical = new URL(path, Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
     {/* og:image — block 5 */}
 
+    {/* The faces live here, not in global.css, so they can be PERSISTED across client-side
+        swaps. Astro's head swap discards every page <style>; re-created @font-face rules
+        refetch their files, the host revalidates everything (max-age=0), and the incoming
+        page's text sat in the fallback face for one round trip (measured 360–570ms).
+        A persisted element is never removed, so its loaded faces carry straight over.
+        Self-hosted from public/fonts/, latin only, both OFL. */}
+    <style is:inline data-astro-transition-persist="font-faces">
+      @font-face { font-family: "Instrument Sans"; src: url("/fonts/instrument-sans-400-700.woff2") format("woff2"); font-weight: 400 700; font-style: normal; font-display: swap; }
+      @font-face { font-family: "Kode Mono"; src: url("/fonts/kode-400-700.woff2") format("woff2"); font-weight: 400 700; font-style: normal; font-display: swap; }
+    </style>
+    {/* Persisted for the same reason: a re-inserted hint is a new request. */}
     <link
       rel="preload"
       href="/fonts/instrument-sans-400-700.woff2"
       as="font"
       type="font/woff2"
       crossorigin
+      data-astro-transition-persist="font-preload"
     />
 
     <meta name="theme-color" content="#F6F1DA" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" data-astro-transition-persist="icon" />
     {photoTransition && <PhotoTransition />}
+    <script>
+      import "../scripts/service-worker";
+    </script>
 
     {/* Cloudflare Web Analytics — block 5 */}
   </head>

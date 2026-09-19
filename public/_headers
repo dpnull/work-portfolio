@@ -1,4 +1,7 @@
 # Cloudflare Pages response headers.
+# Only work-portfolio-dft.pages.dev reads this file. The live domain, work.dpy2k.com, is served
+# by custom-domains.chatgpt.site, which ignores it and sends max-age=0 on everything; there the
+# caching is done by the service worker instead (public/sw.js).
 
 /*
   X-Content-Type-Options: nosniff
@@ -10,6 +13,16 @@
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Posters and clips: long cache, filenames are versioned by hand when replaced.
-/media/*
+# The two font files. Replacing one means a new filename, as with any font update.
+/fonts/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Posters and clips live in /clips/ (this rule used to say /media/*, which matched nothing,
+# so they were revalidated on every view). A week, then refreshed behind the scenes:
+# filenames are versioned by hand when a clip is replaced, but not fingerprinted.
+/clips/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
+# The browser must always be able to see a new worker, or the kill switch cannot land.
+/sw.js
+  Cache-Control: no-cache
