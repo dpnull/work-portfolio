@@ -23,9 +23,11 @@ const pathOf = (url: URL) => url.pathname.replace(/\.html$/, '').replace(/\/$/, 
 const connection = () => (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
 const saveData = () => connection()?.saveData === true;
 const slow = () => /2g$/.test(connection()?.effectiveType ?? '');
+// This page's own load, plus a beat: the LCP paint and the late font swap land right around
+// the load event, and nothing speculative should be on the wire with them.
 const loaded = new Promise<void>(resolve => {
   if (document.readyState === 'complete') resolve();
-  else window.addEventListener('load', () => resolve(), { once: true });
+  else window.addEventListener('load', () => window.setTimeout(resolve, 250), { once: true });
 });
 
 // A missing asset must never strand navigation.
@@ -116,8 +118,8 @@ async function load(key: string) {
   return next;
 }
 
-// Everything that does not gate the swap waits for this page's own load, goes out at low
-// priority, and is skipped on 2G.
+// Everything that does not gate the swap goes out at low priority, after this page's own
+// load even when a click prepared the page early, and is skipped on 2G.
 function warmRest(next: Document, key: string) {
   if (slow() || saveData()) return;
   void loaded.then(() => picturesOf(next).forEach((picture, index) => void warmImage(picture, key, picture.eager || index < DECODE_AHEAD)));
@@ -140,14 +142,20 @@ function prepare(url: URL) {
   return prepared;
 }
 
+// Nothing speculative leaves before this page's own load event: the two documents and the
+// other page's photograph were competing with the LCP image (Lighthouse, /creative-tech:
+// LCP 1.6s -> 2.2s when they started with the script). A click before then still works; it
+// simply fetches on demand through the loader below.
 function warmDestination() {
-  if (saveData() || document.hidden) return;
-  const current = pathOf(new URL(location.href));
-  if (!routes.has(current)) return;
-  for (const target of portfolio) {
-    if (target === current || (target === '/' && covers.has(current))) continue;
-    void prepare(new URL(target, location.href)).catch(() => {});
-  }
+  void loaded.then(() => {
+    if (saveData() || document.hidden) return;
+    const current = pathOf(new URL(location.href));
+    if (!routes.has(current)) return;
+    for (const target of portfolio) {
+      if (target === current || (target === '/' && covers.has(current))) continue;
+      void prepare(new URL(target, location.href)).catch(() => {});
+    }
+  });
 }
 
 document.addEventListener('astro:before-preparation', event => {
@@ -173,7 +181,7 @@ navigator.serviceWorker?.addEventListener('controllerchange', () => {
   for (const [key, page] of pages) void page.document.then(next => warmRest(next, key), () => {});
 });
 
-// Begin on load, not hover. Reuse the same pending request if a click arrives early.
+// Begin on load, not hover. A click reuses the same pending request.
 document.addEventListener('astro:page-load', warmDestination);
 // A tab left open for a while refreshes its prepared pages when it is looked at again.
 document.addEventListener('visibilitychange', warmDestination);

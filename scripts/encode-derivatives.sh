@@ -20,15 +20,17 @@ done
 ffmpeg -v error -y -i "$PUB/hero-portrait-m.jpg" -vf "scale=600:800:flags=lanczos" \
   -c:v libwebp -quality 80 -compression_level 6 "$PUB/hero-portrait-m-600.webp"
 
-# 3. Cover reel. The print shows it 100-155 CSS px wide (about 310 px at 2x), so 360x640
-#    is already oversampled; the 540x960 original stays for the pages that show it larger.
+# 3. Cover reel. The print shows it 94-160 CSS px wide: 320 px on a 2x laptop, 411 px on a
+#    3x phone, so 432x768 still oversamples every screen (360x640 measured soft on phones
+#    and in the small overlay type). The 540x960 original stays for pages that show it larger.
 #    Its first frame is the poster, so there is no jump when the video starts.
-ffmpeg -v error -y -i "$PUB/clips/about-preview.mp4" -an -vf "scale=360:640:flags=lanczos" \
+ffmpeg -v error -y -i "$PUB/clips/about-preview.mp4" -an -vf "scale=432:768:flags=lanczos" \
   -c:v libx264 -profile:v high -crf 26 -preset slow -pix_fmt yuv420p -g 60 \
-  -movflags +faststart "$PUB/clips/about-preview-360.mp4"
+  -movflags +faststart "$PUB/clips/about-preview-432.mp4"
+# The poster is on screen only until the first frame decodes, so it stays at 360x640.
 ffmpeg -v error -y -i "$PUB/clips/about-preview.mp4" -frames:v 1 -vf "scale=360:640:flags=lanczos" \
   -c:v libwebp -quality 62 -compression_level 6 "$PUB/clips/about-preview-poster.webp"
 
 echo
-ls -l "$PUB"/clips/*-540.webp "$PUB"/hero-portrait-m-600.webp "$PUB"/clips/about-preview-360.mp4 "$PUB"/clips/about-preview-poster.webp \
+ls -l "$PUB"/clips/*-540.webp "$PUB"/hero-portrait-m-600.webp "$PUB"/clips/about-preview-432.mp4 "$PUB"/clips/about-preview-poster.webp \
   | awk '{printf "%8.1f KB  %s\n", $5/1024, $9}'
