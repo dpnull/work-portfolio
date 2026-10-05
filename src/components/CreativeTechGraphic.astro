@@ -1,0 +1,90 @@
+---
+import audience from '../assets/creative-tech/01-audience-funnel.svg?raw';
+import production from '../assets/creative-tech/02-creator-production.svg?raw';
+import portfolio from '../assets/creative-tech/03-portfolio-system.svg?raw';
+
+interface Props { kind: 'audience' | 'production' | 'portfolio' }
+const graphics = {
+  audience: {
+    art: audience,
+    title: 'Find your audience. Build your email list.',
+    subtitle: 'Attract the right people, learn what they need, and collect their email addresses.',
+    viewBox: '0 165 1120 400',
+    description: 'Define your ideal audience. Create content to attract them. Use a funnel to learn more about them. Collect email addresses, locations, needs and gaps. Use what you learn to improve the next round of content.',
+    panels: [
+      ['18 185 264 275', 'Define your ideal audience.'],
+      ['292 185 264 275', 'Create content to attract them.'],
+      ['564 185 264 275', 'Use a funnel to learn more about them. This example uses a 28-question assessment.'],
+      ['838 185 264 275', 'Collect email addresses and audience insights: location, needs and gaps.'],
+    ],
+    caption: 'Use what you learn to improve the next round of content.',
+  },
+  production: {
+    art: production,
+    title: 'From the idea to the final frame.',
+    subtitle: 'Creative judgement. A considered production process.',
+    viewBox: '0 195 1120 295',
+    description: 'Research: topics and scripts. Plan: people and logistics. Film: camera. Edit: story and colour.',
+    panels: [
+      ['20 211 264 270', 'Research: topics and scripts.'],
+      ['292 211 264 270', 'Plan: people and logistics.'],
+      ['564 211 264 270', 'Film: camera.'],
+      ['836 211 264 270', 'Edit: story and colour.'],
+    ],
+    caption: '',
+  },
+  portfolio: {
+    art: portfolio,
+    title: 'Two disciplines. One connected home.',
+    subtitle: 'A shared design, with space for both sides of my work.',
+    viewBox: '0 150 1120 395',
+    description: 'work.dpy2k.com connects UGC and Video with Creative Tech. Self-hosted video sits alongside audience funnels, creator production and this portfolio.',
+    panels: [
+      ['115 272 360 265', 'UGC and Video: self-hosted video.'],
+      ['645 272 360 265', 'Creative Tech: audience funnel, creator production and this portfolio.'],
+    ],
+    caption: '',
+  },
+};
+const { kind } = Astro.props;
+const graphic = graphics[kind];
+// These are local, reviewed SVG sources; retain native text and shared site tokens.
+const drawing = graphic.art.replace(/^<svg\b[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+---
+<div class:list={['work-graphic', kind]}>
+  <header>
+    <h3>{graphic.title}</h3>
+    <p>{graphic.subtitle}</p>
+  </header>
+  <svg class="wide-art" viewBox={graphic.viewBox} role="img" aria-label={graphic.description}>
+    <g aria-hidden="true" set:html={drawing} />
+  </svg>
+  <div class="compact-art">
+    {kind === 'portfolio' && <p class="site-root">work.dpy2k.com</p>}
+    <div class="panels">
+      {graphic.panels.map(([viewBox, label]) => (
+        <svg viewBox={viewBox} role="img" aria-label={label}>
+          <g aria-hidden="true" set:html={drawing} />
+        </svg>
+      ))}
+    </div>
+    {graphic.caption && <p class="feedback">↳ {graphic.caption}</p>}
+  </div>
+</div>
+<style>
+  header{padding-inline:4.8%;margin-bottom:32px}
+  h3{font-size:clamp(26px,3.3vw,41px);font-weight:500;letter-spacing:-.025em;line-height:1.15;margin:0 0 14px}
+  header p{font-size:clamp(16px,1.9vw,22px);line-height:1.5;color:var(--color-ink-dim);margin:0}
+  svg{display:block;width:100%;height:auto;font-family:var(--font-sans);overflow:hidden}
+  .compact-art{display:none}
+  @media(max-width:700px){
+    header{padding:0;margin-bottom:24px}
+    .wide-art{display:none}
+    .compact-art{display:block}
+    .panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 8px}
+    .compact-art :global(.connector){display:none}
+    .feedback{font-size:14px;line-height:1.5;color:var(--color-ink-dim);margin:20px 0 0}
+    .site-root{font-size:18px;font-weight:500;text-align:center;margin:0 0 20px}
+    .portfolio .panels{grid-template-columns:1fr;max-width:420px;margin:auto;gap:20px}
+  }
+</style>
