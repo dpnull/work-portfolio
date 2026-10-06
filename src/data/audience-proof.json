@@ -1,0 +1,26 @@
+{
+  "checkedOn": "2026-10-06",
+  "source": "Notion Self-Assessment Questionnaire",
+  "sourceUrl": "https://app.notion.com/p/72513c5a0d12490b94ab09a9dc719750",
+  "submissions": 1743,
+  "rowsWithEmail": 1739,
+  "uniqueEmails": 1642,
+  "instagramHandles": 394,
+  "assessmentQuestions": 28,
+  "recordsWithLocation": 168,
+  "recordsWithAge": 175,
+  "recordsWithTopPillar": 205,
+  "_countMethod": "All current database rows. Unique emails are COUNT(DISTINCT LOWER(TRIM(NULLIF(Email, '')))). Address deliverability and marketing consent were not audited. Counts describe captured contacts, not confirmed subscribers or customers.",
+  "_conversion": "No matched funnel-entry/visitor denominator was found. The existing 14% figure uses 1,750 historical sign-ups / 12,500 followers; it is not a tracked funnel conversion rate. Do not relabel it as one.",
+  "_examples": "Every display row below is fictional. Only the aggregate totals and field names come from the database. Field completion varies; sample rows do not imply that every contact has location or priority data.",
+  "examples": [
+    {"email":"lead.001@example.com","location":"UK","topic":"Mindset","colour":"purple","status":"Replied","statusColour":"yellow"},
+    {"email":"lead.002@example.com","location":"US","topic":"Posture","colour":"blue","status":"Contacted","statusColour":"blue"},
+    {"email":"lead.003@example.com","location":"Australia","topic":"Nutrition","colour":"green","status":"New","statusColour":"neutral"},
+    {"email":"lead.004@example.com","location":"Poland","topic":"Style","colour":"orange","status":"Replied","statusColour":"yellow"},
+    {"email":"lead.005@example.com","location":"Germany","topic":"Skin & grooming","colour":"rose","status":"New","statusColour":"neutral"},
+    {"email":"lead.006@example.com","location":"France","topic":"Mindset","colour":"purple","status":"Contacted","statusColour":"blue"},
+    {"email":"lead.007@example.com","location":"Canada","topic":"Posture","colour":"blue","status":"Replied","statusColour":"yellow"},
+    {"email":"lead.008@example.com","location":"Ireland","topic":"Unassigned","colour":"neutral","status":"New","statusColour":"neutral"}
+  ]
+}

@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import DevBar from "../components/DevBar.astro";
 import PhotoTransition from "../components/PhotoTransition.astro";
+import ColourStudy from "../components/ColourStudy.astro";
 
 /**
  * Site-wide shell: meta, fonts, analytics slot.
@@ -23,7 +24,7 @@ const path = Astro.url.pathname.replace(/index\.html$/, "").replace(/\.html$/, "
 const canonical = new URL(path, Astro.site);
 ---
 
-<html lang="en-GB">
+<html lang="en-GB" data-colour-study="cobalt" data-finish="character">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -47,7 +48,8 @@ const canonical = new URL(path, Astro.site);
       crossorigin
     />
 
-    <meta name="theme-color" content="#F6F1DA" />
+    <meta name="theme-color" content="#F1F3F4" />
+    <ColourStudy />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     {photoTransition && <PhotoTransition />}
 

@@ -1,0 +1,153 @@
+---
+import proof from '../data/audience-proof.json';
+interface Props { variant?: '1' | '2' | '3'; }
+const { variant = '1' } = Astro.props;
+const fmt = (value: number) => value.toLocaleString('en-GB');
+const examples = variant === '2' ? proof.examples.slice(0, 6) : proof.examples;
+const marks = Array.from({ length: 48 }, (_, i) => i * 7.5);
+---
+<div class:list={['audience-proof', `proof-${variant}`]}>
+  <header class="proof-heading">
+    <h2>How do you make a message feel personal?</h2>
+    <p class="summary">I built a 28-question self-assessment for my own audience to understand what people struggle with and want to change. That gives each follow-up a starting point that matters to them.</p>
+    <p class="summary">One central workspace means less switching between tools and can reduce monthly software costs.</p>
+  </header>
+
+  <div class="proof-stage">
+    {variant === '2' && <div class="workspace-bar"><span class="database-icon" aria-hidden="true">▦</span><span>Self-Assessment Questionnaire</span><span class="workspace-meta">One shared view</span></div>}
+
+    <div class="database">
+      <div class="records" role="table" aria-label="Illustrative contact records showing the database fields">
+        <div class="record column-headings" role="row">
+          <span role="columnheader">Email</span><span role="columnheader">Location</span><span role="columnheader">Top priority</span><span role="columnheader">Follow-up</span>
+        </div>
+        {examples.map((entry, index) => (
+          <div class="record data-row" role="row" style={`--row:${index}`}>
+            <span class="email-cell" role="cell"><span class="entry-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><span class="email">{entry.email}</span></span>
+            <span role="cell"><span class="pill blue">{entry.location}</span></span>
+            <span role="cell"><span class:list={['pill', entry.colour]}>{entry.topic}</span></span>
+            <span role="cell"><span class:list={['pill', 'status', entry.statusColour]}>{entry.status}</span></span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {variant === '3' && <svg class="collect-lines" viewBox="0 0 180 380" preserveAspectRatio="none" aria-hidden="true"><path d="M0 36 C115 36 55 190 180 190 M0 88 C115 88 70 190 180 190 M0 140 C115 140 80 190 180 190 M0 192 H180 M0 244 C115 244 80 190 180 190 M0 296 C115 296 70 190 180 190 M0 348 C115 348 55 190 180 190"/></svg>}
+
+    <div class="result">
+      <div class="email-total" aria-label={`${fmt(proof.uniqueEmails)} unique email addresses captured`}>
+        {/* A circular total, with no implied conversion percentage. */}
+        <svg class="total-ring" viewBox={variant === '1' ? '12 12 256 256' : '0 0 280 280'} aria-hidden="true">
+          <circle class="outer-ring" cx="140" cy="140" r="128"/>
+          <circle class="inner-ring" cx="140" cy="140" r="116"/>
+          {variant === '2' && marks.map(angle => <path class="ring-tick" d="M140 16 V25" transform={`rotate(${angle} 140 140)`}/>)}
+        </svg>
+        <div class="total-copy">
+          <span class="total-kicker">{variant === '3' ? 'Together in one place' : 'Emails captured'}</span>
+          <strong>{fmt(proof.uniqueEmails)}</strong>
+          <span class="total-label">unique email addresses</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<style>
+  .audience-proof{min-width:0;container-type:inline-size}
+  .proof-heading{margin-bottom:24px;max-width:950px}
+  h2{font-size:clamp(26px,3.3vw,41px);font-weight:500;line-height:1.15;letter-spacing:-.025em;margin:0 0 16px}
+  .summary{font-size:clamp(16px,1.7vw,20px);line-height:1.5;color:var(--color-ink-dim);margin:0;max-width:62ch}
+  .summary + .summary{margin-top:12px}
+  .proof-stage{position:relative;display:grid;grid-template-columns:minmax(0,1.65fr) minmax(240px,1fr);align-items:center;gap:36px;padding:0 4.8%}
+  .database{position:relative;min-width:0;z-index:1}
+  .database-icon{font-size:21px;vertical-align:-1px;margin-right:5px;font-weight:400}
+  .records{min-width:0}
+  .record{display:grid;grid-template-columns:minmax(0,1.48fr) .7fr 1.05fr .85fr;align-items:center;gap:8px;min-height:34px}
+  .column-headings{font-size:11px;color:var(--color-ink-dim);min-height:28px;margin-bottom:5px}
+  .data-row>span{min-width:0;display:flex}
+  .email-cell{align-items:center;gap:9px}
+  .entry-number{display:none;font-family:var(--font-mono);font-size:10px;color:var(--color-ink-dim)}
+  .email{display:block;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pill{display:inline-block;padding:4px 8px;border-radius:var(--radius-data-pill);font-size:11px;line-height:1.2;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;color:var(--color-ink)}
+  .blue{background:var(--color-tag-blue)}.purple{background:var(--color-tag-purple)}.green{background:var(--color-tag-green)}.orange{background:var(--color-tag-orange)}.rose{background:var(--color-tag-rose)}.yellow{background:var(--color-tag-yellow)}.neutral{background:var(--color-tag-neutral)}
+  .status::before{content:'';display:inline-block;width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.55;margin:0 4px 2px 0}
+  .result{position:relative;z-index:2;min-width:0;display:flex;align-items:center;flex-direction:column}
+  .email-total{width:min(100%,280px);aspect-ratio:1;position:relative;display:grid;place-items:center;text-align:center}
+  .total-ring{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+  .outer-ring{stroke:var(--color-accent);fill:none;stroke-width:1.5}
+  .inner-ring{stroke:var(--color-line);fill:none;stroke-width:1}
+  .total-copy{position:relative;display:flex;flex-direction:column;gap:4px;width:90%;padding:10px}
+  .total-kicker{font-size:12px;color:var(--color-ink-dim)}
+  .total-copy strong{font-size:clamp(48px,5.5vw,68px);font-weight:500;letter-spacing:-.06em;line-height:1.1;font-variant-numeric:tabular-nums;margin-block:5px}
+  .total-label{font-size:13px}
+
+  /* 01: open rows, with increasingly solid details towards the result. */
+  .proof-1{--proof-diameter:min(256px,calc((100cqw - 24px) / 2.65))}
+  .proof-1 .proof-stage{padding:0;gap:24px;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr)}
+  .proof-1 .database{height:var(--proof-diameter)}
+  .proof-1 .records{height:100%;display:grid;grid-template-rows:20px repeat(8,minmax(0,1fr))}
+  .proof-1 .record{min-height:0}
+  .proof-1 .column-headings{margin-bottom:0;align-items:start}
+  .proof-1 .data-row:last-child{align-items:end}
+  .proof-1 .email-total{width:var(--proof-diameter)}
+  .proof-1 .data-row>span:nth-child(1){opacity:.6}.proof-1 .data-row>span:nth-child(2){opacity:.74}.proof-1 .data-row>span:nth-child(3){opacity:.88}
+  .proof-1 .data-row:hover>span{opacity:1}
+
+  /* 02: the same information inside a single Notion-like workspace. */
+  .proof-2 .proof-stage{gap:0;padding:0;background:color-mix(in srgb,var(--color-plate) 46%,var(--color-ground));border:1px solid var(--color-line);grid-template-columns:minmax(0,1.8fr) minmax(240px,1fr)}
+  .workspace-bar{grid-column:1/-1;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--color-line);padding:18px 24px;font-size:15px;font-weight:500}
+  .workspace-meta{margin-left:auto;font-size:11px;font-weight:400;color:var(--color-ink-dim)}
+  .proof-2 .database{padding:22px 22px 20px}
+  .proof-2 .record{grid-template-columns:minmax(0,1.38fr) .65fr 1fr .88fr;gap:7px;min-height:34px}
+  .proof-2 .column-headings{min-height:28px}
+  .proof-2 .pill{padding:4px 6px;border-radius:5px;font-size:10px}
+  .proof-2 .result{align-self:stretch;justify-content:center;border-left:1px solid var(--color-line);padding:26px 16px;background:color-mix(in srgb,var(--color-accent) 4%,var(--color-ground))}
+  .proof-2 .email-total{max-width:235px}
+  .proof-2 .outer-ring{stroke:var(--color-line);stroke-width:1}
+  .proof-2 .inner-ring{stroke:var(--color-accent);stroke-width:1}
+  .ring-tick{stroke:var(--color-accent);stroke-width:2}
+  .proof-2 .total-copy strong{font-size:58px}
+  .proof-2 .data-row>span:nth-child(1){opacity:.7}.proof-2 .data-row>span:nth-child(2){opacity:.8}.proof-2 .data-row>span:nth-child(3){opacity:.9}
+
+  /* 03: individual records connect to one central contact total. */
+  .proof-3 .proof-stage{grid-template-columns:minmax(0,1.6fr) minmax(240px,1fr);gap:68px;padding-block:12px 28px}
+  .proof-3 .data-row{margin-block:3px}
+  .proof-3 .data-row:nth-child(3n){transform:translateX(12px)}
+  .proof-3 .data-row:nth-child(3n + 1){transform:translateX(5px)}
+  .proof-3 .record{gap:7px;grid-template-columns:minmax(0,1.4fr) .65fr 1fr .85fr}
+  .proof-3 .column-headings{border:0;min-height:28px}
+  .proof-3 .data-row>span:first-child{opacity:.5}.proof-3 .data-row>span:nth-child(2){opacity:.7}.proof-3 .data-row>span:nth-child(3){opacity:.85}
+  .proof-3 .data-row:hover>span{opacity:1}
+  .collect-lines{position:absolute;width:17%;height:285px;left:53%;top:37px;fill:none;stroke:var(--color-accent);stroke-width:.7;opacity:.25;z-index:0}
+  .proof-3 .outer-ring{stroke:var(--color-accent)}
+  .proof-3 .inner-ring{fill:var(--color-accent);stroke:var(--color-accent)}
+  .proof-3 .total-copy{color:var(--color-accent-ink)}
+  .proof-3 .total-kicker{color:inherit;font-size:11px}
+
+  @container(max-width:960px){
+    .proof-heading{padding-inline:0}
+    .proof-stage{padding-inline:0;gap:24px;grid-template-columns:minmax(0,1.65fr) minmax(210px,1fr)}
+    .record{gap:6px;grid-template-columns:minmax(0,1.25fr) .64fr 1.02fr .85fr}
+    .email{font-size:10px}.pill{font-size:10px;padding-inline:6px}
+    .total-copy strong{font-size:55px}.total-label{font-size:11px}.total-kicker{font-size:11px}
+    .proof-2 .proof-stage{grid-template-columns:minmax(0,1.7fr) minmax(200px,1fr)}
+    .proof-2 .database{padding-inline:16px}.proof-2 .email{font-size:10px}.proof-2 .record{gap:5px}
+    .proof-2 .total-copy strong{font-size:49px}.proof-2 .result{padding-inline:12px}
+    .proof-3 .proof-stage{gap:45px;grid-template-columns:minmax(0,1.6fr) minmax(220px,1fr)}
+    .proof-3 .collect-lines{left:51%;width:19%}
+  }
+  @container(max-width:650px){
+    .proof-heading{margin-bottom:24px}h2{font-size:28px}.summary{font-size:16px}
+    .proof-1 .proof-stage{--proof-diameter:256px;grid-template-columns:1fr;gap:24px}
+    .proof-stage,.proof-2 .proof-stage,.proof-3 .proof-stage{grid-template-columns:1fr;gap:32px;padding:0}
+    .record{min-height:34px;gap:5px}
+    .column-headings{font-size:10px}.email{font-size:10px}.pill{font-size:9px;padding:4px 5px}.status::before{display:none}
+    .email-total{max-width:260px}.total-copy strong{font-size:64px}.total-kicker{font-size:12px}.total-label{font-size:13px}
+    .result{width:100%}
+    .workspace-bar{font-size:12px;padding:15px;gap:4px}.workspace-meta{display:none}
+    .proof-2 .proof-stage{gap:0}.proof-2 .database{padding:18px 12px}.proof-2 .record{gap:4px}.proof-2 .pill{font-size:9px;padding-inline:4px}
+    .proof-2 .result{border-left:0;border-top:1px solid var(--color-line);padding-block:26px}
+    .proof-2 .total-copy strong{font-size:58px}
+    .proof-3 .collect-lines{display:none}.proof-3 .data-row:nth-child(n){transform:none}
+  }
+</style>

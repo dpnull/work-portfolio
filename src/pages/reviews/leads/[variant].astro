@@ -1,0 +1,22 @@
+---
+import '../../../styles/global.css';
+import AudienceProof from '../../../components/AudienceProof.astro';
+export function getStaticPaths() {
+  return [{params:{variant:'1'}},{params:{variant:'2'}},{params:{variant:'3'}}];
+}
+const variant = Astro.params.variant as '1'|'2'|'3';
+const names = {'1':'Open ledger','2':'Inside the workspace','3':'Everything connects'};
+---
+<!doctype html>
+<html lang="en-GB">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="robots" content="noindex, nofollow"/><title>{names[variant]} · Audience proof</title><link rel="preload" href="/fonts/instrument-sans-400-700.woff2" as="font" type="font/woff2" crossorigin/></head>
+<body>
+  <nav aria-label="Mockup review"><a href={`/reviews/leads#option-${variant}`}>← All three directions</a><span>0{variant} / {names[variant]}</span><a href="/creative-tech#audience-results">View in the page ↗</a></nav>
+  <main><AudienceProof variant={variant}/></main>
+</body>
+</html>
+<style>
+  nav{max-width:1216px;margin:auto;padding:20px 32px;display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid var(--color-line);font-size:12px}nav a{text-decoration:underline;text-underline-offset:4px}nav span{font-weight:500}
+  main{max-width:1216px;margin:auto;padding:54px 32px 40px}
+  @media(max-width:650px){nav{padding:18px 22px;flex-wrap:wrap}nav span{order:3;width:100%;color:var(--color-ink-dim)}main{padding:36px 22px}}
+</style>

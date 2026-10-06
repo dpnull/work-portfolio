@@ -1,0 +1,55 @@
+---
+import { colourStudies } from '../data/colour-studies';
+const ids = colourStudies.map(study => study.id);
+---
+{/* Approved default; explicit study URLs retain the comparison controls. */}
+<script is:inline define:vars={{ ids }}>
+(() => {
+  const apply = (palette, character) => {
+    const root = document.documentElement;
+    if (!ids.includes(palette)) {
+      root.dataset.colourStudy = 'cobalt';
+      root.dataset.finish = 'character';
+      return;
+    }
+    root.dataset.colourStudy = palette;
+    if (character) root.dataset.finish = 'character';
+    else delete root.dataset.finish;
+  };
+  const sync = () => {
+    const query = new URLSearchParams(location.search);
+    const palette = query.get('palette');
+    const character = query.get('finish') === 'character';
+    apply(palette, character);
+    if (!ids.includes(palette)) return;
+    document.querySelectorAll('a[href]').forEach(link => {
+      const url = new URL(link.getAttribute('href'), location.href);
+      if (url.origin !== location.origin || !['/', '/ugc', '/creative-tech'].includes(url.pathname)) return;
+      url.searchParams.set('palette', palette);
+      if (character) url.searchParams.set('finish', 'character');
+      else url.searchParams.delete('finish');
+      link.href = url.pathname + url.search + url.hash;
+    });
+  };
+  sync();
+  if (!window.__portfolioColourStudy) {
+    window.__portfolioColourStudy = true;
+    const onPageLoad = () => {
+      sync();
+      if (window.parent !== window) window.parent.postMessage({ type: 'portfolio-preview-navigation', path: location.pathname }, location.origin);
+    };
+    document.addEventListener('astro:page-load', onPageLoad);
+    document.addEventListener('DOMContentLoaded', onPageLoad);
+    window.addEventListener('message', event => {
+      if (event.origin !== location.origin || event.source !== window.parent || window.parent === window) return;
+      if (event.data?.type !== 'portfolio-colour-preview' || !ids.includes(event.data.palette)) return;
+      const url = new URL(location.href);
+      url.searchParams.set('palette', event.data.palette);
+      if (event.data.character) url.searchParams.set('finish', 'character');
+      else url.searchParams.delete('finish');
+      history.replaceState(null, '', url);
+      sync();
+    });
+  }
+})();
+</script>

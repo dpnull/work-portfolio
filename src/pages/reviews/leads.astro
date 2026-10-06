@@ -1,0 +1,39 @@
+---
+import '../../styles/global.css';
+import AudienceProof from '../../components/AudienceProof.astro';
+const options = [
+  {id:'1',name:'Open ledger',description:'Closest to your sketch: light rows, coloured pills and a circular total.'},
+  {id:'2',name:'Inside the workspace',description:'A single Notion-style view brings the contacts and results together.'},
+  {id:'3',name:'Everything connects',description:'Individual entries lead into one shared place, with a stronger focal point.'},
+] as const;
+---
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Audience proof · Three design directions</title>
+  <link rel="preload" href="/fonts/instrument-sans-400-700.woff2" as="font" type="font/woff2" crossorigin/>
+</head>
+<body>
+  <header class="review-nav"><a href="/creative-tech#audience-results">← Creative Tech</a><nav aria-label="Compare audience proof mockups">{options.map(option=><a href={`#option-${option.id}`}>0{option.id}<span> · {option.name}</span></a>)}</nav></header>
+  <main>
+    <div class="review-intro"><p>Creative Tech / Audience proof</p><h1>Three ways to show the system.</h1><p>Verified database totals. Illustrative contact entries. Choose the direction that feels most like you.</p></div>
+    {options.map(option=><section id={`option-${option.id}`} class="mock" aria-labelledby={`mock-heading-${option.id}`}>
+      <div class="mock-label"><h2 id={`mock-heading-${option.id}`}><span>0{option.id}</span> {option.name}</h2><p>{option.description}</p><a href={`/reviews/leads/${option.id}`}>Open this mock ↗</a></div>
+      <div class="mock-art"><AudienceProof variant={option.id}/></div>
+    </section>)}
+    <footer><strong>About the figures</strong><p>The current database contains 1,743 submissions, including 1,739 with an email address and 1,642 distinct addresses after deduplication. It also contains 394 Instagram handles. Checked 6 October 2026.</p><p>A funnel conversion rate needs a matching visitor or funnel-entry count. The older 14% figure compares historical email sign-ups with followers, so it is not shown as a conversion rate.</p></footer>
+  </main>
+</body>
+</html>
+<style>
+  .review-nav{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:20px 4%;border-bottom:1px solid var(--color-line);font-size:13px;background:var(--color-ground)}
+  nav{display:flex;gap:24px}a{text-decoration:underline;text-underline-offset:4px}
+  main{max-width:1320px;margin:auto;padding:56px 32px 64px}
+  .review-intro{margin-bottom:64px;max-width:720px}.review-intro>p:first-child{text-transform:uppercase;letter-spacing:var(--tracking-label);font:11px var(--font-mono);margin-bottom:18px;color:var(--color-ink-dim)}
+  h1{font-size:clamp(32px,4.5vw,55px);line-height:1.05;letter-spacing:-.05em;font-weight:500;margin:0 0 20px}.review-intro p{font-size:16px;line-height:1.5}
+  .mock{scroll-margin-top:28px;margin-bottom:90px}.mock-label{display:flex;gap:24px;align-items:center;border-top:1px solid var(--color-ink);padding-top:18px;margin-bottom:32px}.mock-label h2{font-size:20px;font-weight:500;white-space:nowrap;letter-spacing:-.02em}.mock-label h2 span{font:12px var(--font-mono);margin-right:12px}.mock-label p{font-size:13px;line-height:1.5;color:var(--color-ink-dim);max-width:42ch}.mock-label a{font-size:12px;margin-left:auto;white-space:nowrap}.mock-art{padding:34px 0}
+  footer{max-width:720px;border-top:1px solid var(--color-line);padding-top:24px;font-size:13px;line-height:1.6}footer p{margin-top:12px;color:var(--color-ink-dim)}
+  @media(max-width:700px){main{padding:36px 22px}.review-nav{padding:18px 22px}nav{gap:18px}nav a span{display:none}.mock-label{flex-wrap:wrap;gap:12px}.mock-label p{order:3;width:100%;max-width:none}.mock-art{padding-top:10px}.mock{margin-bottom:60px}.review-intro{margin-bottom:40px}}
+</style>

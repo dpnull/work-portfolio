@@ -6,7 +6,7 @@ const nav = [
   { label: "UGC & Video", href: "/ugc", id: "ugc" },
   { label: "Creative Tech", href: "/creative-tech", id: "creative-tech" },
 ];
-const contactUrl = active === "ugc" ? "#book-call" : "#contact";
+const contactUrl = active ? "#book-call" : "#contact";
 // THE RAIL (Dom's pick from a five-option board, 2026-09-07).
 // Full-bleed row of fused hairline cells — same construction as the stats strip:
 // neighbours share one 1px `line` rule, there are no gaps, and the button IS the

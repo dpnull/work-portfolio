@@ -4,8 +4,8 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SocialRail from "../components/SocialRail.astro";
 import CreativeTechGraphic from "../components/CreativeTechGraphic.astro";
-import site from "../data/site.json";
-const linkedin = site.social.find(profile => profile.id === "linkedin")!;
+import AudienceProof from "../components/AudienceProof.astro";
+import Hero from "../components/Hero.astro";
 ---
 <Base title="Creative Tech & Content Systems — Dom Przewozny" description="Audience funnels, creative production and web development. The work behind my content, with a Computer Science background." photoTransition>
   <Header active="creative-tech" />
@@ -15,55 +15,42 @@ const linkedin = site.social.find(profile => profile.id === "linkedin")!;
       <div class="intro-copy">
         <a class="back-cover" href="/" data-photo-link>← Back to cover</a>
         <h1 id="tech-heading" data-tech-title>Creative Tech & Content Systems</h1>
-        <p class="intro">Computer Science background.<br/>A creator who likes figuring things out.</p>
-        <p>I work across content, production and technology. I’ve built an audience funnel, plan topics and film for a 7M-follower creator, and use AI tools in my workflow.</p>
+        <p>I’m a creator with a Computer Science background. I’ve built an audience funnel, plan topics and film for a 7M-follower creator, and use AI tools in my workflow.</p>
         <dl><div><dt>Creative</dt><dd>Research, scripts, filming, editing & colour grading.</dd></div><div><dt>Technical & operational</dt><dd>Web development, production planning & AI workflows.</dd></div></dl>
         <SocialRail inline horizontal />
       </div>
     </section>
-    <section id="selected-work" class="selected" aria-labelledby="selected-heading">
-      <h2 id="selected-heading" class="font-display text-section">Selected work</h2>
+    <section id="selected-work" class="selected" aria-label="Audience and content systems">
+      <article id="audience-results" class="work-row">
+        <AudienceProof variant="1" />
+      </article>
       <article id="audience-funnel" class="work-row">
         <CreativeTechGraphic kind="audience" />
-        <a class="work-link" href="/ugc#work">See the videos</a>
       </article>
       <article id="creative-production" class="work-row">
         <CreativeTechGraphic kind="production" />
-        <a class="work-link" href="/ugc">View my video work</a>
-      </article>
-      <article id="portfolio-build" class="work-row">
-        <CreativeTechGraphic kind="portfolio" />
-        <a class="work-link" href="/">Back to the homepage</a>
       </article>
     </section>
-    <section class="work-together" aria-labelledby="together-heading">
-      <div><h2 id="together-heading"><span>Let’s talk about your project.</span></h2><p>Content, production or the systems around them. I’m open to project work, ongoing support and team opportunities.</p></div>
-      <div class="contact-links"><a class="contact-button" href={`mailto:${site.email}`}>Email me <span aria-hidden="true">↗</span></a><a href={linkedin.href} target="_blank" rel="noopener noreferrer">Experience & background on LinkedIn</a></div>
-    </section>
+    <div class="contact-section"><Hero heading="Let’s talk about your project." description="Have an audience to grow or a content process to improve? Let’s talk through what you need, your timeline and whether we’re a good fit." /></div>
   </main>
   <Footer />
 </Base>
 <style>
-  .tech-page{max-width:var(--container-page);margin:auto;padding:40px 32px}
-  .introduction{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(28px,5vw,72px);padding:0 0 40px;align-items:center}
+  .tech-page{--section-gap:40px;display:grid;gap:var(--section-gap);max-width:var(--container-page);margin:auto;padding:40px 32px}
+  .introduction{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(28px,5vw,72px);align-items:center}
   .portrait{width:100%;margin:0;padding:9px;background:white;box-shadow:0 3px 10px #23382d18}
   .portrait img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:50% 45%}
   .back-cover{display:inline-block;margin-bottom:22px;font-size:14px;text-underline-offset:5px}.back-cover:hover{text-decoration:underline}
   figcaption{font-size:12px;line-height:1.5;padding:8px 2px 2px}
-  .intro-copy{max-width:48ch;padding-bottom:24px}
+  .intro-copy{max-width:48ch}
   h1{font-size:clamp(28px,3vw,40px);line-height:1.1;letter-spacing:-.035em;margin-bottom:16px}
-  .intro-copy p{font-size:16px;line-height:1.6;margin-bottom:20px}.intro-copy .intro{font-size:20px;line-height:1.4}
+  .intro-copy p{font-size:16px;line-height:1.6;margin-bottom:20px}
   dl{margin:28px 0 0;display:grid;gap:18px}dt{font-size:13px;font-weight:650}dd{margin:4px 0 0;font-size:15px;color:var(--color-ink-dim)}
-  .selected{padding-top:20px}.selected h2{margin-bottom:32px}
-  .work-row{padding:40px 0 32px;border-top:1px solid var(--color-line);scroll-margin-top:100px}
-  .work-link{display:inline-block;margin:24px 4.8% 0}
-  .work-link,.contact-links>a:not(.contact-button){font-size:14px;line-height:1.6;text-decoration:underline;text-underline-offset:4px}
-  .work-together{border-top:1px solid var(--color-line);margin-top:16px;padding:48px 0 16px;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
-  .work-together h2{font-size:clamp(26px,3vw,36px);line-height:1.25;letter-spacing:-.03em;margin-bottom:20px}
-  .work-together h2 span{background:var(--color-plate);padding:0 .16em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-  .work-together p{font-size:16px;line-height:1.6;max-width:44ch}
-  .contact-links{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
-  .contact-button{display:inline-flex;gap:32px;align-items:center;padding:16px 20px;background:var(--color-accent);color:var(--color-accent-ink);font-size:16px;font-weight:600;border:1px solid var(--color-accent)}
-  .contact-button:hover{background:var(--color-ink)}
-  @media(max-width:700px){.tech-page{padding:40px 24px}.introduction{grid-template-columns:1fr;gap:32px;padding:32px 0 40px}.portrait{max-width:320px}.intro-copy{padding:0}.work-row{padding-block:32px}.work-link{margin-inline:0}.work-together{grid-template-columns:1fr;gap:24px;padding-top:32px}}
+  .selected{display:grid;gap:var(--section-gap)}
+  .work-row{min-width:0;scroll-margin-top:100px}
+  .contact-section :global(.hero){min-height:0}
+  .contact-section :global(.hero-copy){padding:0;justify-content:flex-start}
+  .contact-section :global(.hero-copy-inner){width:100%;align-self:flex-start}
+  .contact-section :global(.hero-portrait){padding-block:0;translate:none;margin-bottom:0}
+  @media(max-width:700px){.tech-page{--section-gap:32px;padding:40px 24px}.introduction{grid-template-columns:1fr;gap:32px}.portrait{max-width:320px}}
 </style>

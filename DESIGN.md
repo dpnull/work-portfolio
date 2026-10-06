@@ -32,7 +32,8 @@ Kode Mono is reserved for runtimes, bookmark tabs, small schematic marks and dev
 ## Colour and geometry
 
 - Use the semantic colour tokens in `src/styles/global.css`; do not hardcode component colours.
-- The accent colour is a signal, not a general background. Use it for the primary CTA and active playback progress.
+- The approved palette is Chalk & Cobalt: chalk `#F1F3F4`, ink `#202C40`, cobalt `#3156D8`, and citron `#D5EF83`. Shared definitions also power the colour review page.
+- Keep the added styling: lighter grain, citron heading marks and photo tabs, solid accent CTAs and the filled email-result circle. Use these accents selectively while preserving the existing layout.
 - Corners stay square. Borders are normally one pixel and use the relevant `line` token.
 - Cinematic work uses the cinema palette; text roles and spacing remain consistent with the main page.
 

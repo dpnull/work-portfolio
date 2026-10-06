@@ -1,0 +1,111 @@
+---
+import '../../styles/global.css';
+import { colourStudies } from '../../data/colour-studies';
+---
+<!doctype html>
+<html lang="en-GB" data-colour-lab>
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Five colour directions · @dpy2k</title>
+</head>
+<body>
+  <header class="lab-header"><a href="/">@dpy2k</a><span>Colour & character studies</span><a id="full-preview" href="/creative-tech?palette=cobalt&finish=character" target="_blank" rel="noopener">Open full preview ↗</a></header>
+  <main class="lab-layout">
+    <aside class="lab-controls" aria-label="Design comparison controls">
+      <div class="lab-intro"><h1>Find your colour.</h1><p>Five new palettes, plus your original. Add the styling layer to compare.</p></div>
+      <fieldset class="palette-options"><legend>1. Choose a palette</legend>
+        {colourStudies.map(study => <button class="colour-option" type="button" data-colour-study={study.id} data-palette-choice={study.id} aria-pressed={study.id === 'cobalt'}>
+          <span class="option-label"><span>{study.number}</span><strong>{study.name}</strong><span class="selected-mark" aria-hidden="true">↗</span></span>
+          <span class="option-swatches" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="option-note">{study.note}</span>
+        </button>)}
+      </fieldset>
+      <fieldset class="finish-control"><legend>2. Add a little character</legend><label><input id="character-toggle" type="checkbox" checked/><span>Added styling</span></label><p>Lighter grain, a bold result circle, photo tabs and a little colour behind the headings.</p></fieldset>
+      <details class="brand-notes"><summary>Your current colours</summary><p>Butter <code>#F6F1DA</code><br/>Forest <code>#23382D</code><br/>Green <code>#35604A</code><br/>Periwinkle <code>#C8A9F9</code></p><p>The photographs add cool dusk blue. The current grain softens the contrast across everything.</p></details>
+    </aside>
+    <section class="lab-preview" aria-label="Live portfolio preview">
+      <div class="preview-toolbar"><nav aria-label="Preview page"><button type="button" data-preview-page="/">Cover</button><button type="button" data-preview-page="/ugc">UGC & Video</button><button type="button" data-preview-page="/creative-tech" aria-pressed="true">Creative Tech</button></nav><span id="preview-state" aria-live="polite">01 / Chalk & Cobalt · Added styling</span></div>
+      <div class="direction-note"><strong id="direction-name">Chalk & Cobalt</strong><p id="direction-description">{colourStudies[1].description}</p></div>
+      <iframe id="site-preview" title="Portfolio colour preview" src="/creative-tech?palette=cobalt&finish=character"></iframe>
+    </section>
+  </main>
+</body>
+</html>
+<script>
+  import { colourStudies, type ColourStudyId } from '../../data/colour-studies';
+  const frame = document.querySelector<HTMLIFrameElement>('#site-preview')!;
+  const toggle = document.querySelector<HTMLInputElement>('#character-toggle')!;
+  const full = document.querySelector<HTMLAnchorElement>('#full-preview')!;
+  const query = new URLSearchParams(location.search);
+  let palette: ColourStudyId = colourStudies.find(item => item.id === query.get('palette'))?.id ?? 'cobalt';
+  let character = query.get('finish') !== 'plain';
+  const allowedPages = ['/', '/ugc', '/creative-tech'];
+  let page = allowedPages.includes(query.get('page') ?? '') ? query.get('page')! : '/creative-tech';
+  function previewUrl() {
+    const url = new URL(page, location.origin);
+    url.searchParams.set('palette', palette);
+    if (character) url.searchParams.set('finish', 'character');
+    return url.pathname + url.search;
+  }
+  function update(navigate = false) {
+    const choice = colourStudies.find(item => item.id === palette)!;
+    toggle.checked = character;
+    document.querySelectorAll<HTMLButtonElement>('[data-palette-choice]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.paletteChoice === palette)));
+    document.querySelectorAll<HTMLButtonElement>('[data-preview-page]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.previewPage === page)));
+    document.querySelector('#direction-name')!.textContent = choice.name;
+    document.querySelector('#direction-description')!.textContent = choice.description;
+    document.querySelector('#preview-state')!.textContent = `${choice.number} / ${choice.name} · ${character ? 'Added styling' : 'Colour only'}`;
+    full.href = previewUrl();
+    const url = new URL(location.href);
+    url.searchParams.set('palette', palette);
+    url.searchParams.set('finish', character ? 'character' : 'plain');
+    url.searchParams.set('page', page);
+    history.replaceState(null, '', url);
+    if (navigate) frame.src = previewUrl();
+    else frame.contentWindow?.postMessage({ type: 'portfolio-colour-preview', palette, character }, location.origin);
+  }
+  document.querySelectorAll<HTMLButtonElement>('[data-palette-choice]').forEach(button => button.addEventListener('click', () => { palette = button.dataset.paletteChoice as ColourStudyId; update(); }));
+  document.querySelectorAll<HTMLButtonElement>('[data-preview-page]').forEach(button => button.addEventListener('click', () => { page = button.dataset.previewPage!; update(true); }));
+  toggle.addEventListener('change', () => { character = toggle.checked; update(); });
+  window.addEventListener('message', event => {
+    if (event.origin !== location.origin || event.source !== frame.contentWindow) return;
+    if (event.data?.type !== 'portfolio-preview-navigation' || !allowedPages.includes(event.data.path)) return;
+    page = event.data.path;
+    update();
+  });
+  frame.addEventListener('load', () => {
+    const childPath = frame.contentWindow?.location.pathname;
+    if (childPath && allowedPages.includes(childPath)) page = childPath;
+    update();
+  });
+  update(true);
+</script>
+<style>
+  body{margin:0;background:var(--color-lab-ground);color:var(--color-lab-ink)}
+  .lab-header{height:64px;padding:0 28px;display:flex;align-items:center;gap:24px;border-bottom:1px solid var(--color-lab-line);background:var(--color-lab-paper)}
+  .lab-header>a:first-child{font-size:23px;font-weight:650;letter-spacing:-.06em}.lab-header>span{font-size:13px;color:var(--color-lab-dim)}.lab-header>a:last-child{margin-left:auto;font-size:13px;text-decoration:underline;text-underline-offset:4px}
+  .lab-layout{display:grid;grid-template-columns:288px minmax(0,1fr);height:calc(100svh - 64px)}
+  .lab-controls{overflow-y:auto;padding:26px 20px;border-right:1px solid var(--color-lab-line);background:var(--color-lab-paper)}
+  .lab-label,legend{font:10px var(--font-mono);text-transform:uppercase;letter-spacing:.09em;color:var(--color-lab-dim)}
+  h1{font-size:29px;letter-spacing:-.04em;line-height:1.1;margin:10px 0 12px;font-weight:600}.lab-intro>p:last-child{font-size:13px;line-height:1.5;color:var(--color-lab-dim);margin-bottom:24px}
+  fieldset{border:0;padding:0;margin:0 0 24px;min-width:0}legend{margin-bottom:12px}
+  .palette-options{display:grid;gap:8px}.colour-option{background:var(--color-lab-paper);color:var(--color-lab-ink);border:1px solid var(--color-lab-line);padding:11px 12px;text-align:left;cursor:pointer;width:100%}
+  .colour-option[aria-pressed="true"]{outline:2px solid var(--color-lab-ink);outline-offset:-2px}.option-label{display:flex;align-items:center;gap:9px;font-size:12px}.option-label>span:first-child{font:10px var(--font-mono);color:var(--color-lab-dim)}.option-label strong{font-weight:600}.selected-mark{margin-left:auto;visibility:hidden}.colour-option[aria-pressed="true"] .selected-mark{visibility:visible}
+  .option-swatches{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;height:20px;margin:9px 0 6px}.option-swatches i:nth-child(1){background:var(--color-ground)}.option-swatches i:nth-child(2){background:var(--color-ink)}.option-swatches i:nth-child(3){background:var(--color-accent)}.option-swatches i:nth-child(4){background:var(--color-study-pop)}.option-note{font-size:11px;color:var(--color-lab-dim)}
+  .finish-control label{display:flex;gap:10px;align-items:center;font-size:14px;font-weight:600;cursor:pointer}.finish-control input{width:17px;height:17px;accent-color:var(--color-lab-ink)}.finish-control p,.brand-notes p{font-size:12px;line-height:1.55;color:var(--color-lab-dim);margin-top:10px}.brand-notes{border-top:1px solid var(--color-lab-line);padding-top:16px}.brand-notes summary{cursor:pointer;font-size:12px}.brand-notes code{font-size:10px}
+  .lab-preview{display:flex;flex-direction:column;min-width:0;min-height:0}.preview-toolbar{padding:12px 20px;background:var(--color-lab-paper);border-bottom:1px solid var(--color-lab-line);display:flex;align-items:center;justify-content:space-between;gap:16px}.preview-toolbar nav{display:flex;gap:4px}.preview-toolbar button{font-size:12px;padding:8px 11px;cursor:pointer;border:1px solid transparent}.preview-toolbar button[aria-pressed="true"]{background:var(--color-lab-ink);color:var(--color-lab-paper)}#preview-state{font:10px var(--font-mono);color:var(--color-lab-dim)}
+  .direction-note{padding:15px 22px;border-bottom:1px solid var(--color-lab-line);display:flex;gap:20px;align-items:baseline}.direction-note strong{font-size:14px;white-space:nowrap}.direction-note p{font-size:12px;line-height:1.5;margin:0;color:var(--color-lab-dim);max-width:75ch}iframe{width:100%;flex:1;min-height:0;border:0;background:var(--color-lab-ground)}
+  @media(max-width:960px){.lab-layout{grid-template-columns:235px minmax(0,1fr)}.lab-controls{padding:20px 14px}#preview-state{display:none}.direction-note{display:block}.direction-note p{margin-top:6px}.lab-header{padding:0 20px}.lab-header>span{display:none}}
+  @media(min-width:651px){
+    .lab-controls{padding-top:20px;padding-bottom:20px}
+    h1{font-size:26px;margin:0 0 10px}
+    .lab-intro>p:last-child{font-size:12px;margin-bottom:18px}
+    fieldset{margin-bottom:18px}
+    .colour-option{padding:9px 11px}
+    .option-swatches{height:14px;margin:7px 0 0}
+    .option-note{display:none}
+    .finish-control p{margin-top:8px}
+  }
+  @media(max-width:650px){.lab-header{height:56px;padding:0 16px}.lab-header>a:last-child{font-size:11px}.lab-layout{display:flex;flex-direction:column;height:auto}.lab-controls{overflow:visible;padding:20px 16px;border-right:0;border-bottom:1px solid var(--color-lab-line)}.lab-intro>p:last-child{margin-bottom:18px}.palette-options{grid-template-columns:1fr 1fr;margin-bottom:18px}.colour-option{padding:9px}.option-note{font-size:10px}.option-label{gap:6px;font-size:11px}.finish-control{margin-bottom:0}.brand-notes{margin-top:16px}.lab-preview{height:85svh;min-height:560px}.preview-toolbar{padding:10px 12px}.direction-note{padding:12px 16px}}
+</style>
