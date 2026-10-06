@@ -19,13 +19,15 @@ The font files and shared tokens live in `src/styles/global.css`.
 | Body, navigation and descriptions | Instrument Sans | Regular or medium, normal tracking |
 | Compact UI labels | Kode Mono | Uppercase, `--text-label`, `--tracking-label` |
 
+Use the shared size tokens: `--text-hero` (32–40px) for page titles, `--text-section` (24–32px) for section headings, `--text-subheading` (20–24px) for card/service titles, `--text-body` (16px) for prose and `--text-caption` (14px) for captions and secondary links. Do not introduce component-specific heading scales or enlarge paragraphs on desktop. Navigation and graphic/data labels have separate compact roles; display statistics remain distinct.
+
 Kode Mono is reserved for runtimes, bookmark tabs, small schematic marks and developer controls. It is not a second body or heading face. `CINEMATIC` and `BRAND DEAL` must use the same label tokens.
 
 ## Layout
 
 - Page content caps at `--container-page` (`76rem`).
 - Standard page gutters are `24px` on small screens and `32px` from the `sm` breakpoint.
-- Desktop work cards use a four-column rhythm with a `24px` gap.
+- Video previews cap at `--video-preview-width` (240px wide, about 427px tall at 9:16). Use two columns on phones, three from 640px and four from 1024px, with 24px gaps from 640px. Center capped grids rather than stretching previews to fill the page. Cinematic previews use the same cap and gain their third column at 640px.
 - A three-card row keeps the same card width and gap, then centers the group in the container.
 - Hero copy remains left-aligned but the copy block is centered inside its column.
 
@@ -39,7 +41,9 @@ Kode Mono is reserved for runtimes, bookmark tabs, small schematic marks and dev
 
 ## Component rules
 
-- Header CTA: one compact schematic accent plus a clear action label; it should be more visible than navigation without becoming a banner.
+- Header trial: centered floating paper frame, a shallow inset, an even 6px paper border and an independent citron wordmark sticker floating gently in the left gutter. This header is the exception to the flat geometry rule; keep its shadow quiet. The menu is 52px tall with a 28px desktop top offset; from 440px to 899px the menu aligns right with the sticker to its left; below 440px a smaller sticker sits above-left and the menu starts at 44px. Navigation stays in one compact row, using the shared sans face with equal 12px button side padding (8px on phones), no extra inset padding and no inter-button gap. On phones the booking label is shortened to "Book a call". The same fixed header persists across pages; only the active page highlight changes. Keep the shared booking action and omit the email address. Its named transition group stays above all moving photos and titles.
+- The three Creative Tech case-study sections share one centered 672px content column, including headings, prose, database results and diagrams; do not mix a full-width proof section with narrow diagrams.
+- Creative Tech diagrams share a 1016×256 source canvas, trimmed source margins and zero CSS inset padding, aligned left with the audience-results stage. Cap wide diagrams at `--graphic-stage-width` (672px); compact views use matching 264×275 panel crops and cap columns at `--graphic-panel-width` (144px).
 - Proof strip: stat, label and explanation must read as three distinct levels.
 - Bookmark tabs: same mono label styling, 30px height and one-pixel outline.
 - Video titles use Instrument Sans medium; descriptions use Instrument Sans regular and the relevant dim colour.

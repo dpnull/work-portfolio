@@ -8,7 +8,7 @@ const cinematic = clips.groups.filter(g => g.id === "cinematic").flatMap(g => g.
 <div id="portfolio-work">
   <section id="work" aria-labelledby="work-heading" class="mx-auto max-w-(--container-page) px-6 pt-10 pb-8 sm:px-8">
     <h2 id="work-heading" class="font-display text-section">Videos</h2>
-    <ul id="work-grid" class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6" role="list">
+    <ul id="work-grid" class="video-grid" role="list">
       {educational.map(clip => <VideoTile clip={clip} />)}
     </ul>
   </section>
@@ -24,14 +24,24 @@ const cinematic = clips.groups.filter(g => g.id === "cinematic").flatMap(g => g.
   </section>
 </div>
 <style>
+  .video-grid { display: grid; grid-template-columns: repeat(2, minmax(0, var(--video-preview-width))); justify-content: center; gap: 32px 16px; margin-top: 32px; }
+  @media (min-width: 40rem) {
+    .video-grid { grid-template-columns: repeat(3, minmax(0, var(--video-preview-width))); gap: 32px 24px; }
+  }
+  @media (min-width: 64rem) {
+    .video-grid { grid-template-columns: repeat(4, minmax(0, var(--video-preview-width))); }
+  }
+
   .cinematic { position: relative; margin-top: 30px; border-top: 1px solid var(--color-cinema-line); background: var(--color-cinema); color: var(--color-cinema-ink); padding-block: 40px; }
   .cinematic-inner { box-sizing: border-box; width: 100%; max-width: var(--container-page); margin-inline: auto; padding-inline: 32px; }
-  .cinematic-frame { position: relative; }
+  .cinematic-frame { position: relative; max-width: calc(3 * var(--video-preview-width) + 48px); margin-inline: auto; }
   .cinematic-tab { position: absolute; inset-block-start: -70px; inset-inline-start: 0; display: inline-flex; align-items: center; height: 30px; padding-inline: 14px; border: 1px solid var(--color-cinema-line); border-bottom: 0; background: var(--color-cinema); color: var(--color-cinema-ink); font-family: var(--font-mono); font-size: var(--text-label); font-weight: 600; letter-spacing: var(--tracking-label); }
-  .cinematic-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 46px 16px; }
+  .cinematic-grid { display: grid; grid-template-columns: repeat(2,minmax(0,var(--video-preview-width))); justify-content: center; gap: 46px 16px; }
+  @media (min-width: 40rem) {
+    .cinematic-grid { grid-template-columns: repeat(3,minmax(0,var(--video-preview-width))); gap: 24px; }
+  }
   @media (min-width: 64rem) {
     .cinematic-frame { width: calc(75% - 6px); margin-inline: auto; }
-    .cinematic-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; }
   }
   @media (max-width: 40rem) {
     .cinematic { padding-block: 32px 40px; }

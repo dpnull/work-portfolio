@@ -7,10 +7,7 @@ const names = ['Photo notes', 'Portfolio spread', 'Work shelf'];
 ---
 <Base title={`Dom — ${names[Number(choice)-1]}`} description="Videos, creative production and things I’ve built. A portfolio by Dom Przewozny.">
   <div class:list={['study', `study-${choice}`]}>
-    <header class="masthead">
-      <a class="wordmark" href="/">@dpy2k</a>
-      <nav aria-label="Portfolio"><a href="/ugc">UGC & video</a><a href="/creative-tech">Creative tech</a><a href={`mailto:${site.email}`}>Email me</a></nav>
-    </header>
+
     <main>
       <section class="intro" aria-label="About Dom">
         <div class="intro-copy"><p class="eyebrow">A little of what I do</p><h1>Hi, I’m Dom.</h1><p>Creator. Computer Science background.<br/>Usually making something.</p><p class="bio">I make videos, plan and film content, and build things behind the scenes.</p><div class="socials"><a href={site.social[0].href}>Instagram</a><a href={site.social[2].href}>LinkedIn</a></div></div>

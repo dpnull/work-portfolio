@@ -70,6 +70,12 @@
   --color-tag-yellow: #ece6c3;
   --color-tag-neutral: #e6e5d9;
   --radius-data-pill: 999px;
+  /* Polaroid header trial: a paper frame with a shallow inset and lime label. */
+  --radius-header: 2px;
+  --color-header-edge: color-mix(in srgb, var(--color-study-paper-ink) 10%, var(--color-study-paper));
+  --color-header-shadow: color-mix(in srgb, var(--color-study-paper-ink) 8%, transparent);
+  --color-header-inset: color-mix(in srgb, var(--color-study-paper-ink) 3%, var(--color-study-paper));
+  --color-header-hover: color-mix(in srgb, var(--color-study-paper-ink) 7%, var(--color-study-paper));
   /* The dusk set. It ran the stats strip until 2026-09-08, when the strip went
      flat and bright; its ONLY remaining job is the foot on each video tile in
      WorkGrid (views / likes / saves over the poster). Values unchanged — the
@@ -136,23 +142,22 @@
   --text-label: 0.6875rem;
   --tracking-label: 0.14em;
 
-  /* Fluid display sizes — phone first */
-  --text-hero: clamp(2.25rem, 8vw, 4.5rem);
-  --text-hero--line-height: 1.02;
+  /* Shared reading scale: page titles, sections, card titles and body copy. */
+  --text-hero: clamp(2rem, 3.5vw, 2.5rem);
+  --text-hero--line-height: 1.1;
   --text-hero--letter-spacing: -0.03em;
-  --text-section: clamp(1.5rem, 4vw, 2.25rem);
-  --text-section--line-height: 1.1;
-  --text-section--letter-spacing: -0.02em;
-  /* The hero lede carries the hero on its own — no title above it. Desktop
-     only: it is set over the photo, and its measure (33ch, in Hero.astro) is
-     tuned so it breaks over four lines. On phones the lede is body size.
-     Stepped down from clamp(1.5rem, 3vw, 2.375rem) on 2026-09-07 when the hero
-     band was shortened (see --hero-keep in Hero.astro): the shorter band had to
-     hold the same copy. The measure is in `ch`, so it still breaks over FOUR
-     lines at every width — that is the thing to re-check if this moves. */
-  --text-lede: clamp(1.25rem, 2.5vw, 2rem);
-  --text-lede--line-height: 1.22;
-  --text-lede--letter-spacing: -0.01em; /* Instrument Sans at weight 600 (picker) */
+  --text-section: clamp(1.5rem, 3vw, 2rem);
+  --text-section--line-height: 1.15;
+  --text-section--letter-spacing: -0.025em;
+  --text-subheading: clamp(1.25rem, 2vw, 1.5rem);
+  --text-body: 1rem;
+  --text-body--line-height: 1.5;
+  --text-caption: 0.875rem;
+  --text-nav: 0.9375rem;
+  --text-nav-compact: 0.75rem;
+  --text-lede: var(--text-body);
+  --text-lede--line-height: var(--text-body--line-height);
+  --text-lede--letter-spacing: 0;
 
   --text-stat: clamp(1.75rem, 6vw, 2.75rem);
   --text-stat--line-height: 1;
@@ -166,6 +171,9 @@
 
   /* Layout */
   --container-page: 76rem;
+  --video-preview-width: 15rem;
+  --graphic-stage-width: 42rem;
+  --graphic-panel-width: 9rem;
 
   /* Local colour study controls. Portfolio palettes below remain opt-in. */
   --color-lab-ground: #eceeec;
@@ -185,14 +193,13 @@
     color: var(--color-ink);
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
-    /* The rail is sticky, so an anchor would otherwise land underneath it.
-       Keep in step with the header heights in Header.astro. */
-    scroll-padding-top: 90px;
+    /* Leave room for the floating paper header when following section links. */
+    scroll-padding-top: 108px;
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: 440px) {
     html {
-      scroll-padding-top: 56px;
+      scroll-padding-top: 100px;
     }
   }
 
@@ -323,8 +330,6 @@ html[data-colour-study] .note:is(:hover,:focus-visible) .open { background:var(-
 /* The optional second layer adds editorial marks to the existing geometry.
    It leaves the reviewed content, row spacing and section spacing intact. */
 html[data-finish="character"] body::after { opacity:.10; }
-html[data-finish="character"] .rail-mark { background:var(--color-study-pop);color:var(--color-study-pop-ink); }
-html[data-finish="character"] .rail-cta { background:var(--color-accent);color:var(--color-accent-ink); }
 html[data-finish="character"] :is(.intro-copy h1,.opening-copy h1,.bio h1) {
   text-decoration:underline;text-decoration-color:var(--color-study-pop);
   text-decoration-thickness:.16em;text-underline-offset:.1em;text-decoration-skip-ink:none;
@@ -352,7 +357,15 @@ html[data-finish="character"] .proof { background:var(--color-study-pop);color:v
 html[data-finish="character"] .proof-context { color:inherit; }
 html[data-finish="character"] .hero h2>span { background:var(--color-study-pop);color:var(--color-study-pop-ink); }
 html[data-finish="character"] .cover .paper { border-top:4px solid var(--color-accent); }
-html[data-finish="character"] .cover .wordmark { background:var(--color-study-pop);color:var(--color-study-pop-ink);padding:4px 9px;transform:rotate(-2deg); }
 html[data-finish="character"] .cover .open { text-decoration-color:var(--color-accent);text-decoration-thickness:2px; }
 html[data-colour-lab] body::after { display:none; }
 html[data-colour-lab] astro-dev-toolbar { display:none; }
+
+/* Carry the audience-result colour edge to edge on both booking panels. */
+html[data-finish="character"] .hero {
+  background:var(--color-study-pop);
+  color:var(--color-study-pop-ink);
+  box-shadow:0 0 0 100vmax var(--color-study-pop);
+  clip-path:inset(0 -100vmax);
+}
+html[data-finish="character"] .hero .call-note { color:inherit; }

@@ -1,6 +1,5 @@
 ---
 import Base from "../layouts/Base.astro";
-import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SocialRail from "../components/SocialRail.astro";
 import CreativeTechGraphic from "../components/CreativeTechGraphic.astro";
@@ -8,7 +7,6 @@ import AudienceProof from "../components/AudienceProof.astro";
 import Hero from "../components/Hero.astro";
 ---
 <Base title="Creative Tech & Content Systems — Dom Przewozny" description="Audience funnels, creative production and web development. The work behind my content, with a Computer Science background." photoTransition>
-  <Header active="creative-tech" />
   <main class="tech-page">
     <section class="introduction" aria-labelledby="tech-heading">
       <figure class="portrait"><img data-tech-photo src="/work-with-me.webp" alt="Dom overlooking the city at sunset" width="1000" height="1000" fetchpriority="high"/><figcaption>Behind the scenes.</figcaption></figure>
@@ -40,17 +38,13 @@ import Hero from "../components/Hero.astro";
   .introduction{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(28px,5vw,72px);align-items:center}
   .portrait{width:100%;margin:0;padding:9px;background:white;box-shadow:0 3px 10px #23382d18}
   .portrait img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:50% 45%}
-  .back-cover{display:inline-block;margin-bottom:22px;font-size:14px;text-underline-offset:5px}.back-cover:hover{text-decoration:underline}
-  figcaption{font-size:12px;line-height:1.5;padding:8px 2px 2px}
+  .back-cover{display:inline-block;margin-bottom:22px;font-size:var(--text-caption);text-underline-offset:5px}.back-cover:hover{text-decoration:underline}
+  figcaption{font-size:var(--text-caption);line-height:1.5;padding:8px 2px 2px}
   .intro-copy{max-width:48ch}
-  h1{font-size:clamp(28px,3vw,40px);line-height:1.1;letter-spacing:-.035em;margin-bottom:16px}
-  .intro-copy p{font-size:16px;line-height:1.6;margin-bottom:20px}
-  dl{margin:28px 0 0;display:grid;gap:18px}dt{font-size:13px;font-weight:650}dd{margin:4px 0 0;font-size:15px;color:var(--color-ink-dim)}
-  .selected{display:grid;gap:var(--section-gap)}
+  h1{font-size:var(--text-hero);line-height:1.1;letter-spacing:-.035em;margin-bottom:16px}
+  .intro-copy p{font-size:var(--text-body);line-height:1.6;margin-bottom:20px}
+  dl{margin:28px 0 0;display:grid;gap:18px}dt{font-size:var(--text-body);font-weight:650}dd{margin:4px 0 0;font-size:var(--text-body);color:var(--color-ink-dim)}
+  .selected{display:grid;gap:48px;width:100%;max-width:var(--graphic-stage-width);margin-inline:auto}
   .work-row{min-width:0;scroll-margin-top:100px}
-  .contact-section :global(.hero){min-height:0}
-  .contact-section :global(.hero-copy){padding:0;justify-content:flex-start}
-  .contact-section :global(.hero-copy-inner){width:100%;align-self:flex-start}
-  .contact-section :global(.hero-portrait){padding-block:0;translate:none;margin-bottom:0}
   @media(max-width:700px){.tech-page{--section-gap:32px;padding:40px 24px}.introduction{grid-template-columns:1fr;gap:32px}.portrait{max-width:320px}}
 </style>

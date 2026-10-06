@@ -55,8 +55,8 @@ const marks = Array.from({ length: 48 }, (_, i) => i * 7.5);
 <style>
   .audience-proof{min-width:0;container-type:inline-size}
   .proof-heading{margin-bottom:24px;max-width:950px}
-  h2{font-size:clamp(26px,3.3vw,41px);font-weight:500;line-height:1.15;letter-spacing:-.025em;margin:0 0 16px}
-  .summary{font-size:clamp(16px,1.7vw,20px);line-height:1.5;color:var(--color-ink-dim);margin:0;max-width:62ch}
+  h2{font-size:var(--text-section);font-weight:500;line-height:1.15;letter-spacing:-.025em;margin:0 0 16px}
+  .summary{font-size:var(--text-body);line-height:1.5;color:var(--color-ink-dim);margin:0;max-width:62ch}
   .summary + .summary{margin-top:12px}
   .proof-stage{position:relative;display:grid;grid-template-columns:minmax(0,1.65fr) minmax(240px,1fr);align-items:center;gap:36px;padding:0 4.8%}
   .database{position:relative;min-width:0;z-index:1}
@@ -82,7 +82,7 @@ const marks = Array.from({ length: 48 }, (_, i) => i * 7.5);
   .total-label{font-size:13px}
 
   /* 01: open rows, with increasingly solid details towards the result. */
-  .proof-1{--proof-diameter:min(256px,calc((100cqw - 24px) / 2.65))}
+  .proof-1{--proof-diameter:min(208px,calc((100cqw - 24px) / 2.65))}
   .proof-1 .proof-stage{padding:0;gap:24px;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr)}
   .proof-1 .database{height:var(--proof-diameter)}
   .proof-1 .records{height:100%;display:grid;grid-template-rows:20px repeat(8,minmax(0,1fr))}
@@ -137,8 +137,8 @@ const marks = Array.from({ length: 48 }, (_, i) => i * 7.5);
     .proof-3 .collect-lines{left:51%;width:19%}
   }
   @container(max-width:650px){
-    .proof-heading{margin-bottom:24px}h2{font-size:28px}.summary{font-size:16px}
-    .proof-1 .proof-stage{--proof-diameter:256px;grid-template-columns:1fr;gap:24px}
+    .proof-heading{margin-bottom:24px}h2{font-size:var(--text-section)}.summary{font-size:var(--text-body)}
+    .proof-1 .proof-stage{--proof-diameter:208px;grid-template-columns:1fr;gap:24px}
     .proof-stage,.proof-2 .proof-stage,.proof-3 .proof-stage{grid-template-columns:1fr;gap:32px;padding:0}
     .record{min-height:34px;gap:5px}
     .column-headings{font-size:10px}.email{font-size:10px}.pill{font-size:9px;padding:4px 5px}.status::before{display:none}

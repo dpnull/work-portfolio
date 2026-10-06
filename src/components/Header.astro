@@ -1,344 +1,145 @@
 ---
 import site from "../data/site.json";
-interface Props { active?: "ugc" | "creative-tech"; }
-const { active } = Astro.props;
+const path = Astro.url.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
 const nav = [
-  { label: "UGC & Video", href: "/ugc", id: "ugc" },
-  { label: "Creative Tech", href: "/creative-tech", id: "creative-tech" },
+  { label: "UGC & Video", href: "/ugc" },
+  { label: "Creative Tech", href: "/creative-tech" },
 ];
-const contactUrl = active ? "#book-call" : "#contact";
-// THE RAIL (Dom's pick from a five-option board, 2026-09-07).
-// Full-bleed row of fused hairline cells — same construction as the stats strip:
-// neighbours share one 1px `line` rule, there are no gaps, and the button IS the
-// cell. Order at >=1024: wordmark | Work | Rates | email | Book a free video call.
-//
-// Dom's revisions (2026-09-07, second pass):
-//  · STICKY. The rail freezes to the top of the viewport, so it needs an opaque
-//    ground of its own — the hero photo scrolls underneath it.
-//  · NO LIME. The CTA was a lime fill; it is now ground with an `ink` border.
-//    Lime survives nowhere on the page now — the hero's lede plates went white
-//    on 2026-09-07 too.
-//  · INSTANT hover. No transition on any cell: the invert snaps.
-//  · The email is set in the sans, not Kode Mono.
-//  · The CTA reads "Book a free video call", which is too long for a third of a
-//    phone row, so the phone tiers were re-cut: tier one is wordmark + CTA,
-//    tier two is Work | Rates. The CTA is therefore a direct child of <header>
-//    rather than a child of <nav> — it has to be able to share tier one with
-//    the wordmark while the nav wraps below it.
-//
-// The CTA's border is 1px on all four sides — the same weight as every other
-// rule in the rail (Dom, 2026-09-07; it was 2px and read as heavy). It still
-// sits 1px proud of the row (`margin-block: -1px` on a stretched flex item),
-// which now lands its ink border exactly ON the rail's top and bottom
-// hairlines rather than beside them. Keep the two together: drop the negative
-// margin and the button gains a doubled edge.
-//
-// The email CELL COPIES rather than opening a mail client (Dom, 2026-09-07):
-// clicking it writes the address to the clipboard and the label flashes
-// "Copied" for 1.6s. `navigator.clipboard.writeText` needs no permission
-// prompt for a WRITE — only reads prompt — provided it runs in a secure
-// context off a real user gesture, which a click handler is. The
-// `execCommand` path below it is the fallback for a non-secure context
-// (an http staging host) where the modern API is simply absent.
-//
-// 640–1023: the email cell is dropped and an empty flex spacer cell holds its
-// slot, so the rail language survives. <640: the two tiers described above; no
-// email on phones (see the open flag in PROGRESS.md; block 4's contact section
-// is the fix).
+const contactUrl = nav.some(item => item.href === path) ? "#book-call" : "/ugc#book-call";
 ---
 
-<header class="rail">
-  <a href="/" class="rail-cell rail-mark font-display text-lg font-semibold">{site.wordmark}</a>
-
-  <nav aria-label="Primary" class="rail-nav">
-    {nav.map((item) => (
-      <a href={item.href} aria-current={active === item.id ? "page" : undefined} class="rail-cell rail-link text-sm">{item.label}</a>
-    ))}
-    <button
-      type="button"
-      class="rail-cell rail-email text-sm"
-      data-copy-email={site.email}
-      aria-label={`Copy email address ${site.email}`}
-      title="Click to copy"
-    >
-      <span data-copy-label>{site.email}</span>
-      <span class="sr-only" role="status" aria-live="polite" data-copy-status></span>
-    </button>
-    <div class="rail-spacer" aria-hidden="true"></div>
-  </nav>
-
-  <a href={contactUrl} class="rail-cell rail-cta text-sm font-semibold">
-    <span>{active === "ugc" ? "Book a free video call" : "Let’s talk"}</span>
-    <span class="rail-cta-mark" aria-hidden="true">↗</span>
-  </a>
+<header class="site-header" data-site-header transition:name="site-header" transition:persist="site-header" transition:animate="none">
+  <a href="/" class="header-mark" aria-label={`${site.wordmark} — home`}>{site.wordmark}</a>
+  <div class="polaroid-header">
+  <div class="header-inset">
+    <nav aria-label="Primary" class="header-nav">
+      {nav.map((item) => (
+        <a href={item.href} data-header-page={item.href} aria-current={path === item.href ? "page" : undefined} class="header-link">{item.label}</a>
+      ))}
+      <a href={contactUrl} class="header-cta" aria-label="Book a free video call">
+        <span class="cta-full">Book a free video call</span><span class="cta-short" aria-hidden="true">Book a call</span><span aria-hidden="true">↗</span>
+      </a>
+    </nav>
+  </div>
+  </div>
 </header>
+<div class="header-space" aria-hidden="true"></div>
 
 <style>
-  /* ── The rail itself ──────────────────────────────────────────────
-     Phone first: two tiers inside one 90px border-box, so the hairlines
-     are part of the height rather than added to it.
-     Sticky, and opaque: the hero photo starts immediately below and has to
-     pass behind it, not show through it. */
-  .rail {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    display: flex;
-    flex-wrap: wrap;
-    height: 90px;
-    background-color: var(--color-ground);
-    border-top: 1px solid var(--color-line);
-    border-bottom: 1px solid var(--color-line);
+  /* One fixed paper header survives document swaps above the photo animation. */
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 88px;
+    z-index: 100;
+    pointer-events: none;
   }
-
-  /* Tier one is wordmark + CTA, tier two is the nav. Both tiers are pinned to
-     44px rather than left to `align-content: stretch`, which shares out the
-     LEFTOVER space and so hands the taller line (the 18px wordmark) a taller
-     tier. 1 + 44 + 44 + 1 = the 90px border box. */
-  .rail-mark,
-  .rail-nav,
-  .rail-cta {
-    height: 44px;
+  .polaroid-header {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: auto;
+    width: fit-content;
+    max-width: calc(100% - 48px);
+    margin-inline: auto;
+    padding: 6px;
+    background: var(--color-study-paper);
+    border: 1px solid var(--color-header-edge);
+    border-radius: var(--radius-header);
+    box-shadow: 0 2px 3px var(--color-header-shadow), 0 12px 28px var(--color-header-shadow);
+    color: var(--color-study-paper-ink);
   }
-
-  .rail-mark {
-    flex: 1 1 auto;
-    padding-inline: 24px;
-    justify-content: flex-start;
-    letter-spacing: -0.02em;
+  .header-space { height: 112px; }
+  .header-inset {
+    padding: 0;
+    background: var(--color-header-inset);
+    border: 1px solid var(--color-header-edge);
   }
-
-  .rail-nav {
-    display: flex;
-    flex: 1 0 100%;
-    order: 2; /* wraps to tier two, under the wordmark + CTA */
-    border-top: 1px solid var(--color-line); /* the tier divider; gone at >=640 */
+  .header-mark {
+    position: absolute;
+    z-index: 2;
+    top: 30px;
+    left: 24px;
+    pointer-events: auto;
+    display: grid;
+    place-items: center;
+    min-height: 40px;
+    padding: 4px 12px;
+    background: var(--color-study-pop);
+    color: var(--color-study-pop-ink);
+    font-size: 24px;
+    font-weight: 650;
+    letter-spacing: -.05em;
+    line-height: 1.2;
+    transform: rotate(-7deg);
+    animation: sticker-float 6s ease-in-out infinite;
+    box-shadow: 0 2px 3px var(--color-header-shadow);
+    white-space: nowrap;
   }
-
-  /* ── Cells ────────────────────────────────────────────────────────
-     Every cell is the full height of its row, centred, and inverts on
-     hover/focus — INSTANTLY, no transition (Dom, 2026-09-07). Neighbours
-     share one rule: each cell owns its LEFT edge, the first of a row owns
-     none (the viewport edge does that job). */
-  .rail-cell {
+  .header-nav { display: flex; align-items: center; justify-content: center; gap: 0; }
+  .header-link, .header-cta {
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    min-height: 36px;
+    padding: 6px 12px;
+    font: 500 var(--text-nav)/1.3 var(--font-sans);
+    color: inherit;
     white-space: nowrap;
-    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .header-link[aria-current="page"] {
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 5px;
+  }
+  .cta-short { display: none; }
+  .header-cta { gap: 10px; background: var(--color-accent); color: var(--color-accent-ink); }
+  .header-link:hover { background: var(--color-header-hover); }
+  .header-cta:hover { background: var(--color-study-paper-ink); color: var(--color-study-paper); }
+  .header-mark:focus-visible, .header-link:focus-visible, .header-cta:focus-visible {
+    outline: 2px solid var(--color-study-paper-ink);
+    outline-offset: 3px;
+  }
+  @keyframes sticker-float {
+    50% { transform: translateY(-3px) rotate(-6deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .header-mark { animation: none; }
+  }
+  @media (max-width: 899px) {
+    .polaroid-header { left: auto; right: 18px; transform: none; }
+    .header-mark { left: 18px; top: 34px; font-size: 20px; min-height: 32px; padding-inline: 10px; }
+  }
+  @media (max-width: 639px) {
+    .polaroid-header { max-width: calc(100% - 24px); }
+    .header-link, .header-cta { padding-inline: 8px; font-size: var(--text-nav-compact); }
+    .header-cta { gap: 6px; }
+    .cta-full { display: none; }
+    .cta-short { display: inline; }
+  }
+  @media (max-width: 439px) {
+    .site-header { height: 96px; }
+    .polaroid-header { top: 44px; left: 50%; right: auto; transform: translateX(-50%); }
+    .header-mark { top: 8px; font-size: 16px; min-height: 24px; padding: 2px 8px; }
   }
 
-  .rail-nav > * {
-    flex: 1 1 0;
-    min-width: 0;
-  }
-
-  .rail-nav > * + * {
-    border-left: 1px solid var(--color-line);
-  }
-
-  .rail-link {
-    padding-inline: 12px;
-  }
-  .rail-link[aria-current="page"] { box-shadow: inset 0 -3px 0 var(--color-accent); }
-
-  /* The email is a <button>, not a mailto link (Dom, 2026-09-07: a mail client
-     firing off unasked is a worse outcome than a copied string). So the UA's
-     button chrome has to come off — .rail-cell supplies the rest. font-SIZE is
-     left alone: the `text-sm` utility owns it, and the scoped selector here
-     outranks it. */
-  .rail-email {
-    color: var(--color-ink-dim);
-    padding-inline: 24px;
-    appearance: none;
-    background: none;
-    border: 0;
-    font-family: inherit;
-    font-weight: inherit;
-    letter-spacing: inherit;
-    cursor: pointer;
-  }
-
-  /* While the "Copied" flash is up the cell goes full ink — the one moment it
-     is louder than the two nav links beside it. Hover and focus are excluded
-     BY HAND: the invert below is a plain `.rail-cell:hover`, which this
-     attribute selector would otherwise outrank, painting ink on ink for the
-     whole 1.6s — and you have to be hovering to have clicked. */
-  .rail-email[data-copied]:not(:hover):not(:focus-visible) {
-    color: var(--color-ink);
-  }
-
-  /* Hidden on phones; the spacer wakes up at 640, the email at 1024. */
-  .rail-email,
-  .rail-spacer {
-    display: none;
-  }
-
-  /* ── The CTA ──────────────────────────────────────────────────────
-     No fill: ground, ink text, a 1px ink border on all four sides — rail
-     weight, not a heavier one — pulled 1px proud top and bottom so the border
-     lands exactly on the rail's hairlines rather than beside them. What marks
-     it as the button is that the border is INK while every other rule in the
-     rail is `line`. On phones it shares tier one with the wordmark and its
-     right border sits on the viewport edge. */
-  .rail-cta {
-    order: 1;
-    flex: 0 0 auto;
-    background-color: color-mix(in srgb, var(--color-accent) 16%, var(--color-ground));
-    color: var(--color-ink);
-    border: 1px solid var(--color-line);
-    box-shadow: inset 0 -4px 0 var(--color-accent);
-    margin-block: -1px;
-    padding-inline: 16px;
-    gap: 12px;
-  }
-
-  .rail-cta-mark {
-    display: grid;
-    place-items: center;
-    width: 22px;
-    height: 22px;
-    border-left: 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent);
-    padding-left: 10px;
-    font-family: var(--font-mono);
-    font-size: var(--text-label);
-    line-height: 1;
-  }
-
-  /* Invert: ink ground, page-colour text. The rules stay put. */
-  .rail-cell:hover,
-  .rail-cell:focus-visible {
-    background-color: var(--color-ink);
-    color: var(--color-ground);
-  }
-
-  .rail-cta:hover,
-  .rail-cta:focus-visible {
-    box-shadow: inset 0 -4px 0 var(--color-accent);
-  }
-
-  .rail-cta:hover .rail-cta-mark,
-  .rail-cta:focus-visible .rail-cta-mark {
-    border-left-color: color-mix(in srgb, var(--color-ground) 45%, transparent);
-  }
-
-  /* The global focus ring is ink, which vanishes against the inverted ink
-     cell — same square 2px ring, recoloured and pulled inside so it also
-     clears the viewport edge on the CTA. */
-  .rail-cell:focus-visible {
-    outline: 2px solid var(--color-ground);
-    outline-offset: -6px;
-  }
-
-  /* ── Tablet: one 56px row, email swapped for an empty spacer cell ── */
-  @media (min-width: 640px) {
-    .rail {
-      flex-wrap: nowrap;
-      height: 56px;
-    }
-    /* auto = stretch again, so all three fill the single row */
-    .rail-mark,
-    .rail-nav,
-    .rail-cta {
-      height: auto;
-    }
-    .rail-mark {
-      flex: 0 0 auto;
-      padding-inline: 30px;
-    }
-    .rail-nav {
-      flex: 1 1 auto;
-      order: 0;
-      border-top: 0;
-    }
-    .rail-nav > * {
-      flex: 0 0 auto;
-    }
-    .rail-nav > *:first-child {
-      border-left: 1px solid var(--color-line);
-    }
-    .rail-link {
-      padding-inline: 16px;
-    }
-    .rail-cta {
-      order: 0;
-      padding-inline: 16px;
-    }
-    .rail-nav > .rail-spacer {
-      display: block;
-      flex: 1 1 0;
-    }
-  }
-
-  /* ── Desktop: the email takes the middle back off the spacer ── */
-  @media (min-width: 1024px) {
-    .rail-nav > .rail-spacer {
-      display: none;
-    }
-    .rail-nav > .rail-email {
-      display: flex;
-      flex: 1 1 0;
-    }
-  }
 </style>
 
 <script>
-  import { onPageReady } from '../scripts/page-ready';
-  onPageReady(() => {
-  // Progressive enhancement, deliberately JS-only: with scripts off the cell is
-  // still the address, legible and selectable, which is what people do by hand
-  // anyway. Nothing else on the rail depends on this running.
-  document.querySelectorAll<HTMLButtonElement>("[data-copy-email]").forEach((button) => {
-    const address = button.dataset.copyEmail ?? "";
-    const label = button.querySelector<HTMLElement>("[data-copy-label]");
-    const status = button.querySelector<HTMLElement>("[data-copy-status]");
-    if (!address || !label || !status) return;
-
-    let timer: number | undefined;
-
-    async function write(text: string) {
-      if (window.isSecureContext && navigator.clipboard) {
-        try {
-          await navigator.clipboard.writeText(text);
-          return true;
-        } catch {
-          // Denied or unavailable — drop through to the legacy path.
-        }
-      }
-      const scratch = document.createElement("textarea");
-      scratch.value = text;
-      scratch.setAttribute("readonly", "");
-      scratch.style.cssText = "position:fixed;top:-9999px;opacity:0";
-      document.body.append(scratch);
-      scratch.select();
-      let ok = false;
-      try {
-        ok = document.execCommand("copy");
-      } catch {
-        ok = false;
-      }
-      scratch.remove();
-      return ok;
-    }
-
-    button.addEventListener("click", async () => {
-      const ok = await write(address);
-      window.clearTimeout(timer);
-
-      // Sighted feedback is the label swap; the live region is the same news
-      // for a screen reader, which would not otherwise hear the button's own
-      // content change.
-      label.textContent = ok ? "Copied" : "Copy failed";
-      status.textContent = ok ? `Copied ${address}` : `Could not copy. The address is ${address}`;
-      button.toggleAttribute("data-copied", ok);
-
-      timer = window.setTimeout(() => {
-        label.textContent = address;
-        status.textContent = "";
-        button.removeAttribute("data-copied");
-      }, 1600);
+  // The DOM is persisted, so update its route state before the incoming snapshot.
+  const syncHeader = () => {
+    const path = location.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
+    document.querySelectorAll<HTMLAnchorElement>("[data-header-page]").forEach(link => {
+      if (link.dataset.headerPage === path) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
     });
-  });
-  });
+    const contact = document.querySelector<HTMLAnchorElement>(".header-cta");
+    if (contact) contact.href = ["/ugc", "/creative-tech"].includes(path) ? "#book-call" : "/ugc#book-call";
+  };
+  document.addEventListener("astro:after-swap", syncHeader);
+  document.addEventListener("astro:page-load", syncHeader);
+  syncHeader();
 </script>

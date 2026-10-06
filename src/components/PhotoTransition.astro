@@ -8,6 +8,12 @@ import { ClientRouter } from 'astro:transitions';
   /* Astro restores history inside the swap; smooth scrolling must not animate it. */
   html[data-astro-transition] { scroll-behavior: auto !important; }
 
+  /* Named snapshots sit in a top layer; the fixed header needs its own topmost group. */
+  ::view-transition-group(site-header) { z-index: 100; animation: none; }
+  ::view-transition-old(site-header) { display: none; }
+  ::view-transition-new(site-header) { animation: none; mix-blend-mode: normal; }
+  ::view-transition-group(root) { z-index: 0; }
+
   [data-ugc-photo] { view-transition-name: ugc-photo; }
   [data-ugc-title] { view-transition-name: ugc-title; }
   [data-tech-photo] { view-transition-name: tech-photo; }

@@ -3,6 +3,7 @@ import "../styles/global.css";
 import DevBar from "../components/DevBar.astro";
 import PhotoTransition from "../components/PhotoTransition.astro";
 import ColourStudy from "../components/ColourStudy.astro";
+import Header from "../components/Header.astro";
 
 /**
  * Site-wide shell: meta, fonts, analytics slot.
@@ -18,7 +19,7 @@ interface Props {
   photoTransition?: boolean;
 }
 
-const { title, description, photoTransition = false } = Astro.props;
+const { title, description, photoTransition = true } = Astro.props;
 // build.format "file" emits /index.html, which must not leak into the canonical.
 const path = Astro.url.pathname.replace(/index\.html$/, "").replace(/\.html$/, "");
 const canonical = new URL(path, Astro.site);
@@ -57,6 +58,7 @@ const canonical = new URL(path, Astro.site);
   </head>
 
   <body class="bg-ground text-ink antialiased">
+    <Header />
     <slot />
     {/* Dev-only control rail. Renders on `npm run dev`, absent from the build. */}
     <DevBar />

@@ -9,7 +9,7 @@ const graphics = {
     art: audience,
     title: 'What happens after someone watches?',
     subtitle: 'I give interested viewers a useful next step, so a passing visit can become an ongoing conversation.',
-    viewBox: '0 165 1120 295',
+    viewBox: '64 195 1016 256',
     description: 'Define your ideal audience. Create content to attract them. Use a funnel to learn more about them. Collect email addresses, locations, needs and gaps.',
     panels: [
       ['18 185 264 275', 'Define your ideal audience.'],
@@ -23,13 +23,13 @@ const graphics = {
     art: production,
     title: 'What should you make next?',
     subtitle: 'I turn your audience’s real questions and frustrations into stories they can see themselves in, with personality that gives them a reason to watch.',
-    viewBox: '0 195 1120 295',
+    viewBox: '64 223 1016 256',
     description: 'Research: topics and scripts. Plan: people and logistics. Film: camera. Edit: story and colour.',
     panels: [
-      ['20 211 264 270', 'Research: topics and scripts.'],
-      ['292 211 264 270', 'Plan: people and logistics.'],
-      ['564 211 264 270', 'Film: camera.'],
-      ['836 211 264 270', 'Edit: story and colour.'],
+      ['18 211 264 275', 'Research: topics and scripts.'],
+      ['292 211 264 275', 'Plan: people and logistics.'],
+      ['564 211 264 275', 'Film: camera.'],
+      ['838 211 264 275', 'Edit: story and colour.'],
     ],
     caption: '',
   },
@@ -73,18 +73,20 @@ const drawing = graphic.art.replace(/^<svg\b[^>]*>/, '').replace(/<\/svg>\s*$/, 
 </div>
 <style>
   header{margin-bottom:24px}
-  h2{font-size:clamp(26px,3.3vw,41px);font-weight:500;letter-spacing:-.025em;line-height:1.15;margin:0 0 14px}
-  header p{font-size:clamp(16px,1.7vw,20px);line-height:1.5;color:var(--color-ink-dim);margin:0;max-width:62ch}
+  h2{font-size:var(--text-section);font-weight:500;letter-spacing:-.025em;line-height:1.15;margin:0 0 14px}
+  header p{font-size:var(--text-body);line-height:1.5;color:var(--color-ink-dim);margin:0;max-width:62ch}
+  /* Crop the source-art margins; both diagrams share the same canvas and scale. */
+  .wide-art{width:min(100%,var(--graphic-stage-width));max-width:var(--graphic-stage-width);margin:0;padding:0}
   svg{display:block;width:100%;height:auto;font-family:var(--font-sans);overflow:hidden}
   .compact-art{display:none}
   @media(max-width:700px){
     header{padding:0;margin-bottom:24px}
     .wide-art{display:none}
     .compact-art{display:block}
-    .panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 8px}
+    .panels{display:grid;grid-template-columns:repeat(2,minmax(0,var(--graphic-panel-width)));gap:24px 8px}
     .compact-art :global(.connector){display:none}
-    .feedback{font-size:14px;line-height:1.5;color:var(--color-ink-dim);margin:20px 0 0}
-    .site-root{font-size:18px;font-weight:500;text-align:center;margin:0 0 20px}
+    .feedback{font-size:var(--text-caption);line-height:1.5;color:var(--color-ink-dim);margin:20px 0 0}
+    .site-root{font-size:var(--text-body);font-weight:500;text-align:center;margin:0 0 20px}
     .portfolio .panels{grid-template-columns:1fr;max-width:420px;margin:auto;gap:20px}
   }
 </style>
