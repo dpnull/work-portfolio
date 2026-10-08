@@ -325,12 +325,11 @@ html[data-colour-study] :is(.print,.note,.opening-print,.introduction>.portrait)
 html[data-colour-study] :is(.opening-print figcaption span,.note small) { color:var(--color-study-paper-dim) !important; }
 html[data-colour-study] .hero h2>span { color:var(--color-study-paper-ink);background:var(--color-study-paper); }
 html[data-colour-study] .pill { color:var(--color-study-paper-ink); }
-html[data-colour-study] .note:is(:hover,:focus-visible) .open { background:var(--color-accent);color:var(--color-accent-ink); }
 
 /* The optional second layer adds editorial marks to the existing geometry.
    It leaves the reviewed content, row spacing and section spacing intact. */
 html[data-finish="character"] body::after { opacity:.10; }
-html[data-finish="character"] :is(.intro-copy h1,.opening-copy h1,.bio h1) {
+html[data-finish="character"] .bio h1 {
   text-decoration:underline;text-decoration-color:var(--color-study-pop);
   text-decoration-thickness:.16em;text-underline-offset:.1em;text-decoration-skip-ink:none;
 }
@@ -357,7 +356,6 @@ html[data-finish="character"] .proof { background:var(--color-study-pop);color:v
 html[data-finish="character"] .proof-context { color:inherit; }
 html[data-finish="character"] .hero h2>span { background:var(--color-study-pop);color:var(--color-study-pop-ink); }
 html[data-finish="character"] .cover .paper { border-top:4px solid var(--color-accent); }
-html[data-finish="character"] .cover .open { text-decoration-color:var(--color-accent);text-decoration-thickness:2px; }
 html[data-colour-lab] body::after { display:none; }
 html[data-colour-lab] astro-dev-toolbar { display:none; }
 
