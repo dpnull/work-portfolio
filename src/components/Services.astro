@@ -3,7 +3,7 @@ import offers from "../data/offers.json";
 interface Props { kind?: "ads" | "systems" }
 const { kind = "ads" } = Astro.props;
 const packages = kind === "ads"
-  ? [offers.ad, { ...offers.monthly, title: "Retainer", note: "I use my own audience data to shape content around your ideal customer and refine what turns their interest into action." }]
+  ? [offers.ad, { ...offers.monthly, title: "Retainer", description: "A month of content shaped and funneled around your ideal audience.", note: "I use my own audience data to shape content around your ideal customer and refine what turns their interest into action." }]
   : [offers.monthly, offers.founder];
 ---
 <section id="work-with-me" aria-labelledby="services-heading">
