@@ -1,30 +1,34 @@
+---
+import offers from "../data/offers.json";
+interface Props { kind?: "ads" | "systems" }
+const { kind = "ads" } = Astro.props;
+const packages = kind === "ads"
+  ? [offers.ad, { ...offers.monthly, title: "Retainer", note: "I use my own audience data to shape content around your ideal customer and refine what turns their interest into action." }]
+  : [offers.monthly, offers.founder];
+---
 <section id="work-with-me" aria-labelledby="services-heading">
-  <h2 id="services-heading" class="font-display text-section">Work with me</h2>
+  <h2 id="services-heading" class="font-display text-section">{kind === "ads" ? "Work with me" : "Monthly retainers"}</h2>
   <div class="offers">
-    <article>
-      <h3>UGC videos</h3>
-      <p class="price">From US$150 <span>/ video</span></p>
-      <p>Creator-led videos for your brand’s social channels and ads, from concept to final edit.</p>
-      <p class="note">Final pricing depends on the brief, deliverables and usage.</p>
-    </article>
-    <article>
-      <h3>Creative production</h3>
-      <p class="price">Quoted by scope</p>
-      <p>Content planning, filming, editing and production assistance—for a project or ongoing support.</p>
-      <p class="note">Tell me what you need and we’ll work out the scope together.</p>
-    </article>
+    {packages.map((offer, index) => (
+      <article>
+        <h3>{offer.title}</h3>
+        <p class="price">From {offer.price} {offer.period && <span>{offer.period}</span>}</p>
+        <p>{offer.description}</p>
+        <p class="note">{offer.note}{kind === "ads" && index === 1 && <> <a href="/content-systems">Explore content systems →</a></>}</p>
+      </article>
+    ))}
   </div>
 </section>
 <style>
   section{padding-top:48px;scroll-margin-top:90px}
   h2{margin:0 0 32px}
-  .offers{display:grid;grid-template-columns:1fr 1fr;border-block:1px solid var(--color-line)}
-  article{padding:28px 32px 28px 0}
-  article+article{padding-left:32px;border-left:1px solid var(--color-line)}
+  .offers{display:grid;grid-template-columns:1fr 1fr;column-gap:32px;border-top:1px solid var(--color-line)}
+  article{padding:28px 0}
   h3{font-size:var(--text-subheading);font-weight:600;margin:0 0 12px;letter-spacing:-.02em}
   p{font-size:var(--text-body);line-height:1.5;max-width:45ch;margin:0 0 14px}
   .price{font-size:var(--text-subheading);font-weight:600;letter-spacing:-.025em;margin-bottom:20px}
   .price span{font-size:var(--text-caption);font-weight:400;letter-spacing:0}
   .note{font-size:var(--text-caption);color:var(--color-ink-dim);margin-bottom:0}
-  @media(max-width:650px){.offers{grid-template-columns:1fr}article{padding:24px 0}article+article{padding:24px 0;border-left:0;border-top:1px solid var(--color-line)}}
+  .note a{text-decoration:underline;text-underline-offset:3px}
+  @media(max-width:650px){.offers{grid-template-columns:1fr}article{padding:24px 0}}
 </style>

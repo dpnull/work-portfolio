@@ -16,9 +16,9 @@ const options = [
   <link rel="preload" href="/fonts/instrument-sans-400-700.woff2" as="font" type="font/woff2" crossorigin/>
 </head>
 <body>
-  <header class="review-nav"><a href="/creative-tech#audience-results">← Creative Tech</a><nav aria-label="Compare audience proof mockups">{options.map(option=><a href={`#option-${option.id}`}>0{option.id}<span> · {option.name}</span></a>)}</nav></header>
+  <header class="review-nav"><a href="/content-systems#audience-results">← Content systems</a><nav aria-label="Compare audience proof mockups">{options.map(option=><a href={`#option-${option.id}`}>0{option.id}<span> · {option.name}</span></a>)}</nav></header>
   <main>
-    <div class="review-intro"><p>Creative Tech / Audience proof</p><h1>Three ways to show the system.</h1><p>Verified database totals. Illustrative contact entries. Choose the direction that feels most like you.</p></div>
+    <div class="review-intro"><p>Content systems / Audience proof</p><h1>Three ways to show the system.</h1><p>Verified database totals. Illustrative contact entries. Choose the direction that feels most like you.</p></div>
     {options.map(option=><section id={`option-${option.id}`} class="mock" aria-labelledby={`mock-heading-${option.id}`}>
       <div class="mock-label"><h2 id={`mock-heading-${option.id}`}><span>0{option.id}</span> {option.name}</h2><p>{option.description}</p><a href={`/reviews/leads/${option.id}`}>Open this mock ↗</a></div>
       <div class="mock-art"><AudienceProof variant={option.id}/></div>

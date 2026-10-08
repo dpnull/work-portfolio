@@ -5,8 +5,8 @@ interface Props {
   description?: string;
 }
 const {
-  heading = "Let’s talk about your next video.",
-  description = "Have a brand, a brief or an idea? Let’s talk through what you need, your timeline and whether we’re a good fit.",
+  heading = "Have a product in mind?",
+  description = "Book a 15-minute call to talk through your product, audience and the story we could tell. Choose a one-off ad or a monthly retainer.",
 } = Astro.props;
 ---
 
@@ -15,8 +15,8 @@ const {
     <div class="hero-copy-inner">
       <h2 id="hero-heading"><span>{heading}</span></h2>
       <p class="hero-support">{description}</p>
-      <a class="book-button" href={site.bookingUrl} target="_blank" rel="noopener noreferrer">Book a free video call <span aria-hidden="true">↗</span></a>
-      <p class="call-note">Or alternatively email me at <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      <a class="book-button" href={site.bookingUrl} target="_blank" rel="noopener noreferrer">Book a 15-minute call <span aria-hidden="true">↗</span></a>
+      <p class="call-note">Prefer email? Send your brief to <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
     </div>
   </div>
   <div class="hero-portrait">

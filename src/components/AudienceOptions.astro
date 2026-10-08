@@ -10,14 +10,13 @@ const { opening = false, hub = false } = Astro.props;
   <section id={opening ? "introduction" : "audience-03"} aria-label={opening ? "About me" : "Audience and content"}>
     {!opening && <div class="audience-copy">
       <h2>A connection with young men figuring things out.</h2>
-      <p>From looking after themselves to building better habits, my work speaks to the everyday challenges they recognise.</p>
+      <p>Appearance, discipline and self-improvement are part of my own content. My audience gives me a direct connection to the young men your brand wants to reach, and a clear sense of what they care about.</p>
     </div>}
     {!opening && <div class="kit">
       <div class="metric">
         <svg viewBox="0 0 80 80" role="img" aria-label="95 percent male audience"><circle class="track" cx="40" cy="40" r="33"/><circle class="portion" cx="40" cy="40" r="33" pathLength="100" stroke-dasharray="95 5" transform="rotate(-90 40 40)"/><text x="40" y="46" text-anchor="middle">95%</text></svg>
         <span>Male audience</span>
       </div>
-      <span class="divider" aria-hidden="true"></span>
       <div class="metric"><strong>18–34</strong><span>Age range</span></div>
     </div>}
     {opening ? <div class="about-story">
@@ -30,8 +29,8 @@ const { opening = false, hub = false } = Astro.props;
         <p class="intro">Computer Science background.<br/>Big nerd and a social media creator{hub ? " & creative technologist." : " & professional assistant."}</p>
         <p>I make educational videos that feel relatable, from the first idea to the final edit. I’ve grown my own audiences, built a funnel that brought in 1,750 email subscribers, and plan topics and film for a 7M-follower creator.</p>
         {hub ? <nav class="portfolio-paths" aria-label="Choose a portfolio">
-          <a href="/ugc"><span><strong>UGC & video</strong><small>Videos, brand films & creative production.</small></span><span aria-hidden="true">↗</span></a>
-          <a href="/creative-tech"><span><strong>Creative tech & content systems</strong><small>Audience funnels, workflows & things I’ve built.</small></span><span aria-hidden="true">↗</span></a>
+          <a href="/brand-ads"><span><strong>Brand ads</strong><small>Videos, brand films & creative production.</small></span><span aria-hidden="true">↗</span></a>
+          <a href="/content-systems"><span><strong>Content systems</strong><small>Audience funnels, workflows & things I’ve built.</small></span><span aria-hidden="true">↗</span></a>
         </nav> : <dl>
           <div><dt>Behind the content</dt><dd>Research, scripts, filming, editing & colour grading.</dd></div>
           <div><dt>Behind the scenes</dt><dd>Production planning, drone work & AI workflows.</dd></div>
@@ -68,10 +67,9 @@ dl{margin:28px 0 0;display:grid;gap:18px}dt{font-size:var(--text-body);font-weig
 .audience-copy{max-width:52ch;margin:0 auto 28px;text-align:center}
 .audience-copy h2{font-size:var(--text-section);font-weight:500;line-height:1.15;letter-spacing:-.035em;margin:0 0 16px}
 .audience-copy p{font-size:var(--text-body);line-height:1.6;margin:0}
-.kit{display:flex;justify-content:center;align-items:center;gap:40px;padding:22px 0;border-block:1px solid var(--color-line)}
+.kit{display:flex;justify-content:center;align-items:center;gap:40px;padding:22px 0}
 .metric{display:flex;align-items:center;justify-content:center;gap:12px;font-size:var(--text-body);font-weight:600}
 .metric strong{font-size:clamp(24px,2.4vw,34px);line-height:1;letter-spacing:-.045em;font-weight:650}
-.divider{width:1px;height:32px;background:var(--color-line);flex-shrink:0}
 svg{width:64px;height:64px;flex-shrink:0}circle{fill:none;stroke-width:5px}.track{stroke:var(--color-line)}.portion{stroke:var(--color-ink)}text{fill:var(--color-ink);font-size:23px;font-weight:600}
 @media(min-width:640px){.audience{padding-inline:32px}}
 @media(max-width:550px){.kit{gap:16px}.metric{gap:8px;font-size:var(--text-caption);flex:1}.metric:last-child{flex-direction:column}svg{width:56px;height:56px}}

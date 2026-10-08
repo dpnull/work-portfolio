@@ -5,5 +5,5 @@ import PortfolioCover from '../components/PortfolioCover.astro';
 <script>
   // Preserve inbound links to sections that lived on the original homepage.
   const legacy = new Set(['#work', '#work-with-me', '#book-call', '#about', '#introduction', '#portfolio-work', '#audience-03', '#audience-options']);
-  if (legacy.has(window.location.hash)) window.location.replace(`/ugc${window.location.hash}`);
+  if (legacy.has(window.location.hash)) window.location.replace(`/brand-ads${window.location.hash}`);
 </script>

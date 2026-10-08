@@ -2,10 +2,10 @@
 import site from "../data/site.json";
 const path = Astro.url.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
 const nav = [
-  { label: "UGC & Video", href: "/ugc" },
-  { label: "Creative Tech", href: "/creative-tech" },
+  { label: "Brand ads", href: "/brand-ads" },
+  { label: "Content systems", href: "/content-systems" },
 ];
-const contactUrl = nav.some(item => item.href === path) ? "#book-call" : "/ugc#book-call";
+const contactUrl = nav.some(item => item.href === path) ? "#book-call" : "/brand-ads#book-call";
 ---
 
 <header class="site-header" data-site-header transition:name="site-header" transition:persist="site-header" transition:animate="none">
@@ -16,8 +16,8 @@ const contactUrl = nav.some(item => item.href === path) ? "#book-call" : "/ugc#b
       {nav.map((item) => (
         <a href={item.href} data-header-page={item.href} aria-current={path === item.href ? "page" : undefined} class="header-link">{item.label}</a>
       ))}
-      <a href={contactUrl} class="header-cta" aria-label="Book a free video call">
-        <span class="cta-full">Book a free video call</span><span class="cta-short" aria-hidden="true">Book a call</span><span aria-hidden="true">↗</span>
+      <a href={contactUrl} class="header-cta" aria-label="Book a 15-minute call">
+        <span class="cta-full">Book a 15-minute call</span><span class="cta-short" aria-hidden="true">Book a call</span><span aria-hidden="true">↗</span>
       </a>
     </nav>
   </div>
@@ -137,7 +137,7 @@ const contactUrl = nav.some(item => item.href === path) ? "#book-call" : "/ugc#b
       else link.removeAttribute("aria-current");
     });
     const contact = document.querySelector<HTMLAnchorElement>(".header-cta");
-    if (contact) contact.href = ["/ugc", "/creative-tech"].includes(path) ? "#book-call" : "/ugc#book-call";
+    if (contact) contact.href = ["/brand-ads", "/content-systems"].includes(path) ? "#book-call" : "/brand-ads#book-call";
   };
   document.addEventListener("astro:after-swap", syncHeader);
   document.addEventListener("astro:page-load", syncHeader);
