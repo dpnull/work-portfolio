@@ -16,8 +16,8 @@ const contactUrl = nav.some(item => item.href === path) ? "#book-call" : "/ugc#b
       {nav.map((item) => (
         <a href={item.href} data-header-page={item.href} aria-current={path === item.href ? "page" : undefined} class="header-link">{item.label}</a>
       ))}
-      <a href={contactUrl} class="header-cta" aria-label="Book a free video call">
-        <span class="cta-full">Book a free video call</span><span class="cta-short" aria-hidden="true">Book a call</span><span aria-hidden="true">↗</span>
+      <a href={contactUrl} class="header-cta" aria-label="Book a 15-minute call">
+        <span class="cta-full">Book a 15-minute call</span><span class="cta-short" aria-hidden="true">Book a call</span><span aria-hidden="true">↗</span>
       </a>
     </nav>
   </div>

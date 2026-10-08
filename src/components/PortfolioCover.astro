@@ -5,7 +5,7 @@ interface Props { choice: string; showCompare?: boolean; }
 const { choice, showCompare = false } = Astro.props;
 const names=['Lifted prints','Fanned notes','Picture notes'];
 ---
-<Base title={`Dom — ${names[Number(choice)-1]}`} description="UGC, video and creative technology by Dom Przewozny." photoTransition>
+<Base title="Dom Przewozny — Video & Creative Tech" description="Short videos for grooming, fitness, wellbeing and tech brands, plus content production and audience systems. Scripts, filming and editing by Dom Przewozny." photoTransition>
 <div class:list={['cover',`cover-${choice}`]}>
   <main>
     <section class="personal" aria-label="About Dom">
@@ -16,16 +16,16 @@ const names=['Lifted prints','Fanned notes','Picture notes'];
           <span class="collage-cue">Explore my videos ↗</span>
         </a>
       </div>
-      <div class="bio"><h1>Stories with personality.</h1><p>I’m Dom. I make videos about the things we overthink, struggle with and try to change. I bring my humour, curiosity and love of filmmaking to the brands I work with.</p><SocialRail inline horizontal /></div>
+      <div class="bio"><h1>Stories with personality.</h1><p>I’m Dom. I script, film and edit short videos for grooming, fitness, wellbeing and tech brands. My work brings humour and curiosity to the things we overthink, struggle with and try to change.</p><SocialRail inline horizontal /></div>
     </section>
     <section class="notes" aria-label="Explore my portfolios">
       <a class="note video-note" href="/ugc" data-photo-link={choice === '1' ? '' : undefined}>
         <div class="note-photo"><img data-ugc-photo={choice === '1' ? '' : undefined} src="/clips/its-all-a-lie.webp" alt="A frame from Dom’s personal cinematic short, It’s all a lie" width="720" height="1280" fetchpriority="high"/><span class="photo-label">It’s all a lie / personal film</span></div>
-        <div class="paper"><h2 data-ugc-title={choice === '1' ? '' : undefined}>UGC & Video</h2><p>Brand films, educational videos and creative production.</p><span class="open">View videos <span aria-hidden="true">↗</span></span></div>
+        <div class="paper"><h2 data-ugc-title={choice === '1' ? '' : undefined}>UGC & Video</h2><p>Short videos for your brand’s social channels and ads. Three-video pilots from US$600.</p><span class="open">View videos <span aria-hidden="true">↗</span></span></div>
       </a>
       <a class="note tech-note" href="/creative-tech" data-photo-link={choice === '1' ? '' : undefined}>
         <div class="note-photo"><img data-tech-photo={choice === '1' ? '' : undefined} src="/work-with-me.webp" alt="Dom looking over the city at sunset" width="800" height="800"/><span class="photo-label">Me / behind the scenes</span></div>
-        <div class="paper"><h2 data-tech-title={choice === '1' ? '' : undefined}>Creative Tech & Content Systems</h2><p>I built a 28-question audience assessment to understand the people watching.</p><span class="open">View projects <span aria-hidden="true">↗</span></span></div>
+        <div class="paper"><h2 data-tech-title={choice === '1' ? '' : undefined}>Creative Tech & Content Systems</h2><p>Content planning, filming and editing, with the systems to keep it organised. Projects from US$850.</p><span class="open">View projects <span aria-hidden="true">↗</span></span></div>
       </a>
     </section>
   </main>
