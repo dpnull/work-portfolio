@@ -10,7 +10,7 @@ import { colourStudies } from '../../data/colour-studies';
   <title>Five colour directions · @dpy2k</title>
 </head>
 <body>
-  <header class="lab-header"><a href="/">@dpy2k</a><span>Colour & character studies</span><a id="full-preview" href="/creative-tech?palette=cobalt&finish=character" target="_blank" rel="noopener">Open full preview ↗</a></header>
+  <header class="lab-header"><a href="/">@dpy2k</a><span>Colour & character studies</span><a id="full-preview" href="/content-systems?palette=cobalt&finish=character" target="_blank" rel="noopener">Open full preview ↗</a></header>
   <main class="lab-layout">
     <aside class="lab-controls" aria-label="Design comparison controls">
       <div class="lab-intro"><h1>Find your colour.</h1><p>Five new palettes, plus your original. Add the styling layer to compare.</p></div>
@@ -25,9 +25,9 @@ import { colourStudies } from '../../data/colour-studies';
       <details class="brand-notes"><summary>Your current colours</summary><p>Butter <code>#F6F1DA</code><br/>Forest <code>#23382D</code><br/>Green <code>#35604A</code><br/>Periwinkle <code>#C8A9F9</code></p><p>The photographs add cool dusk blue. The current grain softens the contrast across everything.</p></details>
     </aside>
     <section class="lab-preview" aria-label="Live portfolio preview">
-      <div class="preview-toolbar"><nav aria-label="Preview page"><button type="button" data-preview-page="/">Cover</button><button type="button" data-preview-page="/ugc">UGC & Video</button><button type="button" data-preview-page="/creative-tech" aria-pressed="true">Creative Tech</button></nav><span id="preview-state" aria-live="polite">01 / Chalk & Cobalt · Added styling</span></div>
+      <div class="preview-toolbar"><nav aria-label="Preview page"><button type="button" data-preview-page="/">Cover</button><button type="button" data-preview-page="/brand-ads">Brand ads</button><button type="button" data-preview-page="/content-systems" aria-pressed="true">Content systems</button></nav><span id="preview-state" aria-live="polite">01 / Chalk & Cobalt · Added styling</span></div>
       <div class="direction-note"><strong id="direction-name">Chalk & Cobalt</strong><p id="direction-description">{colourStudies[1].description}</p></div>
-      <iframe id="site-preview" title="Portfolio colour preview" src="/creative-tech?palette=cobalt&finish=character"></iframe>
+      <iframe id="site-preview" title="Portfolio colour preview" src="/content-systems?palette=cobalt&finish=character"></iframe>
     </section>
   </main>
 </body>
@@ -40,8 +40,8 @@ import { colourStudies } from '../../data/colour-studies';
   const query = new URLSearchParams(location.search);
   let palette: ColourStudyId = colourStudies.find(item => item.id === query.get('palette'))?.id ?? 'cobalt';
   let character = query.get('finish') !== 'plain';
-  const allowedPages = ['/', '/ugc', '/creative-tech'];
-  let page = allowedPages.includes(query.get('page') ?? '') ? query.get('page')! : '/creative-tech';
+  const allowedPages = ['/', '/brand-ads', '/content-systems'];
+  let page = allowedPages.includes(query.get('page') ?? '') ? query.get('page')! : '/content-systems';
   function previewUrl() {
     const url = new URL(page, location.origin);
     url.searchParams.set('palette', palette);

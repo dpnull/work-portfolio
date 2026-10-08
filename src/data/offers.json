@@ -1,0 +1,23 @@
+{
+  "ad": {
+    "title": "One-off ad",
+    "price": "$300",
+    "period": "",
+    "description": "One strong ad, scripted, filmed and edited. Includes a planning call and one shoot of up to 3 hours.",
+    "note": "Flexible and fast deadlines."
+  },
+  "monthly": {
+    "title": "Monthly Content System",
+    "price": "$1,500",
+    "period": "/ month",
+    "description": "One filming day of up to 6 hours, 10\u201312 videos and 15\u201320 stills. A month of content shaped around your audience.",
+    "note": "Monthly planning, hooks and captions, two combined revision rounds and a review of what worked."
+  },
+  "founder": {
+    "title": "Founder Content Partner",
+    "price": "$2,500",
+    "period": "/ month",
+    "description": "Two filming sessions and 16\u201320 videos, with content pillars, recurring series and script frameworks.",
+    "note": "Versions for LinkedIn, TikTok and Instagram, a monthly review and async communication between sessions."
+  }
+}

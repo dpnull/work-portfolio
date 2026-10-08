@@ -21,15 +21,16 @@ const graphics = {
   },
   production: {
     art: production,
-    title: 'From the first idea to the final edit.',
-    subtitle: 'I turn your audience’s real questions and frustrations into stories they can see themselves in. Research, scripts, shoot planning and editing are part of one process.',
+    title: 'From audience insight to the next month of content.',
+    subtitle: 'Research what your audience cares about, plan the stories, film and edit them, then review what worked to shape the next month.',
     viewBox: '64 223 1016 256',
-    description: 'Research: topics and scripts. Plan: people and logistics. Film: camera. Edit: story and colour.',
+    description: 'Research: topics and scripts. Plan: people and logistics. Film: camera. Edit: story and colour. Review: results and next steps.',
     panels: [
-      ['18 211 264 275', 'Research: topics and scripts.'],
-      ['292 211 264 275', 'Plan: people and logistics.'],
-      ['564 211 264 275', 'Film: camera.'],
-      ['838 211 264 275', 'Edit: story and colour.'],
+      ['20 211 264 275', 'Research: topics and scripts.'],
+      ['224 211 264 275', 'Plan: people and logistics.'],
+      ['428 211 264 275', 'Film: camera.'],
+      ['632 211 264 275', 'Edit: story and colour.'],
+      ['836 211 264 275', 'Review: results and next steps.'],
     ],
     caption: '',
   },
@@ -38,10 +39,10 @@ const graphics = {
     title: 'Two disciplines. One connected home.',
     subtitle: 'A shared design, with space for both sides of my work.',
     viewBox: '0 150 1120 395',
-    description: 'work.dpy2k.com connects UGC and Video with Creative Tech. Self-hosted video sits alongside audience funnels, creator production and this portfolio.',
+    description: 'work.dpy2k.com connects Brand ads with Content systems. Self-hosted video sits alongside audience funnels, creator production and this portfolio.',
     panels: [
-      ['115 272 360 265', 'UGC and Video: self-hosted video.'],
-      ['645 272 360 265', 'Creative Tech: audience funnel, creator production and this portfolio.'],
+      ['115 272 360 265', 'Brand ads: self-hosted video.'],
+      ['645 272 360 265', 'Content systems: audience funnel, creator production and this portfolio.'],
     ],
     caption: '',
   },
@@ -50,6 +51,10 @@ const { kind } = Astro.props;
 const graphic = graphics[kind];
 // These are local, reviewed SVG sources; retain native text and shared site tokens.
 const drawing = graphic.art.replace(/^<svg\b[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+// Isolate each production stage in compact views so neighboring labels do not enter the crop.
+const panelDrawing = (index: number) => kind === 'production'
+  ? drawing.replace(/<g data-production-stage="(\d+)"[^>]*>[\s\S]*?<\/g>/g, (group, stage) => Number(stage) === index ? group : '')
+  : drawing;
 ---
 <div class:list={['work-graphic', kind]}>
   <header>
@@ -62,9 +67,9 @@ const drawing = graphic.art.replace(/^<svg\b[^>]*>/, '').replace(/<\/svg>\s*$/, 
   <div class="compact-art">
     {kind === 'portfolio' && <p class="site-root">work.dpy2k.com</p>}
     <div class="panels">
-      {graphic.panels.map(([viewBox, label]) => (
+      {graphic.panels.map(([viewBox, label], index) => (
         <svg viewBox={viewBox} role="img" aria-label={label}>
-          <g aria-hidden="true" set:html={drawing} />
+          <g aria-hidden="true" set:html={panelDrawing(index)} />
         </svg>
       ))}
     </div>

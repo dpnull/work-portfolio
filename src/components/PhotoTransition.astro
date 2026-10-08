@@ -14,23 +14,23 @@ import { ClientRouter } from 'astro:transitions';
   ::view-transition-new(site-header) { animation: none; mix-blend-mode: normal; }
   ::view-transition-group(root) { z-index: 0; }
 
-  [data-ugc-photo] { view-transition-name: ugc-photo; }
-  [data-ugc-title] { view-transition-name: ugc-title; }
+  [data-brand-ads-photo] { view-transition-name: brand-ads-photo; }
+  [data-brand-ads-title] { view-transition-name: brand-ads-title; }
   [data-tech-photo] { view-transition-name: tech-photo; }
   [data-tech-title] { view-transition-name: tech-title; }
 
-  ::view-transition-group(ugc-photo),
-  ::view-transition-group(ugc-title),
+  ::view-transition-group(brand-ads-photo),
+  ::view-transition-group(brand-ads-title),
   ::view-transition-group(tech-photo),
   ::view-transition-group(tech-title) {
     animation-duration: 420ms;
     animation-timing-function: cubic-bezier(.22, .8, .2, 1);
   }
-  ::view-transition-group(ugc-photo), ::view-transition-group(tech-photo) { z-index: 2; }
-  ::view-transition-group(ugc-title), ::view-transition-group(tech-title) { z-index: 3; }
-  ::view-transition-image-pair(ugc-photo), ::view-transition-image-pair(tech-photo) { isolation: auto; }
-  ::view-transition-old(ugc-photo), ::view-transition-old(tech-photo) { display: none; }
-  ::view-transition-new(ugc-photo), ::view-transition-new(tech-photo) {
+  ::view-transition-group(brand-ads-photo), ::view-transition-group(tech-photo) { z-index: 2; }
+  ::view-transition-group(brand-ads-title), ::view-transition-group(tech-title) { z-index: 3; }
+  ::view-transition-image-pair(brand-ads-photo), ::view-transition-image-pair(tech-photo) { isolation: auto; }
+  ::view-transition-old(brand-ads-photo), ::view-transition-old(tech-photo) { display: none; }
+  ::view-transition-new(brand-ads-photo), ::view-transition-new(tech-photo) {
     animation: none;
     mix-blend-mode: normal;
     height: 100%;
@@ -38,12 +38,12 @@ import { ClientRouter } from 'astro:transitions';
   }
   /* The cover names both cards; a portfolio page names only its own. The unpaired
      card must leave and arrive with the page, not linger above it. */
-  ::view-transition-old(ugc-photo):only-child, ::view-transition-old(ugc-title):only-child,
+  ::view-transition-old(brand-ads-photo):only-child, ::view-transition-old(brand-ads-title):only-child,
   ::view-transition-old(tech-photo):only-child, ::view-transition-old(tech-title):only-child {
     display: block;
     animation: portfolio-out 140ms ease both;
   }
-  ::view-transition-new(ugc-photo):only-child, ::view-transition-new(ugc-title):only-child,
+  ::view-transition-new(brand-ads-photo):only-child, ::view-transition-new(brand-ads-title):only-child,
   ::view-transition-new(tech-photo):only-child, ::view-transition-new(tech-title):only-child {
     animation: portfolio-in 260ms 100ms ease both;
   }
@@ -54,7 +54,7 @@ import { ClientRouter } from 'astro:transitions';
 
   @media (prefers-reduced-motion: reduce) {
     @view-transition { navigation: none; }
-    [data-ugc-photo], [data-ugc-title], [data-tech-photo], [data-tech-title] { view-transition-name: none; }
+    [data-brand-ads-photo], [data-brand-ads-title], [data-tech-photo], [data-tech-title] { view-transition-name: none; }
     ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation-duration: .01ms !important; animation-delay: 0ms !important; }
   }
 </style>

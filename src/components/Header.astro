@@ -2,10 +2,10 @@
 import site from "../data/site.json";
 const path = Astro.url.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
 const nav = [
-  { label: "UGC & Video", href: "/ugc" },
-  { label: "Creative Tech", href: "/creative-tech" },
+  { label: "Brand ads", href: "/brand-ads" },
+  { label: "Content systems", href: "/content-systems" },
 ];
-const contactUrl = nav.some(item => item.href === path) ? "#book-call" : "/ugc#book-call";
+const contactUrl = nav.some(item => item.href === path) ? "#book-call" : "/brand-ads#book-call";
 ---
 
 <header class="site-header" data-site-header transition:name="site-header" transition:persist="site-header" transition:animate="none">
@@ -137,7 +137,7 @@ const contactUrl = nav.some(item => item.href === path) ? "#book-call" : "/ugc#b
       else link.removeAttribute("aria-current");
     });
     const contact = document.querySelector<HTMLAnchorElement>(".header-cta");
-    if (contact) contact.href = ["/ugc", "/creative-tech"].includes(path) ? "#book-call" : "/ugc#book-call";
+    if (contact) contact.href = ["/brand-ads", "/content-systems"].includes(path) ? "#book-call" : "/brand-ads#book-call";
   };
   document.addEventListener("astro:after-swap", syncHeader);
   document.addEventListener("astro:page-load", syncHeader);

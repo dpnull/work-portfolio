@@ -2,7 +2,7 @@ import type { TransitionBeforePreparationEvent } from 'astro:transitions/client'
 
 // Keep this experiment bounded to the cover and its two portfolios.
 const covers = new Set(['/', '/covers/1']);
-const routes = new Set([...covers, '/ugc', '/creative-tech']);
+const routes = new Set([...covers, '/brand-ads', '/content-systems']);
 const pages = new Map<string, { expires: number; document: Promise<Document> }>();
 const assets = new Map<string, Promise<void>>();
 const pathOf = (url: URL) => url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
@@ -55,7 +55,7 @@ function prepare(url: URL) {
     for (const image of Array.from(next.querySelectorAll<HTMLImageElement>('img[src]')).slice(0, 6)) {
       const webp = image.closest('picture')?.querySelector('source[type="image/webp"]')?.getAttribute('srcset');
       const work = warmAsset(new URL(webp || image.getAttribute('src')!, key).href, 'image');
-      if (image.hasAttribute('data-ugc-photo') || image.hasAttribute('data-tech-photo')) ready.push(work);
+      if (image.hasAttribute('data-brand-ads-photo') || image.hasAttribute('data-tech-photo')) ready.push(work);
     }
     await Promise.all(ready);
     return next;
@@ -69,7 +69,7 @@ function warmDestination() {
   if (saveData()) return;
   const current = pathOf(new URL(location.href));
   if (!routes.has(current)) return;
-  const targets = covers.has(current) ? ['/ugc', '/creative-tech'] : ['/'];
+  const targets = covers.has(current) ? ['/brand-ads', '/content-systems'] : ['/'];
   for (const target of targets) void prepare(new URL(target, location.href)).catch(() => {});
 }
 

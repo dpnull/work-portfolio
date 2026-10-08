@@ -10,7 +10,7 @@ const { opening = false, hub = false } = Astro.props;
   <section id={opening ? "introduction" : "audience-03"} aria-label={opening ? "About me" : "Audience and content"}>
     {!opening && <div class="audience-copy">
       <h2>A connection with young men figuring things out.</h2>
-      <p>Grooming, fitness and habits are part of my own content. If your customers are young men, I understand the questions they ask and the stories that get their attention.</p>
+      <p>Appearance, discipline and self-improvement are part of my own content. My audience gives me a direct connection to the young men your brand wants to reach, and a clear sense of what they care about.</p>
     </div>}
     {!opening && <div class="kit">
       <div class="metric">
@@ -30,8 +30,8 @@ const { opening = false, hub = false } = Astro.props;
         <p class="intro">Computer Science background.<br/>Big nerd and a social media creator{hub ? " & creative technologist." : " & professional assistant."}</p>
         <p>I make educational videos that feel relatable, from the first idea to the final edit. I’ve grown my own audiences, built a funnel that brought in 1,750 email subscribers, and plan topics and film for a 7M-follower creator.</p>
         {hub ? <nav class="portfolio-paths" aria-label="Choose a portfolio">
-          <a href="/ugc"><span><strong>UGC & video</strong><small>Videos, brand films & creative production.</small></span><span aria-hidden="true">↗</span></a>
-          <a href="/creative-tech"><span><strong>Creative tech & content systems</strong><small>Audience funnels, workflows & things I’ve built.</small></span><span aria-hidden="true">↗</span></a>
+          <a href="/brand-ads"><span><strong>Brand ads</strong><small>Videos, brand films & creative production.</small></span><span aria-hidden="true">↗</span></a>
+          <a href="/content-systems"><span><strong>Content systems</strong><small>Audience funnels, workflows & things I’ve built.</small></span><span aria-hidden="true">↗</span></a>
         </nav> : <dl>
           <div><dt>Behind the content</dt><dd>Research, scripts, filming, editing & colour grading.</dd></div>
           <div><dt>Behind the scenes</dt><dd>Production planning, drone work & AI workflows.</dd></div>

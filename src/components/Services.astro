@@ -1,18 +1,22 @@
+---
+import offers from "../data/offers.json";
+interface Props { kind?: "ads" | "systems" }
+const { kind = "ads" } = Astro.props;
+const packages = kind === "ads"
+  ? [offers.ad, { ...offers.monthly, title: "Retainer", note: "I use my own audience data to shape content around your ideal customer and refine what turns their interest into action." }]
+  : [offers.monthly, offers.founder];
+---
 <section id="work-with-me" aria-labelledby="services-heading">
-  <h2 id="services-heading" class="font-display text-section">Work with me</h2>
+  <h2 id="services-heading" class="font-display text-section">{kind === "ads" ? "Work with me" : "Monthly retainers"}</h2>
   <div class="offers">
-    <article>
-      <h3>3-video pilot</h3>
-      <p class="price">US$600 <span>/ pilot</span></p>
-      <p>Three videos, three angles for your product, scripted, filmed and edited. A simple way to try working together.</p>
-      <p class="note">Delivered in 7 days from the agreed brief and product arrival. One revision round per video; organic use included.</p>
-    </article>
-    <article>
-      <h3>Single videos & monthly content</h3>
-      <p class="price">From US$240 <span>/ video</span></p>
-      <p>One 15 to 45-second video, scripted, filmed and edited, with one revision round. One video plus two extra hooks is US$350; six videos a month start at US$1,150.</p>
-      <p class="note">Final pricing depends on the brief and usage. Paid-ads rights, whitelisting and raw footage are quoted separately.</p>
-    </article>
+    {packages.map((offer, index) => (
+      <article>
+        <h3>{offer.title}</h3>
+        <p class="price">From {offer.price} {offer.period && <span>{offer.period}</span>}</p>
+        <p>{offer.description}</p>
+        <p class="note">{offer.note}{kind === "ads" && index === 1 && <> <a href="/content-systems">Explore content systems →</a></>}</p>
+      </article>
+    ))}
   </div>
 </section>
 <style>
@@ -26,5 +30,6 @@
   .price{font-size:var(--text-subheading);font-weight:600;letter-spacing:-.025em;margin-bottom:20px}
   .price span{font-size:var(--text-caption);font-weight:400;letter-spacing:0}
   .note{font-size:var(--text-caption);color:var(--color-ink-dim);margin-bottom:0}
+  .note a{text-decoration:underline;text-underline-offset:3px}
   @media(max-width:650px){.offers{grid-template-columns:1fr}article{padding:24px 0}article+article{padding:24px 0;border-left:0;border-top:1px solid var(--color-line)}}
 </style>
