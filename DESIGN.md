@@ -46,6 +46,7 @@ Kode Mono is reserved for runtimes, bookmark tabs, small schematic marks and dev
 - The three Creative Tech case-study sections share one centered 672px content column, including headings, prose, database results and diagrams; do not mix a full-width proof section with narrow diagrams.
 - Creative Tech diagrams share a 1016×256 source canvas, trimmed source margins and zero CSS inset padding, aligned left with the audience-results stage. Cap wide diagrams at `--graphic-stage-width` (672px); compact views use matching 264×275 panel crops and cap columns at `--graphic-panel-width` (144px).
 - Proof strip: stat, label and explanation must read as three distinct levels.
+- Audience demographics use spacing between the metrics, with no enclosing rules or vertical separator. Services retain one top rule beneath the section heading; use a column gap and the service headings to separate offers, including when stacked on phones.
 - Bookmark tabs: same mono label styling, 30px height and one-pixel outline.
 - Video titles use Instrument Sans medium; descriptions use Instrument Sans regular and the relevant dim colour.
 - Portfolio descriptions are miniature case studies: name the creative approach and the strategic job it did. Do not narrate what the adjacent video already shows or repeat metrics already visible on the poster.
